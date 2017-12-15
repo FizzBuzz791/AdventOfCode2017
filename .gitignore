@@ -1,3 +1,4 @@
 .vs/*
 **/bin/*
 **/obj/*
+/AdventOfCode2017.sln.DotSettings.user
