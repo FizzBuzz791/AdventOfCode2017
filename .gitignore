@@ -2,3 +2,6 @@
 **/bin/*
 **/obj/*
 /AdventOfCode2017.sln.DotSettings.user
+*.ncrunchsolution*
+*.ncrunchproject*
+packages/
