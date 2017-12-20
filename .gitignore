@@ -5,3 +5,4 @@
 *.ncrunchsolution*
 *.ncrunchproject*
 packages/
+/.idea/*
