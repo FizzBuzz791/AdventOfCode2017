@@ -296,15 +296,31 @@ namespace Day4
                 activities.RemoveRange(0, nextGuard);
             }
 
-            Part1(activityRecords);
+            var guardSleepRecords = activityRecords.GroupBy(a => a.GuardId).ToList();
+            Part1(guardSleepRecords);
+            Part2(guardSleepRecords);
         }
 
-        public static void Part1(List<ActivityRecord> activityRecords)
+        public static void Part1(IList<IGrouping<int, ActivityRecord>> guardSleepRecords)
         {
-            var guardSleepRecords = activityRecords.GroupBy(a => a.GuardId).MaxBy(g => g.ToList().Sum(s => s.TimeAsleep)).FirstOrDefault();
-            var maxMinutes = CalculateMaximumSleepMinute(guardSleepRecords);
+            var sleepiestGuard = guardSleepRecords.MaxBy(g => g.ToList().Sum(s => s.TimeAsleep)).FirstOrDefault();
+            var maxMinutes = CalculateMaximumSleepMinute(sleepiestGuard);
 
-            Console.WriteLine($"Guard #{guardSleepRecords.Key}: Most asleep at 00:{maxMinutes.Key}.");
+            Console.WriteLine($"Guard #{sleepiestGuard.Key}: Most asleep at 00:{maxMinutes.Key}.");
+        }
+
+        public static void Part2(IList<IGrouping<int, ActivityRecord>> guardSleepRecords)
+        {
+            var mostAsleep = new Dictionary<int,KeyValuePair<int, int>>();
+            foreach (var sleepRecord in guardSleepRecords)
+            {
+                var maxSleepMinute = CalculateMaximumSleepMinute(sleepRecord);
+                mostAsleep.Add(sleepRecord.Key, maxSleepMinute);
+            }
+
+            (int guardId, var asleepTime) = mostAsleep.MaxBy(v => v.Value.Value).SingleOrDefault();
+            
+            Console.WriteLine($"Guard #{guardId}: Most asleep at 00:{asleepTime.Key}.");
         }
 
         public static KeyValuePair<int, int> CalculateMaximumSleepMinute(IGrouping<int, ActivityRecord> guard)
