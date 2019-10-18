@@ -6,4 +6,4 @@
 *.ncrunchproject*
 packages/
 /.idea/*
-/2018/Day4/.vs/*
+**/.vs/*
