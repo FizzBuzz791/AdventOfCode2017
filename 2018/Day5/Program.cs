@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using MoreLinq;
 
 namespace Day5
 {
@@ -331,21 +333,53 @@ namespace Day5
         public static void Main()
         {
             Part1();
+            Part2();
         }
 
         public static void Part1()
         {
-            var test = Input.ToCharArray().ToList();
+            Console.WriteLine("Starting Part 1...");
+
+            var fullPolymer = Input.ToCharArray().ToList();
+
+            var collapsedPolymer = ReactPolymer(fullPolymer);
+
+            Console.WriteLine($"Length: {collapsedPolymer.Count}");
+        }
+
+        public static void Part2()
+        {
+            Console.WriteLine("Starting Part 2...");
+            var distinctUnitTypes = Input.ToUpper().ToCharArray().ToList().Distinct();
+
+            var polymerOptions = new Dictionary<string, int>(); // Key: Removed Unit Type, Value: Collapsed Length
+            foreach (var unitType in distinctUnitTypes)
+            {
+                var unit = unitType.ToString();
+                var improvedPolymer = Input.Replace(unit.ToUpper(), string.Empty).Replace(unit.ToLower(), string.Empty).ToCharArray().ToList();
+                var collapsedPolymer = ReactPolymer(improvedPolymer);
+                polymerOptions.Add(unit, collapsedPolymer.Count);
+                Console.WriteLine($"Removing {unit} shorted polymer to {collapsedPolymer.Count} units.");
+            }
+
+            var optimalPolymer = polymerOptions.MinBy(o => o.Value).FirstOrDefault();
+            Console.WriteLine($"Shortest: {optimalPolymer.Value}");
+        }
+
+        public static IList<char> ReactPolymer(List<char> polymer)
+        {
             int index = 0;
-            while (index + 1 < test.Count)
+
+            while (index + 1 < polymer.Count)
             {
                 // Lowercase and Uppercase comparison will return a non-zero result, this is the only time we want to remove.
-                var firstTarget = test[index];
-                var secondTarget = test[index + 1];
-                if (char.ToLower(firstTarget) == char.ToLower(secondTarget) && test[index].CompareTo(test[index + 1]) != 0)
+                var firstTarget = polymer[index];
+                var secondTarget = polymer[index + 1];
+                if (char.ToLower(firstTarget) == char.ToLower(secondTarget) && polymer[index].CompareTo(polymer[index + 1]) != 0)
                 {
-                    test.RemoveRange(index, 2);
-                    index--; // Move back one to check if a new pair has resulted from the removal.
+                    polymer.RemoveRange(index, 2);
+                    if (index > 0)
+                        index--; // Move back one to check if a new pair has resulted from the removal.
                 }
                 else
                 {
@@ -353,7 +387,7 @@ namespace Day5
                 }
             }
 
-            Console.WriteLine($"Length: {test.Count}");
+            return polymer;
         }
     }
 }
