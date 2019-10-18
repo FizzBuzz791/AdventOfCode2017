@@ -1,0 +1,393 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using MoreLinq;
+
+namespace Day5
+{
+    public class Program
+    {
+        private static readonly string Input =
+            "KWwBbJtGgfFRriIxsSEeXGglLKLlkaAQqxXTyYetTEdDEjJUuXxewnNeEWGMmjYEHheyJZzgZztTsWwSGOorRlcCeLlELgAarTtRoIEcCFflBbPpoLlOolLOZoPpOScC" +
+            "mMUuszIiPpLUVvuLyYlkKzeuUEZNnUueqyYbBgGyuxXiIUysSmMNnYYvYlLyXxTtpPEeltTLVERmMMmrXxjKkJvJFfUujVGgkLcClEeAOoaiBFyKkXkKZzxYfcCcCaAHhbIKboOyYBxNnLlXeknNAayYeE" +
+            "ZzZuUuUsSsSWwUuzoOhZzjJmsSAaXxiIwoOWMsZLlSsOoPpzSBbuUlLKBbDdVvIiVvkRrlUuLeEzZToOtDdixcCwWXIsSCcJjseEjJxRrbBXiInHTtSsmXxMwsSWeEQqYNnPpydDdDjJwWuSBbsOopPUTpP" +
+            "orROLjfFJlmMtNqQvVvPpVMmnSsBQapPAWwjJkKqlLRrUuNPpuhHjnNBbJrRUnGgWbGJjPppEePGgvVgBwZzDdcSsCYyhHOovVOCcyrRYfsSFwPpxXHIivVhWkxXrRmMXxrRzZEecJjCYySBbvNnaAVNnIB" +
+            "bAKXvVxkNLlONtTnXLlCjJcxvYyVwWRJjrzrRZNnSsYEeyuUeFfNnMmfLlrRFEoexXmMTYytJjqQorROrRZzEafFAbsrRpPSFffGrRgJfFtTjgGiIKkdlLxFfPpXDHhKZzYoOyJjklQqHJjhLlLHjJhzcYyb" +
+            "BLaAlVmMkKUudDUgGuXhEetTHyYxvxXNntEeTyCcKkKCcYAxXagGJScCXxsjycCVvCcJjGgxXkpjJxXjKBbdaADkKklLJqQpWwPPlLDdrNnSwWsRCczZdDZjJwORsSQqrjuUJoSdDXxsNnQKNnJjkqTtVvWS" +
+            "sEeeWgYyAaPpBbRkKrpPpPGRrIiwzZTfDduUFqQtviIlLftTyOozGgZYcBbCCcruyYDdyYUZzMuUmcCdDNtTnoOJHEehjNIiYySsGBVvBbbwWgcfRrFvrRVrUPpHhudDYyUunNeERzZCxgGXBhHnNbnlWwLp" +
+            "yYLlUuqQblLiIbBBNnxXQcCWYrRyrRhvVHHuUhHhhHaAJQqzZUuQjJqjjJkKwOoTUutOfFvaUuAPcCuUzZUudjnNJCcXxDTlLuUdDhHtYypVIiMmeOowWZznIiNEVvobBgGLlrRFQqmCcKkgaAvVgGEeuHhy" +
+            "YCcAaUGMgjJGoOJjRrfbBvVFPpPTtiIpRrPpfOoAanNdVvoOhHDBbbBcBbMmTtoxkAaSsFflDdQqoOfKknsSNFEqQrjMmMmJBbYyoORDVvcCeAaOoEtTgGHpSslLTuwWRrwWUMmtbBSsPhYQqzZyNnSsbwzv" +
+            "vVVTtSdDsZGgSsWzZIihHwQQiIlLqCZzxXcgGafFAHhqWqQrGTtAagRsSbNnPpDdWNnwwWVvaAOofFwWBjlLTtVvJdjJDJjDdBGgdYyDykdDwWjJfFKYFfVvSWLlLlFqQAafwiIsdzgGZuUkKiIbBbBdDpLV" +
+            "vtQqOYykKWwoyfFYvVPpvAlLabBVTJgLljJGZzpdDPpBJjbTteEYyjHaANnkKhEeJyYCBbcAarRKgGxXrRNnkPKfFCcYykoHxAfFaZzCcZzWwXhxDgwWWwOoGdGwWtTxZzXghHzuvVUpkEeKPXBXxbxJfFdV" +
+            "vDjEaAYyXxeSsiImMrRsSrkjJOoKGgxxQqXiIXmIiMWhyYzBbZRfJjFrRcCrHkmMUuIXGgxikKlnNLuiIUvjJFJjfiIJJjjoMmOViIahHqQiIWNfFnJjwhZzLlfiIFZzVMmoOpPEqQevcCKdDZzbpPBgsSGM" +
+            "UUuumcCKrRkBbgEeWwgAVtsSTohmMHQqOumMRrUcCvgdDGaBXxmxXFmMfMhHaAHaAhbuUBjpPIiJbyYUuxIiNnDwwWWCcBgGbFgGqQfqpPQJjdRrdkQmMqKDOdDojJXBbkiIKWWwRGgJjrNnwaAWGiyYlLRJ" +
+            "UujHjIiJhzZYxgGXoPwWpOMmXxciICysSsSWwxXYWjJwfyMmzZesSEWwhWwHiSUkKjJMmuosRrSGZzUQqugnYNzZqQBbnUuyqTtQycFfjJvVTtxnyaAYNdDXyoOBbGMmEkKkKesgGhNYNnynNnBbHRJjXZzx" +
+            "NwWnoilLIOkKvVyRyeEYrLlmMUuCCczsSDlLyYzZdZiLEeHhCcGgJjliIIvVVvNnNnZzSstTBhHboPvVnNpgTtCvVcIYyWbBwiZzyYfFDvVTtZpmMPzLNnlvVdJrEeRXpPVvxitTuUIKkeDDdWMmwTtdKkZM" +
+            "mXdDHhcCxVvXoJjOxsSzotTAaEeEeYPpyOmMoJaAEbBeuLlGQqXrNHHhMmLlsSpPUAacCIiqLlkKQgGgGVvBrxXnfrbBrRRJjyQjJqYsvzZVXxSLlrqQRjJUudsSyuTtUMoOmWwYBbDcCCxWWZzwwXqQcVvh" +
+            "HEeKJjkCEqWwcCQenADdeEQuUqahEeooObDdsSBglLGcCOXxLlFfmJjMXlLaAlbBKkLQvVzaUqrRQuXxkgGKdxXrQMmmMqRhHOEjDdJeLBbMmacCAGpNnPglkFfPeEpqQeEicCvVuUwWImYqQFdwWDYyaAIi" +
+            "IcCiMDuUdvVkKmOaEeyYlLaAxnNoOvbBUuVDeENnfFHhdZMmzqQGAjJaxXgRJjeEpDdpPdmMNzZnFfAaLxXKklwHXMVXxvmQqhHJeEjcCKkIihHXxfFxEetTTtmMhHhZzjeyYJjnNDdpZzSVvGgLCAaclLvV" +
+            "zhHnYyNYyCXxcncCNnNaAVvVvsSWwyskKSYCckiIKeWwSsEXUynPpJjNYuQKkMuCLlVvcUboOnrRNbBngvVKjJCckGCcAJjDdeEKklLaAaAJjcJjGgfFyYCaPzXBbyYCcxZpPbBplywWiQoOqDdWwLlIrLeE" +
+            "ZjJjWwSsEBGFMbBzpPibiIeEQKIikjLIKkigGlORrrRcCLloKkgNpPPpHVvtGKkQqyYpPgFbmpdEeUIiizZmMIZNnzDdUuAabTtBabBEejJOoCkKTtXxjJVCcvcwWMmiPfkKMmmMndgGCckOofUOoCgPpGCc" +
+            "cSscNnSmMsCwWVvuqQeEqVvjJZzvVPFfHhpZzjqQvVJBbyYwWfFVIivsiISQDOtTNnfFodRNiIoQqODdUuqQQPpSrRsBgGkKbEesSQqWwFfbBUuozZOzZhHIiBzUzZuEENnDeEdYPXxpysSehHJjDdaQORro" +
+            "UvfFqZzQVKdDklLtToOIJjiSYyZzszZSTtPpjJsZzZPpsrRHZzeEhSfyYpmMDidDIiIoOfkKFJOCcoeEvzZtTVjgGHhiIaAdlQwWJsSjlLiIVOQsSqCEecswEexlBbbZzBbBIiYQqUoUuOecpPxXCEtQqHhU" +
+            "udDTuFgGHhyFfUukKYfBbBlLbKkYymcCFfaVvzZAQqMGuUZzcCUeEuJjeEUumMQqNnjJNgRrQNnqGnRxXFfFfWBNnbaAQqwWuUwvtTDOIXxXxbkpPmMITtRQLlqrFMonNGVvgtTOmfhHFfzZRIrOoqQyYSBb" +
+            "sDddDeEnNzZvVSQGguUqsJDrRnNzZFsFVvfEeJblUPIizZnNTtZbBzsFsOoSXxrRfVvAawWjJgfFGBbkKTtTtKuUHnNaApPCchkIzLljJjwWpoOUuSsLHhlwWnNcbBCmMUhHuJjZzmMPRFfVvVvhlLHrJeER" +
+            "FfruSqQfSAaVnNdDMmlrRLtgGTwWvsuwCcqQnNeBaAbiNnvVIdDELnNlWcwDvVdjmMHhJCcUuWXxKhHkCUxXkKGBbgoGKDdHhWBbwkDgfFGeEdgSiIcCjJsYybYyIizZBoXIiqQxUuOQqOaAmAaJiIjoOHjJ" +
+            "fFZzJjhlrxxXXGriIRYygRrUuXxnNpPiIyYFhHfqfFQKkRMmLVvNngrRvVnwkKWNGUjJuFfJACLlYKnCBDdbcNrRVUmMCcjJtTuAaIiOLHhRPpPCTAaaAtsSwWjrRJzZztTrRyjUuLleEJPpIiqQYLdDzZbZ" +
+            "zRUZzivVIRrQRrRBbrNnLGVvgfMmwWFhHXeiIExlrRPeEpwSxXnjwXxWuUSGghIiHpOoTtPTtsJNMmMdDmspsGCcggGSkKXxhHrRoOXxSsGguYyJjUPXcRZzVvraAYyrztTNUunZDGgsSdgoRrwWHhBboOpP" +
+            "KGgQqNnaAeEWOGgoYXmMKkGgxadDaAGgpoKkaAPpPpRrvxYSsyYyXHmMhVVvogRryYGwWEelLEiICcWwjJpyXTtLsSlSwWsxXQqIiZzQsSqPvVnNaApmMPqQpjJbBnBbEedDOXxBbXxotTrAIiaRpjaAgGJh" +
+            "HaAqmMQWwBbVvLlKXxfFvViIkqjKAakJcMmCRrQXxmMTtOoysnyYNSIikKWwnNwOoWYEPpevVrZBbxXzmOomMeEyLlYxpzAaZgGtOzZoTDEeMmdElLekKAZzKdeEhHQqWPSsPxXpwOCcoWKklLnNafTiYydD" +
+            "yYanvVKkNgQqcCfFbBlLkQqoOWeEdDwEgGktwWTkKJjKIvYyEeVzyYZxxXYIiynkyYCcKuUwxnNXuQqSsCcdDDdIzYyZigGByYbNnoOCKkKkpPSjsSjJJsoOnNGgQqGbGgMmBCcgTtmoOHhufFtTzZCcFfdD" +
+            "UfPpFBMmbVvyYOoQDdGgqQqvmZzyMmYoZTzZtmMgGALSRrZkrRpPKkKVCcxUuPpoOgGMmcyYuFfURUuQqxXIiHbaABmMnNhaAFfrUuajRrJACilARrnNaIfOoFMRrgGmTnNnNlHhLipgOofcNHhOonlLECNn" +
+            "OoUunMmxHRryYhNSYyoOdDYhHynPpgGNsfFuUngGfkKFmMDuUdqyhHYQEeuuPMGgmUwWhHuOouUgGlLNnuiIuUEeFjFfLAaRrcimAaOPpoJfFjBbfQqZzqQFjyYhHVkKWwsSXdDxfFlTtDdwhHWKqQUvTcCt" +
+            "zZVuiIkKdDkwSsWNnwvEeVOokKTtMmzPpZVvPpGgDCcieaAGggcCHzFfZoOaAQqhnNXTtfFxgjJJjGHHhXxlHhLSaAyYsApBbPDduUrcCkMsgiIGSqRJjrQuxXGgUxXXxlLIAaiyydDYAaQDXxPVyYvpfFtT" +
+            "FsSfYydGkKjJglzZmMehkKHvBbVHhAKuUjJTtkeEexIepkKPOogGPpgsSGEcFfHcCzkKZhyYsPuUCAaiIpyZzkiKBbkzoOlLVVvUDdugGvsSvVMFVvUuVSsvjiIcVvLlnNmMDnNdnNCZpYRrbBCciIrRYOKk" +
+            "oyywWaAIiqWwaAYyLlQfwnfFTVvziroOAakKyYFIDMjJVvsSAaCNnAaKkDdqQzEsAaMmSeyVvYfFZcYyuXArRaxTtiIUZuyZtTzVvYOAaoRYyaAxXiIrHlLTvVtBgGPpbwdDrRHQqpPhkrRfFKkQZzqKcnNb" +
+            "BOUmMmhmMIiHKJZXxLlzVaOTZzwSqQsWnNdXxXLYygGlYyZztTxmUuhHAaMSsoOtTDtkKUHhuoAIYjioOIFfIYyiYKNEKVvkdRrmMEeGgDyYZzeGeqoOyOojvMjJWDdzxXZwEeXxXxxXLQqlAaHhvZzVSgGp" +
+            "MmhDdDdHaAkYyzZUuKqQvVQDuSKkTtsOoUdqOoPEXbefpPFEPrRDCcdopPPbiIBBbpOoQqoOCUbBwzWXoOxwpPLlBbZQqpgGYyOogGjyYJCciINnPQgkKkKmMGqaYyAWiAaIBxMtTuPiIpMmgzvyYVGHhgMm" +
+            "wxuVveEHqQWweEgUuhHRLlrNnGcCvVxcPpCzgTlLOpPfnNFLmvVMlsSVHPphvxFfSPHhIjDdJiHlFmMVvFfWwfSsFfLVOcCZrRfFFvVfzogGTLltAakVvKauJjUEemMvWwVpRcqQCTtAanmMNmDdMmJjZUuA" +
+            "XxaTaAtzZzMmMWtTwofFOneEbBGXVvxXxYzHhGgfFxXqFmMaAfxXWwQSsSsRsSrrkKRrSsRnHhjaAZzJVyJjfIiFHQSsWnHhtRoOjhfFHkkKBmMtTbKrRZzJoONqwJjWQTtWwyhHRrFfeEaTNnFfvVaxQbBv" +
+            "boOBVVvmDdJRrrsZzSnNeEnNtUuRqQrTJGgfFFbBNnfjaAHhQqlLwWeEJgGjRvVvYyGiIucCUpPpPeLlzvVZEgVQzrRIJjGpPzZrRgiQgVvbxXiIBIirRrRkKJjBbrRFCnNcIZzxfFXiHhwWNnfGsSnNoOgX" +
+            "IixEmMRrBbsSYoIhHiIiBvVbBXxfFbIiIurRIcaAMmRjJOogGWwrTzZrRPpzZQqXXjJRWwAxXvVEkKOoKkCcQqkKbBeDSMmcCRreECVvoOcEeGCcBzZojJOLlSqDdQYtTyfFHhsRJjrbFqmMlLTDaAduUywW" +
+            "oOXxbBMkUudDKzZwWmKpPoWwYiIyXtPpEkFfKHHhhorRWwONxLlXKkIaAZBbIETjJtnvVNoTtOeDEZzeWweEIqwDdWyYLlQAaTiIWwzXxXFnrxVKoJvmMhHhUuKkVocClyYMmLlFcCPpfSscCiITsXYaAyzR" +
+            "rZgGxsaAAazZSzBzZbzZYoBbOKEeiIHEehgRrLoOlDdYeUuCcCcCIsrRUszZSmMQfnNFQqwWwWocdDdvcYNnowndDvoOOoVRwUuWpQqPUuiTQqtlgGpsmEeMiZzIuUZdDzoOTZzTttiaDdOBbNxXjJnPVvBb" +
+            "cjJGgWRfFyuUYFfrJCcjpoOKjSsIijJBudaGvVRrgfFAHVfFvHbBQqbBhHIiIiQqjoOqUwWtTzZLUlLrRESJjswWeuOoAeEalRrLladzZqAaWhNnHwtTtZzVTtvicCDWSsFveVGgvmkjJmMjJbDPpdgnwWNG" +
+            "VRHhSsSnCqQtxXTjJnNYyXxcGNCcFfoOJjnzZglLcVvGgyYAagGxlLadDHcYyCZzhMsSmbBAMmaFWwdDjJfAlLXNZzOonIFfeEJAcCajSsBbrRZzLliTdBTHOoBbRrUuIiEefFbrRoOBGgbwdyFsSUtYgGcC" +
+            "yUnyYhHNMSQqsrpGhHgBbPAkKwpPijJXxMmsSgGYVvmMJnNPgKMmTtkeqmZzMQmubBKkptTPpHhPOoxXDxXdHJjoOMmGqkKtTTtloOEeXqbfFFfBgGfFQeEqGgPimmZOoarcCpPRhmwWkrcoOCkAabKkmMaA" +
+            "BfKkFKzZiIMLlmcMmCvRCcIkKiSMmkKHhZzbBgHhbBOoLlEeGoOHzZmnsHhSqLlhiDdIrRHGgpRsSvVXxrsQqpPLlfFkKrRfFLlQqtThHYgGFYOpPoIzMnNzZeDdEwWLlTSNnshHHhPBblLWbBXxyYwpPjJK" +
+            "kpHfFhtvPPjJpgDdVeEKkiUuIiIyYeEXxeEAaVvdDnQvVqqQNGglfFPfRuFfWwDWwbPpFzZBbjhHJsSCcfMmGgVvYzhHZKkIiwXjBbVWtTwIiQbBqaNnAvjRrGgsStRriITSgaAeEGsJwWNmMOoFfLlhHhHA" +
+            "ajEepPXmMxiINdDxXMmkQAatTqqQqKknvVOOoohHFGgdDDdAgGaVVvvZzarRvOoVaAdZzuUZZzHhdDUnNwWYyAZjJAwWLlwWaeEWwbBMzZmccCCHajEettvVTMlGgPaApiTtEzZeIqQKkLNZzGpPqjJQzqQL" +
+            "leEJvtzZTtTOlLokKgsSxXGmMVZzqnCcNyYuCQqhHQqcCMmcxXfFpPfMmFPPpBkKdwWqQfWwhKkHFdjGgGnxaTtBWrOoRNUpEVveoOoOeEmMIiPtWwhHnGuqQVchHqQAaCvinCnNcGgXxgGTtNhHISsmMLbL" +
+            "HhlYyTLAaQqlQqAmMVTNgGnmhJjpPMmHLShMdVKnNeEkvDGqQFaEhsSHePpwBgGbWnNQqwWwWPpbBGGgBDWwxXhlwWLcXjSsJvVxaAfFNvVlmSaAhHTtsMGgixNnDdXbnIfyZrlLxXYyRzYPpIidDDoiIOJJ" +
+            "jNGDQqKZzrpPtHwWKkhuUTiItrRfiIiaALUuljJPpAMmsSfFIGgiaWwMaAmgToOtTaikKVvQqpPrRRrmzZwgvKxXoOrthBbxXHnZzMmIiCcDvVNnmGvVUuBbUMGdDgeEmEekuUPOopKUrRuHhylLDdGmMgrL" +
+            "EelVsulLUSZzNnvPpcyYjwWWwdDvVJlLJEejUMmtjomtTCcQBfeECcNOjCKkHEgmMGLTtGaAgGYygJqxXQvVDdeEFpPfAaqQxXvvvupQqUahHsSwWmMgtMmfhHIjJWFfwiZzFwWfzZKMGgoOyZzpnNJjPNnU" +
+            "uZzIiSTtAaHhFfYEeynNMmpPXxZzWwcCuwWCGgbJWxXwjmMzbBJYDfFRrHhdNnvdDoAawWwKkvnNrRyYGgeEkKgQqGqOoQSsPDejJYyaAmMvVnRrNBhHAarmMdDkcCcCJFFfPNzIVviTtFVLlQNnLlqWcCvV" +
+            "RapPhHXGgqQxSRrRVvrVvMNnmjJMHhetTscUuWwCSEUCLltTxXcqOoJLjJmMljbcBbbBCsSlLtiITRLaAlBbWwiabVpxaAXuxXkKjJfwBpPpPmMpPbhHWgFfmMmbBKQwWmMaAPpwEsTtSIiaOnzZkKNdDfOo" +
+            "PpaclLCAFWwaRrAyYnNWmoOMaAuUnNVvwpPyYXmJVvYyxjyYJXxIijfFYpQqPyOZzoQpPRZLiIUuEVvPpQqehZzgGgTtRrjJIYywdDWvIiJRrjmdeQIiPpqPpoDTtnNKkoOqRrPuuUuEeUBbwWKkJjJJjyYF" +
+            "GgAUuXxHhJjaVvOouUqkcCKQAWGoOyYgQMmqZHHhsiISiKWwkIiSmMLJjTHhlnNLlzZLkKzZsSgdDGCchHtTMmrRGDlLdwWobJZzjBcYFenjAaJugmMGgGIHhpPHhuGgJfFjUiUmqQhXIifvVFwAviIMmVHh" +
+            "MHLlhmQqGgUUAaFfucCugeWwEGyYXhaFfJqQjLlfFLluJjHhHoORsSrPOoOHSsWwJjQUegGzZEJvVdDBbjFwWRqQrfhreLlCeEcxSsXERVNnTtvkKLkkKHptVvmMTWwPjJRrEeJjlLpSsVhHTtveEQqPFQcC" +
+            "iIZzrRzZKkqfrpPRhWwcvVCZzKaADqQJjkKKkcCrpPIiTtYyUuHiIhJjUkGviIdWwAmMjOBboCcHhuUSMmsmMQnNYybeEShHqOoQeEwgHeyYgULlWQZzLlnzZNfFcCZzWwBEeqNnQzJjJjCcZatAaucCUTCi" +
+            "ILlGgcwuUWAjJbBlSsFLvVlaLlAEBbZzezrcIivyYOooOxtTmYyHhrRsShFuUfHuUuaAIixxXXvVUcdDCNXvVYWAarRnAtTLlawUuWsSMRLlFfrcCmwyYTbBDdtVvAkGgKDdoObBXzzZoOcCgGWsSwyzGgDd" +
+            "PpZTtEjJOorReeEXxbBJVYBbfqxQqXTsStVvXthQqHBbTxlQqBmMOobUDduLBbjlLxXdmMGgEextUuOTtzbBZLlmvkRrGgtTKQqwWOMmoVlFQaAqJmMqQiVvIQqjfNeSsfJjjQMmjZhbWwBVetTggWwCcMQO" +
+            "pzZPLFMiITVvxQfFqhnNVvHXGMmTpqngetTKJjFomeEMNngPpTqAqQcjJeEjXPUutTpVvZzLpPlOPiFfAaEvbjZLwWlyGEedDyYCcgHhjJlLYzzZXxeinYyEYXxoOWxSsXwgGzZOoVvgGNQqLsSgNnjJdguU" +
+            "YlLVkZGgzayCcGgYoOMjJGgwWzZmApvVZxXCxSMuyYUBwWbnNPpmuUjKkKUuvVCejJZfFKkYTtnNPpOAaJfFBbTCcdDmMxXpPmLnNdRroOvKjEeJkWPpwiOlLAUuaoRGgGmcCMDWvVEPKlLmtPpTKpJMOjJH" +
+            "hXGQTMmpPtErRzbqICcdCcEfMFywqUIKUQmMqEeuZjJywjUuJZzZzODddGgqEeQOofFDGGpPgHwpKuRjQqBBbBmMNnQqsnNBvUvunNRSsrTtAajrqSYysZzuUZzQoOPpnNaGgJlLjEmqHhSsyYQMjEUuyYeO" +
+            "tTUNnjJPBbIIgGRrSsuUrReEnNyYKUukRorRUuNnnNwMPToOZzLEevvVtTnXxNIcPYVvypQqPbBKkwWLlpjiIJyYKAaxUuYsSyYRryXkLaAbtTkiImMtBbrRvVpPAaIXxwWmMiTtfNYyyhByDNndiIPpqMmQ" +
+            "QrRXxqQWWWHkiaAItTBsOodDHHhVdDScCoOsiFXxfAaIhaKsSksSpPbRCcrFfmfpPpPUyJjDdJjCcsSAaPpFfwWzjlsFnYyNzNnuUYHhTQqPgGeQWwcbBCPpWvWwVRZzRKzuUcCZwiIgGGgNnWFzlLZFfbBw" +
+            "WGgjVvJjJjPpHRHhroOhbxXoUbBFfuihHyleRPNnLDYyCceEPpdjJVvjJUdnNkKhHLRrlEnwWNKkQIrRidDEeyYxXXxfOoHLlVvhFoOqbWwxTtnNXaAaAaCcyMmYdfFKklLUuJLljFfCKxXMmlLWfFnqQBbG" +
+            "gQBbgGYysDRrdNnHhIiFcbBCfRSiupPifFILfnNswWHhhHsScxHhXVvHGgDddqBSMmsbQfOKLlkZzreERIigGRrfGgRZzywWYKkrUgGuFoOVfFwWBbXABbDIiwLllLTglLoDdOoYIQqiKkRnNSOoNELlxrRA" +
+            "mPlLKAayYHsSFBbGgoOfiIqGgYuUcUuCywfFMmWlhHeEGwMmoOUwzZWXxCcuGgoNCMsSsSddDrVvRQqTGgtABbPOoDhDtTdaPiBbIpVgNnorySsYRpPZCczOJeJpPFfncLlCaiIVKrkLlKvLlVVvNDdzbBZG" +
+            "nNWvVpMAfFnmMRrNXCeENGTtbBwPpYgGWwbOXLluUhdDzZsjJSgGEeOqQqCPtIiTDtTFftsSsCmMUuWYyoMWwQjJIipPdDCcJjqLwWPppPlWnEeKWweEGNngMyHwfFWhVblLBvZzYbKkcbBncKpPPpmMnNkK" +
+            "WlLwcCkXuUBbxbBhWwYypKkPClgiiTtaApCsPvVmSYyXwiIWxLlanAaOoICMPpmGVgGujJUvGgOolvnNVLQqgXxyYGDdVbmMbHOohshbBvVKkKkHwWOeQqyYzZEIgGqZzQGgseEdDuUZlEeTtJIHzpOsSaAo" +
+            "MBeEkfFFmdDMnCcsUmMuSMmFAaXxfRxdDXmXxBNEGgekKKcBbzaATZtTzVvunNDzBbYylIvsSAEeTUuwWRrcYLlmhHRrdcGTtfGXEetNAwOoWRnXxqQTAgGRnyYlNCpHhcClcpPoqKrRZVTtvVvHhzkBbLkU" +
+            "uKAFfETgsSbBzNnolLaAnNOTtZGvkKWwXQdXxuUSeLlFJjQqQiNnIfFquaiIAPpUcCLbamMAKhHkHeSscCQqHWyYqMEpPeeEJCKkTdyYDsEeSBzZFfXDgGcMmCdoOHCchxbPuUtTFraAOoCceujxXUbXxBAa" +
+            "EsTmEeuWrRDdwylLnNMmTCctYUSiaYaCcAWBbhfFXxHyAkKneIiEAwWcYyREerXxpPTtzQqZMmgmMzFfZfdDzZEeoOPpPRhHxaAKwgZhHVvRrzkOVvmMNnSjPeZzZzfZGTtgqOotTQziIBbrCmMjEeneqAGg" +
+            "xXaRrAulcCcCDeGgDdaOoAxdDCVvcAabdsSAYyMahRAKpPkarRrHTgQrkKRwWXxvjJPplLVqvRrumPvberREBGgUuNVvolaALnNKkSHyYjJjJLlVumMUzZvlLhtTCcxXfFxjAaPpJrJMmjWwWwYhhHJuUjvc" +
+            "CxdXENnVveMhHhHmPdDXxRVvSyYsIVvirJjUTOotPzZkOoBbKrBgzKkyYZjRrdDMYOdDJTyvFmMffRbBvsSVJjumwWMUrWUuSsVqtTQeEUycnNDdFsSsYOoITtiyGQlLqkKgfvVtTPpAjJLJjshCcHvrDdPp" +
+            "WwRxNWwrRnNhHnQhHGgqhIeEiXDdRrsCcZzUdDYoOyTtbRrBYTdVPpvEjjLlnNeEZMmaAHKkhEeLyalLbRrCkxYyXKcfUBbyYuFOxkKqJjQXoCuUUucBGnNgVwaxpzZwHXxrRhRhHgqyYQKkmMiFUvVgGuzz" +
+            "ZsSdDMKkwWmfFaArCcRkmMTKMWxXMmYpgoOPpBdPsAFfsSuUwdDgGBZzEeblQqQqiIuUPiIpbzBTyYXxuUHlHhvaAdDVMenNMEeKYeEkaHKkYyhvVTtqjJQAMmXxbsGghHhSaQdDqCcfFZnHCchNplLAPpaV" +
+            "jJOovMmLupPkKKzAacSsGgCInNeBLodDOlbGgEzZStTpPsfFEGOvVoWwgeVvQEKlBIoONnidDwjQwWOorwYvKkTtkKJwWUMZAazroOpYoOyPFfHhvaaAMmjJwfXxGcVvDVvmTtaAhwAaWcXAaxCkKsSSsmKk" +
+            "TttBDejJOeEaEFfYyeDdAJwWKqQxuUFrkKaANGoOZBbIvQTuqQYSWswDHpfuUAdkhHzmMkZUtVRrvTFkHPphKfuxXeEtTpTtdDKkchQqDpPEeAbBAbSrKkRMmstTwJjOotPVJjePpEtFfmuUjWwJSsWwtPpd" +
+            "harRnYyNQzZMmLpBbPTNCceKMmkQVyYXxoOShcStTsCHCctXcCeEhWHsShmMyYSbEeBLlDdvKRrZPWwCcyMmIiDdJjjoOCcJpAlLPpmMRNnSsAeErVvOrRqvjJcNDgGGgySsGgvVYdVCcTWwtvQgGBPOIjsU" +
+            "uOdBbDSjsSRvVWwuvVUULeElEezZHhwWjhKkGkKwQqMmgmMzZoHhjJOPmhwWsKkeWwlLpkKbspPSBPamMAnNeOeMmXxbBEnNjJmjJWMmwysPpStJjazZEdDWMYnzEozZOTJjNnxXbBHvVVUzZuFihHAarDdR" +
+            "YyAcfmxXcVkyYKvXHhAaHhIBbiKkjJxXCveLJjfFljgGDlLdtTuUsSEeTnSIicDhzZHdhHBbnZDjJsowBbowWOzLaAgSsVvIVchzIOonsSNLlsTBbkwaFfAWMWfFWRrWkJwWjKPbBZTVvtnzXxkKkKyYsSFf" +
+            "LlyGKgGeEHhyJjgdIimMduyYUWeEYHRrNnvnBbbrJjRlLfZcmqqQQeEFbBZMaAsnDdFbBFfrRtWNpPBRXEexYyAaLlrmUKrRVQmJDKkSrQqRsDdSjJrrXAaxRttmOoRKtBblLXxuUuzafFwWiIAwWKkKQZzp" +
+            "VxXvPVSAasRwWrvRrzZLlkpPeyGgYPhIDdKNpSsGeEpEePgmMlLcCbEHheYUuysgSLlsQqPpZywWzwWZbBYKsxXcCSyTTtyHhYyRryOoYKkxXhQpPTtqRrHweEGZzIixXVvghvzNgGJjnZdzZYnHCcFfKjJi" +
+            "IxnNhHRBbDFTtgLcCuIMmdDiJjMtwIPpYSBvVbsEUuMtTBmFJXVvKkwWxXDdaAxKkjJoOLlDjOobsSRrlLEZzeYLilLckKmMCdDqQWwzIBIibzZPeEuYYyyCvVwWgGGgQuUcbYyWwuUwWKrRGKAWwBqQbaFf" +
+            "BbpOoWJjcbBqlLQFrvVCyYRrcRxFLKFPHhRfFpPvSQwWqsUuAaSsVWfFLTpPtfKjJuVWgrRCcOoGSswshrRHSVvMmIUKkQyaQqSUvojJHWwjJdCZzcDhOoyYHwXnZpmdQMmqDMPpPzAaSFfQPUTIitAPpMOo" +
+            "TiELlzZMmEBXkKxFfDUufwWFJSFTmMOogvVdDwWCcQqfaARrKjDdJEezZiczZiIGguJjFfOZTpiWwXxXUuwsSZMmaoaAOvEtTOxXvVcZmCGgIpcCJRrVpPXnEexmFiIeEeWcoSeEMmlseEtTDdOhJjHwWTtR" +
+            "QqTtwWrHhsIezZEiuUDFTrkJjFMKeeEEezEeIxXQBeSsUbMmBuroRrOOoRWrPpSlLfQUuGhHwWgqXAaqZznfqKkQcaANXxnyZuUeEvKkZLlRBzBbVvxSFbbiaiCbIAXsSzZQqzZXxzZAaxfcSxdqQAaoJWLl" +
+            "WwSWcNyAOoCvVTYvVZzOLlorDdVCcgYyfFQtTjJqYJjhdplvYcCIyYVbyYBDzkYHkwPpWlLQOoeELleEaGQqgWwhKkeTBbIYyiEcwWZprxXYyYyYlQqQvVsShHEUuejJqxnFBoONGgtThHNbBCiICzVvDdXE" +
+            "HtDlLjJBSpaAPFRrtwjJMdZzDcCoOmIvVmMdDgoORiIFWwkKuUPpDdyoyWBbwsCcmMUWwcKksSqQaJjrVISpPsHsZzelLyGguqDmMdujJZzjkhHwWRDdIdNeEpPvVkoKHhkwTUutWHhjJhHGgLloOOjQwhHp" +
+            "YcHhCyPgmHGCxLlwWVvXxXzYbBPpeEokmaApPNAaqBbBbcLuUlNnNnFwPpVEZzqQeZzgGGdHhDfDbcCmhVviIngwxXESsexrRJjlLawWUuYAaGnzqyPKkkFfmfFeVvyqQsSoOYxlLtTTHKhPzZoOcLgXNnJl" +
+            "cFfCLjrrRYzUuZybJjkQqPMmSspwvQqYtTytTvVNZznbBQqsjJLjJlMdDmFfSrRvVUumSsFEdQXxaCyYiILuhSnWwKKIsSTmMtCcoOkKWwsDdkKGgGgSlZKktJWwjSsUOoiIvgYyovVsDdcCBoOVDdmhKkHV" +
+            "exQqnNlLMpuUPmsSHbByAVgGeiyLgGvOosxehMmHhUhHvqhoMmEePpJjFfoOFRMXNbklLKWwfcCRYNFPpflfNSsGgTXhHiWwIJsiuQquBEuUeLMKkpPOogCYycjdDpLyFfYTOHieEImMXeEuUGwdsSsEDTtP" +
+            "kKxLwpPFfnNRmMBvJjVZZKOoUuXRZWJjzZqQwyeOoEFimMQqBbDdsiCtTtHfFhHhyyYNnAtYyuUEodYyTDdtZzEeqdcCDnLlrRpPrjlEeLisuUJKknNqQXAjJWPpWIRrpPiPpYHhywVPptTQHuUlLLlUeEkK" +
+            "vVTSbBtTAZPRcljrbBXDRcCJjxTtXiDiIsXGgkXxFQuUKkqhGsWwSNnVvzBbkMLlmjTttZzdDXxuQqvVWOowgGMFyIkclLYlLyYEesoOSuRrUyLJpPjuVNQTtcBVvIZzDaAdYyiIOtTovcEAaPLlgGVAKXgG" +
+            "AKWwzgGZcUuCtsSTMmRNdOozZSsDbBaBZzZzPpjNJoOsSiIQftTjKkDdabBDdEeALlFfHHhrhhHeEHRoMmTtqQbBRrzVDdvKVShsFsqIrAaXohHXxfFOaAJjSwWxXuHhxMmXRrJjSVvyaSGaKBbRHhrCYycK" +
+            "XkKJIijxDMmoYVDArYyKZzrkKRkbPpTthHwoaAZzErJxXpPyGTtfJjWwyYYMmHcFfwWOoLlCBboOBSshfGrZzLHhFzLlpPeEIUgGzZqFfUuvKEigGAAZIAAamgGMaqQYyvViLJjiIfeEEeFqCcQWXnrBbboi" +
+            "IOEeXMgZzAaXGgxfVDZzkKdvnmXoOJLlMnNzZmEVwDdWcgBbGMmXxzcpPDVvKebBtsSoOGgCcvOZYgGyMlLZvVFfpRrPBbxXeEupPXQRGFWhchNJjnUTtuAKkUuarRxXBIibudDZtggTuIvbtTBxXpPDYydQ" +
+            "uUqcRrCkDEerqfQbfIiFwhqLblLNkGsdVvDSYxeKkEwKpUuPkMmYxUuXLKklifkKFgGVmMCcDdtTBSsDpCcZzrRSsPYTtsNKPpkZiBqnNQoYyNnPpXxNNjJRrlUpSCRMpNnPrRmSQqcxXZHhBWwAocAIiIia" +
+            "CKkzMxzZeEEbzZfFEevVrRLlXxxXxEzITdIqQOoivVLlDtifqQrRxpPvcCnASDdBboQwvnDdFSsnFOWwoyYfNSoOsgGSgQCcqeEGTPpqlLhyjJAjqkbXKAavpbBPVxXLiIkKACcaCcGaARrdJOyQBbqHrfKk" +
+            "FRrkKhpGgAoOoxKkjJrqQPpRSHhsHhZyEGgBbpPeYtTQGiHwWhIgKkNAFfancxXJYoOzZgGZjJQqrrvVAIixSsGgRUiCyYiIcngNOoeEnCPpQerWzZEefJOgjMmHhfZyRrnlOUobSlTGIiXxIigBbtLwqIJj" +
+            "vIkyJjggOogPpOlLYyojJISsPpXbBNsSRhHDdrlLGdpPpLlAmMrJRrjJxBFCVvyCeEJjVNaAJZzjSsvVMcMPJKkRrILleBbuUUBbrKkUuqQoORuuXwWjitToSxXfVvFrnNRtIirJLlJLKkKoOuUklgiIgyKk" +
+            "YPpKXxwCcUDybBYNsSuUPJsQqSxXsjuUJUuJtHdsSPfFZAyaTMiImMYyMMmmcCWhrRHRhjJTtyYNnQWwTtaAZzYkTfljJKsUuSdDAaYhHKWYTPMhHbBXxnKvVktgpPBGLlFjQlLfpKVnFTnNzZUuKJjSNEeP" +
+            "pyYJZyYnNenNnzKGgeYMmpPhCiIBltTZwWzLXMFfAaeEUKktTZcuKSUuskUCKkoOrRimMzZrhlVelrRnNpdDPAhtLlUZrmMRzPpiCctThenwBbmMWVvpkKCSTLlJApleELipFxXIiAeYyIpPlkKiUNRrWelx" +
+            "leOzEevZYyuUzNXyYSsqfxqOwWwWoRrsqQzlYyZzFSNnsEezeGgFfbrWSXFfofBWRrpXxhrRHEIEeiZEXxeaIiBbAsBjXxJjvVcLGIJFfCLliyYxXnFtOomMhIvVDduUTtsbGqQDdMmCcgIiBWCiVquoVMSl" +
+            "aAFfDJjdJlfxpPXbBFnVvNLlLjqrFdKkQDdBbgGNmhgGlsNnEeMmENbKBbpRPprgGvfvVFrRPgcCGQqKuUfFkaAURVaxXAxXaAviDXzZZFfcNnWOopaXufIiKknsSFNgGRruhHSghHuMWeQqrSOouUwFfWqF" +
+            "fQshRryYHMmhcCWQSwywZzqSsQeQqzVrIRroHhwIicSUsSTnMmGzjJZUuPvVjlLndLPplIfFxXCckoOIZSOjKkJhHvbBVoLlsKqQkpQEefyYFuvtOYwWPpyowjVBNHbtTABbRAPpcCcCctpiLWwlNnIPvkze" +
+            "VvxXEZGssSHhyYMRyZzvVYrjJBnNDdanFfYGgiUuAZuaMVvmXKkHYQqQdDYupyBbFkBbvVnNgEeNnFfBzBxUbBuBbXVxXVvvAAyiQhqRlLQqNXxKknErYyXHKteuUbByaaQqOeEOKURrqjJVvYSsyXqQxdDS" +
+            "PKkfLaAlLgGpJqQjniNUDTbBtqTxazZyYbBMEZzeOWxMkczguAloOGgLYBzSkKewWPpEdXUuNTjTqQbbBBKTteeQtTWNBLldSseWTtnNwHhIiVvJFzZfxPpOkYTtMmykYobZRrTtdHhwOkOXWCceEwvVREWz" +
+            "mPldDQNeECtTUBvJjVnNbAGgauDLfULQxGASnyRgXxtyYWwZSOhsiIsFeMYmMLlyIgGEOuUhHsPvEUDDddueDFQqOkfFAaKoWoLljbBqQKuFFbBwKpQqxVRGgFiQGuVHkgFJjbBQqAaZzfGxFVpPStTxXPTb" +
+            "BJemMKkIitTtyjJPqWwmvVWwVdKkfHALTZztJgGnNjKEpnDEeyDXxdhHZzBbrNNHdSsDhRZzWwkKrRlCcyYxlLkAlLubAMwWhqQhHRucCQqPbcSWjJnUuWwcWvhHVErfmZeEgnUADhHdahIiSbqQBxPphHFb" +
+            "HhEeByFZzRmMCSJjeEszIibyWYyBkWhHwwWKCfFXxzTnDdqQZWzWXxwFIiWwJjtTJuGgUMmjEPpZKkzYyRnfFamMYMmONNcHNnhCntZoBbWUhHXNzZDLlAatTiUiIuIvVxQnrRBbOBuUWjJGnZzcCJjKdxnx" +
+            "XNxItQMmSMmEHhEeeselBsGJpEeqQqFfQfLlFPGGggnXxRrxXlLySspTEebsnuURtfFEhYNnaYbbBELMqqQGgvVssPOOLloogGOoyYgeEyDzMvVkjvlLkpPkKtTcCmVGBbwQEjJHhnGgXxNHhQxXUuZzFfdd" +
+            "bBDsTNABeVlHwQBbhjJWMqRrQvVsSriIATdDsukKJjoOgGoCbBhHuzGgOVorRnoNnONOvOAalicoryYRkUuoOKUutWwyqQYaSQqsoOoBQqzZbvFfAAaXxSsWtIBFfbvViBbTXxbGliPZzkUuKIijjknNLlKE" +
+            "rsTvVgGkjSskkOrRvGFfcqQgwhHVEybRrBYDjJfIMmXpyElGtTuUoOgFFHFfhvkdsiIStiITrrjqQwCtbBTcSstCDdcTGLOobBYTDdZlLztQYFuiIcCFZFgqSyiIBaiIVMMmdcCNnxXUuDqQblLIiLPxcChH" +
+            "haaKkQpPCRUpiIFeuMQphUOoNLkpvXHhxbBYtezFNaTIiIizZjJUuOIiKkLlLAmMarRnoCcQsSqODdNgTtqQaLfFlbKrRjJkGgvaAmvVMSKkOdSsNENuUeExXtTnVhuUHDdNEeDLvVlrwVuUwWqQzZvZSPpJ" +
+            "nNjsBbRrZJyAaOsCFyYaAFZzfpsSPFrRfEeEeucvVtTnNCKFzbFfZLlGhETqQQYyqZHcNnglmMRrRlViIqnNoDqQjLlLsZzDGhHRGEegIiiAaIpPryizrRrRfJtBeEUuIiXnNnkKHhqQGXxFFlNnLCsSKPbB" +
+            "nwWqQqhHhqBbSycrRQqmMJnfQqFzZfFMoOJjqFZzfQRDdVSsvrwWPpmNoFfOEAZzaqQupMmPUjXxUvwMJFfgjqaAQtoOoMrRSsKkKHoRrzqIeECBbAoORHTncCNkuUKwWVXxftTRzZeENCaAcFffmBoFfOOx" +
+            "pcLykKHJjhABpIWfFGAaBEkKaAawWwvVcfBbFWweEowsDdHhHUGguhlLjBQqEjJjuQqOoHsStSsOWwoTFfYyimFQAajJbDdsSmHhMBELPmMpTQqmMtlhPiIpCoOcOQkhOoDdRrLltTcCWcwWVtTxARzZdMLl" +
+            "wGYoPpIZUfkKKkvVFuUODrkIiSsRpLGnvZKkfvjJWGUuuYISssgGEbBoLATTUwOoUlnNvJkKjVYyLhGAbjFSsfDkIiJjCBViIPYOfUjJnzZqQvCcQLnRyeEYdXxDTofFkKOqQSsspMmKkdIYHhEWXNVedDMm" +
+            "pPdDganNFfAoOPpNUCvVUvGnGgQTmMtbCNKkYLRrJzObBYyYyvtLTfFRFXepjqQJzvJjEqQoqeCnNclGmvSFwWfvVKQPlLtTQqhDdHaOobByZwWqQpPFJPlXeqQQqfQqvUzcwWwWJjCUAaEeFfInUuNiVvBb" +
+            "hHFfZzKIEeQOoZjJscdIHhnillEeGfFoOdDgMmtGdHBYdDBpPffFFwADDZyTDrqQRVvdmcMnXylLwGNnKkosnNTtGBpPbgGgSsSHhbiIBRpbExXeBDdhWDdVeEEJHnaAfFooOisIWBJjqQxYEfFZzWFfwpRr" +
+            "bBPqBlSCcyXxXpqQPVvIioqUuTLyTLlEeCmzaHmMhxvNnRrjVTNxdDHKkkQLfhhuUmARdvVYeEMcHGgmauwWTzNnTthPJjJYbeJhkKogGvVlJjLkfTtFKBUDdtTuTFfnUujJRQpSsqdhZMmzRgNnGruUqQVv" +
+            "SpvVPseEpcUOWLAavlUuuvVTQYZoCcJjOzOoRHUueEMANIpvVVnNxXqQqvylZkOovVfFeJuBbUhsSPptgvVDVvPpFfuFfUmMXxDdhsoOUpPuSxXHHCcafYAOodUuRrZoOtwpwHxXxSsNnXblLBXKzXzZYHhx" +
+            "ZYyaUhjGyRcCYyPptpcTzwuVNncZYWvvVVzTrRtSrdDAwWamMATtSQhHJjZxjeqQgWYlYyLdeRraAXbBxeLlMhxXBahjoLEeHGoUIiuOKPBnNbdpeEPNmWwMpuUWpduwnczAWTGjJEmMpaAPIBNVsSeiIqQi" +
+            "IzJeAaUqWhfkOosurRGuUzrhHrRRhKzZjwIifCePSsOohHBEePYyzZYyxXCLdnzeEzyrRzeUtZBbpPJpPjznLLlePpZzElNBbLlToiZzetTgMuGPWVXdDxvwpnNkKTvVtNTBbtbKkosZzRrSQRFFBQcuUCCc" +
+            "EcCeoOLljcCUnNKkqTWjJpPwWdDjfFJUuuBlwLKJoOojcZMXlbBHXaAxLlYzZeMmCRhHrcOJrRKkjLlxXSsGgMJTPphAwxTtXWAtunsSYVhtTHiUuNFfZIiRrfTHhqRCOwWSynOoXrRTtPczeEXxjJLCncWb" +
+            "oOItTohtqQcegGSsElLndHtThlVvGgpPGvCcBRrTtbIiOoBCblxaRrWlvqiOxsCcBIQkIgGjJHEBTbaAKkJjpPBCIiSFfPYybXDCcqNniWggEeWfnBybykxShkFfNnAkKxsSXPwWnNpsBbjeECAOSQoAvVxX" +
+            "aEhQReFfEtTRrzvVSCiFfLuUufHhrjJeEsRtfGAWDdEAaetTdkKHGgKZlLLPrMyodDGQipkmXxMqgGPplrFfIymMtiIKkzZofPpgtDQqujvFfcCGgIrdukKGgRJFfjktHLRCkKSaAOoKvPCcpaAVOOoRrcIy" +
+            "HhYiVPjaAbxXhiiWwyYOHjyudpPRynvVsCirBbRKtTvVGgdRbhHBIbHhYySXxriIwWVvnmMCNhsDdoWnNbdDiuUpLlSMFkKHZQVvZzarvVTuBMYuUycGxXrlLjPBbBbpJzZNOVvXxkDXuUWvtEGzNntLcCRN" +
+            "kBbnsSDHjCKqQwTjJFnqDjJdVpbIpPSFRUunNpPLnDtGgTBbhrRYPpETPptTtQqXxPpiCpgpPGtTtTkNqbAqoKkBbGVvpPOPpmdEwqjEnNEeObfLLXvhIclLdxPpswWSBLMCWQJjdDoOAbBaqUjoOstTdDWv" +
+            "qdrBbQqoqQzZsSGggIYIdhyYjDpPKPuetTrRFRrVhqIBbNsWFfQkkObBgsYyXxiIKWwqIdhHOlLOJPpbnXhXydbhVvnCRRNbBhvEeVWmymMvqEbCcUQpAGSMeYyhLCcOolyYVivVfwWeEOomJjxWHnNASJjx" +
+            "ZzmIIZQLInNieEjJoJgGmNbMsgGmMpTKfJgxXGSsjPmMCmtNDUudyHeBqQLlnNbyoHVvIGjKQqRrkWWwjJsSKkUApPjJcaOoLklLpdCVvStMbgGujkeGgEMBCFEDXxdRrtTtThMHjdDksyuNnUwkcvVCcCvV" +
+            "vVTTAaGgPpLPpfyTLlNlmaaUnNRGNnPuyYdKzZFcCgPyYYMmoqzAeElCUucgiIggGVoORmgDkRrKvAaFsSfVbBUvVudSWCcCDhHKkcZzqQCFVvexXEkKFlHhaFIrgoteenkNnMhHZzWohOYHhyRrrfRraqDd" +
+            "EeZzQcCxzkDQPpmeMmiIeSnIiVvNeEtJRrjotTZjZuoNnOzKSFqQfIiWwVxkgdytTYfgpPHzZtTNnrRjByYMmhbsEeQldIJXMunIrNnRsIMmiHhjHEeqQuUDdRnQtSsMolRrdmKIhMaTisHhpyYJpPvAalLT" +
+            "cDyVvhhHHVvtNFnNfYyyFfXSNuhPiIXhgXxGmjxzZZlLpxLfFVgGvlbYyBTOoiCcRrWzTocQbBqdLHbhJjHBmFfPsSRGuTUwXxRrXdhQMvUurrRrRGaAqibQqzzZZMCAFGgcKkOEeRGkAaKWsSyuaXaANtTl" +
+            "WUuJmRfaAMIktpPVAWwayNnoOFApZZvUbHZDIiXxMrRmdVvyeqZEeERGJpPCXxrUuRdDtSsTBbnoONQbiFWCWOAaYyoUultGkKXDpgqFtHhDdJNnPaAYypuJnLlNwHhfXxbIZPpTtEUYrRDdyrRuUJwTtRnN" +
+            "FRapFfPDdZzPJQfXINnxTzZtncpPBbukKUDdCNBbFlDgmcvNUuCcveENPpXxtTPcDdxBbcCFOofejUuBwKkyYNbDdxXnpDdPTgIiLNfgEQbBZzmqkrxXkkhCcEezUCcpPnxfFXJhHUiiVUTIiDCukOXxhrZz" +
+            "YiUboONsSIiHmMcCguUDduUIdVpPvRrMgyYGmulbhhHFfXxMqEMAampGgSQqkAqQjnkCIiqQqIEBxXriIRooyhcCKSsFXxfQglvhZVvzDUaRCcqlLQHhLlrpAvGgwWoGXvVxhQZzqhdTnGKWGSsAokFOmMdO" +
+            "oDuNntOoDWPlbSboLkMTtmzdzuIenNcfnmMsSerRaFWwZshDdixMmXnNIhQrvVDkPeNtAeAaJjEaXbBgXiIlBIvhHBzEtxcvVKkCdDcGVvgQJDiPpLiQxXIOhHWwyYCcCcQNDKkgGdDOPpnNvKFfmkPnNoKP" +
+            "pkZQmvVSLRrgBoRrObGmMbsGBFHjZrczAaUPfFpqQiIsGiIgtJXxjVCkNWNMRCRLlIiJjeWiIKmMkzZEKLCcmMlLlgGUusYmZqQzqQUGeQXIixqzZEgYQZzqQtmMcorsMdfBbFCIifTtNnMmeLgnyPpxhmPp" +
+            "YTIPgNFIihuBAJjBMRvVVZlLXvWwKvsSVBLlyOoYbYmIIHkLlSrytTRyYFfIkTQqYyZVhHvoOHJbBXyYQqxfWFnNLAsSjJFEGGICajJhHAZkuUKJhdKkDFLgGtiRrsSzEeEeTxsSRrAawWXtWuuFfdrleEea" +
+            "AzFTtiIuUPpAafFdDiIHaWwoYXoZzpnBaDdDjVROlXiTtGaDjrHzwWUnNQqmMnxgGXPECRBdmxooqQOYNTtcLqjyYdDwcqRSJjshcnOdDizmpPMZuTtLEsNnSccVlXmYIiSSEnfiIdoxygGYWNnwXuYqJXue" +
+            "EcCcOoCyYtghkKuONAjQdVwnNwBQqVvsBbSVmHLDdxXleEhioxZrdDvnbIzZAPSTvyYgMmNKvHhVSBkKdYyoOTtDKrRkAxXazZhSSclLZzCFCcLhHlfsCdHYUhHzZLwWuUcCsSQqSBbKdwuJIJjwhzgNnORr" +
+            "ooRrOOpRwWkKFtDJRMJcCbeciimMwLgIAognGzEkaBBzJnBJtTeEVvhHKkhWvVlLGJNnRrGgltYljAaYTxCZoTtdEYyTSstaxXAewqxShoyJsQGgiFVPPPEegGrRpphgxXlLAdJVGaYifqmOVvQXxqeAcoXx" +
+            "OeoOEDddDXRcxlwCbzZUkEeKuBckKwWUuwpPTcWwCeiNdpqEeQMmoOTBCVTvByDdUOcYsSTtioLlOnWlKyNwWUunVcxXFbBrTtcHvHEtcntHhTYgfJUgGufJjFwCtbmHaAJRkBIgaKTtsqlLbQvVnbVvClMm" +
+            "WVIiRrogoOlLnNGgxdUuDgGoOuLlUJMmsHwyWLbBGWwaARmMrxafuUFNnAzdOBbopZDjCRsEmMelLSiIAaricCcsvVSHhAabBAgwWGyYyushpPHwWVvSUCcYutTlpnNiTniIGWrRhnnNNVWArRNtToTgZcnC" +
+            "HpaAcfrBbzZahHsWwOoGJlMYyxXMmsSpXGtTNnKpcwZzWiSPzZetEzCMQylgoUuxDFcHjZFdDmRRvOoVzPhpjGtTgpPifEeHdZrRnIJdDRcCEaIiMoOmNvVpPOWNexolVwsEPpyLlgVfVoSpyTyDmMdvBbYe" +
+            "bBSfsXnNxcsCUnPAXxaQmMwHMmmxIiJuMqmhzCcZdvQqKkKcCxkpgVBkIQqFhHNbAaBeGjJvynPZovgYdDCxTKkRZhFOBBIiXxIHtvutOJYXSCkKsWuCcKnNvVsSffFboOkpPASEesMPUQqoqYGgGJyYjjcC" +
+            "eEMWWwqnrRbBvHWgGwJipSMqGPpkihnXxXjXxwWCFZYpprqwFfWQmMRndvVIcCbBkXfzUDuUFqQlJjLvVvVwWlLhCcLcCEefFfMmEeOCQquIaAPFZzqQfpDdiUcYlVvLyogfDcZmMSkOowIOLlHkmVoOvLlg" +
+            "GBSsczjNnAqPusWwSQEfkZAynEYTemwWrRvVfwZWwSPpTtqYEXGhPlxXLjJdDJEmMJjgDrglUuIiihHGyYvuwbNuUyFYcoqQOGoKlyDKkdcngGCtkKmMTcNykKYNizOoQVyYveEWyYOoXRKREHBgGeADdZfF" +
+            "zXMBboarSQrNjJxXQIiqwCcAAXxEeUyWjkKmErrRofDdlWFQqHHhViIoPpbzuaPVYMmDblAAgeEGopPfFTtsNPulLVvtTHcIZsSbBzUtHhOpiZkNlLQbaxXWvjJgXZzwWxhHGOLlebBhyXHEMfFJjJSafgbP" +
+            "taWwHdvLBEEyTtFflLYoDuaPczKYykeeJGgKAHhguUGcomRGBaPpdXxDFfmUFjreEuUjmEPFnXxdWPpnRWxYWxzHWwoJOxXuXxbGCqQcnFBHhEegFfjoBbOXsSICciJGnSGVvSxOfkKreERlFRwWrSfSsfFF" +
+            "IADgGUBiIGgrOoRbqQfOoFNLlnuqQaAEYiXsgdDyVVvHEtywVcfzZLRrllPLBmMbjEeJxXOpdeqlaAwNEvvVsSmSJGfFuNKFrVTtFfzZvntYyYyAagQKFcJnNfyHZzhIpKFPpIGgxFwgGWgUYhHyJjINhxdK" +
+            "bmGFfQQVvjlLGgmKaOiIiJjIociKkUjuUZRpPZaAzrATtwTEjJdDoVXOXqVwoOYyUuVjJHRGQrKkvVKDdwoxLlcCmuUQGlRRrERWwreNUUAWuhHSfEKpStTsPLlofFOAWrOpwwGGwwGZfrZSGoWwicCbBIOg" +
+            "siZZfFiIFHEsSdDeLYyTPfFppWRNaZbIiNFoOfcCnVvnPqYNyFxoOXmCIiceETHVksbQbBZFSvVcCiINTDwgijGgFAGgabBkCcKfNnxXJfFARrmMJYyjsShaNnDdxaIygGNQIiqQOouWUuwWwoOYyTZkoTtH" +
+            "ETDjqnwXxhvxUuXxXVEaefKBuACoOZTtzjBAfvmMVJPhIimKkgGpUNxEeiIOlmqQrRDXJjAFfpVImMGyCBSsHNdYCZzdDcysSfGPGXhHhHyGuUgYedeEDMjBbkYnGYyqTtKkumAvUrRGKqRLaAlUOwVvBjsW" +
+            "GgwSJAaoObWOUqQboRiINnvDuURKzZtVvGxlgBOcCjiNmMJBVHhvZjBsSbBUxXHhmLlvkKxcBbvrRuoZqzAqQGgaGApQqWAtTfFfyIEegMcCgGVvmZDXMmimARReYDQNnYnGzrRZZnWrRSKuUkFoMtmMQeac" +
+            "VHhkaAuOokKOGrSBdKfHJDGggSMmasSAgsFfHnFfNhSYJjiUlvVasSAxqLZNiFQqfFaAfmKkVvwnftIzNpwWPHvVdUHWpPwQIiFFffnVEeFfGWwgjJVvFhIpPTbEDTtTPeJZzjuVtKkVzZlgGQqQcbaAJlLV" +
+            "OJbBjJBcSXSvVsEOpYkKyngQlvBHKYyosVilbbBYGgXrqQqumMwpPxDLldHFiJjGWZfPEepHhFzwgIfhDOoToOtdXWUQvCcIOoiVRxGgADdayQPpqBLIvGgSOkhXxbVLpjJPqxcCqQXGNcCPmMZzosSeKkBq" +
+            "QbsSxpPsCbjJjooOvjBCqLvTJjyYSnNsiWwPpIvUEpZzrRtMmIihAaHdLleBAaxXCctmwWMiHfsSvNqhuDhrRnZiTHhFNWMWwFCcmaAJjMfInzlQXLrRuGggGIypPGqQsGdjhFkDbsRgowWCcNnUSsKpPvCA" +
+            "EqTmOflbBLKsSksMmfFfFwNzkKKkgNypPNbWCczZwBnqdyErrQqnNaMIYnNyuUxdnNzvmMVWwnNGMNnmXxEeiYFawPaxaAXgZQoOnEeNzOzZUEeVWwWwCgGXVKkyHhMWwmYMubSsJzbjrRnIJosStTbGLqQX" +
+            "gNUunTkrrRdVrOSsBuozZoupPeqQGgWSswErQkCcguVdAaDfFaMyYUKklLQYygNyKsSJjJmtTzZExgpgFDnhbcYgivPaxdMLoXDdnuPuUMYyHkIiLlKpjlLFabJcaUbkFEHhAeHWNQJjJiIdxXtpPeGghOdC" +
+            "cDKztUqngGYiAXAHFfaAmMajJsSIZzZzcCGWxwWXdtnsfzvVfFyYqBSKvhtMfaXxAYnyKUukQNnvVpNohHOBzzZAnrwPeEzZtTtlhfzzIpfcCFPzRUuVvFzgWWggWWPEeoOokKRwauoOUoOeEkNnKkeFsSsU" +
+            "wauunHhrLgqdDPGgpuUMXOWDdDNndkRqgrhvuUTtoOWXxvQxooOxvHhOxoOIiXettTWazJuICeEAkMJqqPOJjopgMBpPcCkDXHBbncCRrLliVvYyuGfXifIikPicCYFOBbojCfkqGTNVvHhRfknUgvVrRHhV" +
+            "vAatfFTjsCcMiIsSVenPpWLwWQELlDPodDmMlBbpLFIiCvWqQYTezZhVvvYEzZoOeGSxIyeQcCqQqdayYJoOjiVvsfLyYFomunNUBbMXsgsNgjIixLleEJuUGbfDdNrRgjJYyJjGgBbBUojOhZXJjwtTrRyX" +
+            "wrNSswDdDgGNfpUNnueMJxXRqQFfJfuMUuAbgrMOCakjEEZCpAOoUcCdOeegGblVdKhHkDVvDhlLATpBbBGFAmMsjmehrFfRxYHoOEoVwABqqQnKSszIPkKdDoTuiChUpnSxXOaaLBdyeEvpAIiUZBeEOvNn" +
+            "hfKklLwLBbFOReMxXxXJazZVzZvAwKkYuaanNWTtnfPpBbFRqsRWgGwAOMmmxDOoVvdaEbhervVkrxwJWwiIjqZInCYLkqQOgCyfYnBiIrROPpotTyYyYWUVgIZzLGRvLyYlVdGJjxXejuUpHzTDdtZGgfFg" +
+            "RrxeyQsRjJIirYyzQqWUuFMEtyecCNYazKFlLeqUpQaJWwZCLlbMKhoiWKEesAazCgGdFGyYFlJjGgglLQqGHfduZFxKjfFJvViDNSsPPyzfctTLVvlJoOxHhNHmdDMvVIGgKtTIigsSjJQmsPIjhVaAlWwN" +
+            "QqQwmkKJgyQAaOupHhmaKByYzZFkUwScsxyjoTUPpVTheEibbofHUuzrtXOoiIacCAkKNncgGyGVOzpXxNYWwQPpqVgEnfQqijJKTtpPbvGPVvjlLJKYyNnXmMkoTtlLZzaADdOVDQqZzHMQZFfzSsmUjXMh" +
+            "WqpNuJjcSCMPprRmSFsEyVYtYPsOnNvFveEGgGYegGSWvLOXEnwonmMzZAmMjLlJCcWwerjJjiUuCcNzSJjsDhFBbsSIJzZPHpZdDrrMfzJhCfdXOaAkKGNnLYqmcZeTEJjpsICaAPkoOFRrfgxPmLjgSARF" +
+            "CPhkKcCMmcNCzGtOnawvorROHwgNtICcPLUuYyUygGTtYaoOmMCIcJdzPTJjtYyfFVvDZXzZgIilwYWAahSjUuaAuUXGOGsSgTtvwTtUqQuLhHcBAaNqBNnNkKnQNmMnSkAGibsQqSfFKrjgGhjvVJMBTHtT" +
+            "hcBbWjFGyeENPpCyNnGgYTVvehVEbBehCRflLCvXxbBLlqQYkLwNIyCouYbVhHtvcbMmtPDnIEtiIpFfPhvVHWaAuvZzVUfFHhWVvLbEWSsjxXJwedDBXCrIixYyWwCaEoMQFIyAuUgvjQqDaGMmHPppvfIq" +
+            "SjYUuOHsXNnQWEVvsSeDOzcXIityhgGHJLyTLAaEejgwGgHNnjbNjZiIbbiIAKxXedDZgKqtTvVQkNXxGOaidDGlWIICERrCLlccCBlLjmrjdASsaOoTfrPzZoOoLlOoGCcZKkPpHWJFfsSYyjyuUYmMiicC" +
+            "uUIjUWDksUOoulRruyHhhDclNEedDnLWwgGqOTfFYytoQhHsHzZbsSsknGPpVtPpspaiBNVRvVgGzoOXQerREquUdDxvVJjXOqQIMvlLSAasVvDdwWbWWVvvwWzZDqJanoaAUbBHcCGTdDUxjIiQyUWwODNn" +
+            "VvFXxNesWwFfsyMzIiZFfxsSLvCCelUzZIQqorRNCCcHryYIioOQCiIcCWJQlURruCIiKpPkuUOoAanoOyOXfFMDbrcepNogrRGOuZhLlDdRJjJdAgZzIxRrLorvJywWYdYyAbNuUPOxyvVOeEAhmMTxXtxp" +
+            "PXfZELUDduRDOoWwWTubrRBUKktwjJUUwcCZNmMnKkOoIWwTlfHFfjzcigXxSsgjAaJefapPlWDddDHhwfwFhHjhzDBbdhGgHtKsSirQqYRsXxKJjhenNEuUiiMAayWwkNngGmnNMVvVxtmMTpeEyYPzveEr" +
+            "mbnNtUuAaTsSaXxQqbUHfkKnlLGpitytTMHyYfFXjiIJfFYNGlEIipPFLctBbTClBbIiWUuwSscYyDTtmFfBbpaAPKkSROCFyYfTqhkKHyzZuMyBbSCcksSewErcpPrmnwnKcvxXTGfFbBVvgSuZCRzxXJhf" +
+            "bjiITPptSbBseEJgnNSBgGRrlsBoOaAbvVGgMqzKbBPWwpkwWOpKMkVOoodnqCcEetToiHhqIliIIdjXxiIKtTkqzZeQqECXTeZbVibLxGxTnEpKdRqHhHHSzqQfAENIiFCEifFUNnZiIDZKlIiOBsBLpwdZ" +
+            "zTUofbBxqQrRXKOZuUzalhHLIigwgzZjJGkgpPNtDHHXxbquUQBxXgOVRraPAudHVLGqNgGnTtkHYOOnNbeiRkKrUuQmMcAaKNJoOaKkMmPpKDdsPeQmOwWoXPpdDxyYsSHBLUCcDDdLliRrmMtTGhfFUqNV" +
+            "vnQunBucCIeEuUqQFfyRJRrcCjHoKUzZKkcdtpjJXscCSxPeiIIiEuvIIPpujFfdDtTZzNuZHTtsPpSeEKKRKQFfMqCoOceGFnlGSstpPNcCBnFfmMWbJEJjlLXCpnVnVCMGdLfXGgBgzZyYGtTbfFixWHhw" +
+            "FuUBbeaAEqPpjpArfrWjuFfeuUhHTtqQziJjyYBFWjIiUXxjTfQGNIrRinPdxgTLOpPoKkwcBbwfIBcCPpqaAaAcqQJjjgrPlLpezZzQEtTYUVvPAapuUuaADVvfFdpPzhBuVwWzzPafYvzZTKDdHhimFrMd" +
+            "DjwLOQmMqonxAUYwSkeEXxzZLlKsgrEBbeoCfZzacmzEejJeEZBSsIQgNnxEeXJwWIijRhHVjJmqHDxWuaAtCcUZzVvgWjoOJwrkKpMhllBlLPpAaiIbLDCOyYtiITtjJZPpcCwlLEeItXHoOhRrdXxDkKPl" +
+            "iILzXJMAabBJjTtHFfxaAdDpHUnsxYpPnTYdCcCIiPpxXtVuUpPjPGgSgGItYyARrnHhNmHtTiWwkMDLOQqYymTtOyYfbBFoIiqQTqeENrhaAJStyYTiNUXxmxjiDLqcCeESBHbJtThyYGFCcRrDGLlKXvsu" +
+            "UkZUzJzTtOHhcCSsairROoIAPpTsEkKEMqdJwWKkjKPpZXAsSFRYyoHOwHhsSmcCKNhHnNqQEETOaAoOCcGRzZifAnvVNjJLCcfpPfUudcwmMpPlLuUfqQHhFsGMriIBbvKkGGDdNnLhjHGghJyYHaZQOypG" +
+            "xtTXfbByALlaYYykDUpgruAAMLntTcCtYFlbBqNnQZiIzIieEttlnNLIEeiKWmMyJsxXrRoOgGCcSjYYSnGzTtZSBzvVNnZPpbsgNKJaAUuhWwmHeFffHhcbzZmKJUqQBmTscDgGPKlAvVCMmaxXmDMRreEm" +
+            "tTdYyMuxgGXlZzbBLwNnJgihOYEhLlYnTobBOMcpFktPgGSmBnMoOQrRnuUNqjJjOFSsfdDlqziiMXsahwXMFkXxKSsqQIvHEmsgatTwWjJPquJjBTkKteQjgGJNnVYMwHnrrxaAXcNHJjnNBOoDYxaAHlLV" +
+            "vxNBWaAwjoAaoIMmxiItTXGgiDVvrRiQeQqxXEkSGoKKqwXxSCgGcniQpPHvOiIofEUpkGrRgdJcCHDiyiaAhHLlVpPvGORDQVwpPgGTtSJuwcjJmlbXDgArRuUBMmbaEeGCGgiHVxlpPZzlUuFPpBoeJQWe" +
+            "DMogiIzZOQaBpiIPQnKgGPfFcPpaAiIIYyGggKkGelLZzyHRrdNlrfspPiInNiVmMvBPvrQqRQNfBbtMmWkcJhdNoOJjKgGnrPpIilTZgeXxTmMkKEezZVQnNqQqQqwNnxdKMmonRgLlCmbUtQqRAqWFfwza" +
+            "AIihfZzmsPSsIcXiEekKIlLxCBwOdDSHyYncNRsBibBVvbBYyrvVDkqQWwXxILYwWywWlGgcSxXkwWKQqNYPIifFprDUYJhoiaNnAIIpPIHBJppvVSsPvNnCwoiIfCcFOWGgokskKcrlhTKrUDRiCcVyYJUd" +
+            "TGKJpPfFXxjkFOTYAaiRLQPpKPIHhotkKTOqgOYGgWwmRpFfLlcCvVlFfzPpkhWwkKDBbwagFYyOoTePpErSRAaQqFUlKkIcsuZzUZRrGgcCcCuUrfFqHeOqsobBacGgJoOgGSyYVeEvrRaKHsOoXKYNnByY" +
+            "YbGgNFwGGwEeIukKxXUjJQdxBpOoscqpPQtbehvRrPdDPppoOCcRzZrzRrZViKqmMibnNvVSYyXzGgZoIQVLKkwAXLBCccbYEeyFfIiVgpEePlCcLSKkyYsLxXtTvVDNCNnTHjUuJOHhiBwCDdNclgGNnZCp" +
+            "xNRrYszZocrQtFznIvTtcCfFyNyYUTawWKYykBbaHtQqjmoEyhLxIimSszCHhJOjkTtSslilLIWoOLbHhUwMvVmBbtQkrRKKURrukIeEikKnNuJHhFfHhqbffqKkQrqOBnDdlLBkjJNnXxFfKbgUmGsSEIOb" +
+            "BuEZMmYZZsqOoQSlLNDyYnNlczZjJpbphHHhgGEcFkKTtaAuUWJkHZgUrRdDSKFSszZHZzwQbBuEjwWeEIiZEyYNnvnbiAaeXxaAgOotwaZuUCNWAapPUDPwPnDNnXxGbBgVveEpkKkgSfEenNFfFsnNhFfb" +
+            "BlOJHyYAbbBaAaNnnNAzZHmBbEEDhHIdDieEQqyaAPpwEefFWxgGaEeAXQygGYuUoOqwPpGIiEJXzqjJsYWwyXxaDdDdRfJjFxXzZLlyoOYsZSswyyYzCVvvUWZDdtCMmPTrYIikKgJBbHuAzXyxeEZkaAIi" +
+            "LlSsaAxxXHhhWPoOKkWTzpPxXLlUuDayFtTsSAhrRMmdGTHjoOMmbBwLxXKkyYlWEQJJOojjqKzLYnNVQvnxXNPinamhreEyqtULVQqlrRuUwouCPHDQPqrNtbhHXcbKkBCxODdMmvVHjXxEByjpaAoOQPpq" +
+            "PpRrmMHZyYtUiInNcCJTtzZlLjAMhHGghCmobBOyxOoXmMDdDbBoOSsvkKqQVeEtTrhHaMFfEeDdHHFlqAaKhXntBbvJVXAZnNsoOSMctYltQOlLxYsfFCCccLbTtdmMRnNrMmBbDjJAaQuUeDdjqQJxXzZv" +
+            "VyXbwNnZZARSsrahHzDKkaAdziSIONhXxXDdxLljvVevlLwHeEqQPrrROEetTRrgWYvVtINtHYyhTnitTSsTaANCvVFfcnpPjJxNmCMVvaAtYzddaWxqQXAablLybhDgTMxXmtTLLJjevVEINiDkZzKCSzqX" +
+            "xikMmNnXxsSuZwWuCcAaVFExLpjfzsSYyYAAaNnpqSsknNsVFfrRKkMgLEiIQDdbBrROJjesnNGgqQSyYaADdVZPExfkKiIrZzVoZjlynfFcBFfjJqNgWsSwEeVucCcupPnPpGOYyoMPpWwTtmEvLlnRrxqQ" +
+            "wZEeHhzeyiDPSBbxXoOtZctTCzWwOEeorudDUNlqVNuFoVvypqQvbuUcIiKdoOJJjBagHuWuDdttalJjOjJeSimMwhHAaVvWdDyUDdWwgUaAuwIiVFWwzeEVNgSslCcWGgwPrKRsSdouziOygBbWKkmDhPpH" +
+            "rmGgRPpEerGgMFfaXvwWCwtTVaAHhvtbBThHGgEeHKqoWwiIHeVvqfMIhZzUJebJSpPWMmOCOoHhWUuAJjnNerRBbybBYbgPpwlLiPCcbaYlCPXsSsPBbprmMRSCcLlobMDdFnIiIirYyBbmMFvfFtvVhrac" +
+            "iMlLmQZOhkmGgNnOTNnJSsGOojsSmWVuJFfeEetTjCYsKkQlLpPHQNpkcfLljJfgNDdxbTjWwUuFrRZIYDuUdgdSlWwJbBdOWoOwQvLUurPcXaAxCpGgLVKtLlTzAaZkvGoOChzteHUcCugzogGuUODddDBZ" +
+            "fRrmMGgkcCUxrIiRXKkoOfcSofFYGgjfFyYzzWRdGgYyZznveqYyQnDovVsqQVBAqLlcCSsoOfFQVvGsSWwsoOSnNlLSEesnNXxnfFPCcpuUAaNloOotJjKkAEenbBfZETcCNrRnVvyMmVPKlnoOpPnNIikK" +
+            "uMmwWWwHPqvVmUEYyfPYyuQqrPpINBbnxXicqAmMqYyQAHXpleECyYcBmiIvZgGrRgSswWtTGzAUubGgYsQeQqEGgtvVTGfuUHBbJjVvQNiInqhzEeBbfUfyqTYyZzlLtfFylgIIiioOXxWJRVvRrRDKVLwW" +
+            "lfWwtTfLegGYdDPmMxiFdDdevWGeECguUhHVZzwCcOoWoKKJsSKuAaUsSscCtTSeEMmPpvVjJcCtSReJeEJsSpILgBwaVOowWOrRjJSsATEzZeOCILcCiIAaohHsSLjJloZsSUcVxXBbLlvOUbBCAwWaMqQm" +
+            "cStOoaRmrRwcCHqWhLvEbaDdntoOXxSDtjJnNTqaAcCYymMeqWgvMKMmeEOoVJKmZdYGaAOopOoSSsSQmlefFBWwQqUuyAUumMyHefpPFTrNSBaAtEePSVvejJvVvVEsPpYYyRXxrNjgjJSbPpkKLlLsoFfu" +
+            "UeEHhOSEGgqTiXdVvDXrREehHMFfFfeEaAmDeomMOEkyYnNVjFfHhJvNgwbopPiINLkKlqXdnxuwOzTVvndDosSWwyANrefdDZweEzNtRrZctTbvJvYyVjVwYBbzZBZcrfYfXsHuNGuUzMFRewsSCbBgYyeE" +
+            "eEGcCNQqfFwQqsCBpUrHlLHhmaBUaKebBEXLlLrtTkSwtTWsKnncCTtRDdYWwmMdNPlLeklahFTtZzQdDWwqDKkvMTkKtQpZzcCYTEjwWtpsvfXohHOMDdvVmKhvUgqTtQqIfrvXSsMmPkHPdWiIwDphWOnN" +
+            "ofBbfbBUsSkJPpOcGzZgCIpFfPitTZzxXhHwfdVpSoBIiEebeimHhEfHhSSHosRrzTZzUuGpPrZzECcetTYsSPpNhHrRbByYsagXqOolujJFlJjOiIodZzSsOooOcUAaunqLpMLlZRjJeErBbwerxAaZzoKo" +
+            "WDjJNcCnUuzBOdDWwmMyKKoXZzjECcDbneEwTttTqEaGghHAEkBbtYyhHJtnxDsZbwWsOoPpSFfyEelLhHwWaUGEeZCqQKoOmXLDdlwomAXtQduoOBHhbnINPlVHEehIiBbbKkBEevsQqBbSFyXxYpsQuURF" +
+            "wQqXxWfrUuukooAAdDDdHhQqYTtIiMoIizZOmFfcCEBbOoRrTIikhxfFRDdAaqQuMmUaOoEKkeAvVerQHiIuUqCcIEeYaVvaljJTcCtLbVvZDdrRbPXgGvVhHxpGBbKfCYBbyYyyYcYPUyPpquUyQqhxAUzc" +
+            "LlCHhaIyeNcCnEoOAayYNwWAmMaAWwcCWwbRrmSgKVTCUbBJjFfpgGPuRrRCcTtrcCaCcTiItrSsahHeAaqQAdDatTEBWKkwhzZnbvfFtTVvNnJWJSsdDjMmTtTVUqPzdwWDvViKibBmMBbDNJpgNtushHCW" +
+            "OorQqRlLoOOiRrRrRvZGgEWYWsnNqwFfHRHhEwmUJjGsUmXvVxtTMncCTqQMmyzZYtfBbNFUxAPkKfFwGgiIWwCkKzNnNbyYBSsnxdiqQIINnrupWLlwVwMmjJWlYyLvVPpcCPkBnDoOdeSLHTtRrMtTqQQq" +
+            "noOqDfRxWwXQGgZzJjKkLsSsmdDNnvvVgGkKDDddiIOUQvTtIcwSioWwAaGgOvVHdDTfNIcyYWwjigFflCzZJbSDMmXxdzWktTKwePwbuSlzZLsUFOxswRBIFfiEZfLZvVlLDdnNvVbBgyYGkKOoYyMmSQwW" +
+            "mMXsaASFQLBblxnVZhHzKkeELllLZRrooOELXlLLBbEyYwSsnJjuIbBLivVEJjPpaGgfPpyYgoOgGGRrPwWIiIPajJzZqQxQqXiIdDvyYyYCcVWLlwjtscPfxXmMFOqQoNEHIuTHaRHhpPraToOtAAsSaLCc" +
+            "EvLyYhHuUIiQSsqHoORmMIrRzumxYYdDKkFfbBJjCcyybcfFHgGyElLkdTNntDYYyyZNEzBbjnNnsktfgGNvUuYiIykPFqJfMmgbGTxXNkKOoHhwWrRmpFfeEtywkykLFtKOWwIiqQoyRrqkKyYjpkKPJHrn" +
+            "NwmtARrrRYazpLlDhxXTjYtTybBPVvpSjpndsWwSuWZzCcuNnUkxAaXGGjjRTeEhHSssSsFfpWwSuUsWjJDoOdwPrRMmKkOIxXpbBPLlJxPpzZUuzZFfUvVTgGQqOotEfPpFvVimMjpbIiBhOoHmCmHhLlnv" +
+            "UucYcfSswiiIUuIWbXjJHhIijRaPDSwWvVsNiTtYyInAagJsSjrRIiFfdDzZnxvViGGYyGYPpKoOiViQfFWRrAasHiIhCcBOFfvVlLuEenNoLNRrYmSsMzkKkOgGoKFJpWwVvbBPGwWLlojEegGchHCFwnNW" +
+            "wAaREqkKSsckKdDGMmNIupJjPJjrXaWwRRpPZzyjCXxOmMoqzctTCpPcCECckKmMSsJjCRrcvVerRXOLlaPHRZLllLxXzhYolLjDaAgeEzpPiIZpPAahBbHlxZzFfXXxmMkzZebBEhHuURaArrRxdDBKEeQJ" +
+            "acCZzYAaMmHbBFfQNntsnNtTfNVWEeqOszZoOIiyYaNVXFffFFVEevbBWwIiZeXBbdgGbBhHDBeXcCmZOuUabzCsqMmKuUXYyxkQrcsRrPuxZrRzXMCSsWwcmPFfpLlRVvrDdLnJPpjneiIEcyYCiIOxXeEb" +
+            "IXxzKknQqhHSyyYdbveEKkIyWXmMqHhQygKnBXxlQlFfLHWAaBqUuFQRdKMmVgGiUaAZztGGTzUVvtTeEHjJswWSCyYHTZztwfIicCHhyNnHhrRYgrqJjqtTWwGgQuUxKkUTZzTtteDdEzmyYzgGoVPpTEkd" +
+            "iIsSfFHhCvVYyvHhVZCVvvepPjoOxMNMmFKxXkGmoOSdDsbBxJfHhuUFjPtTpBEeRNZzAaFfJjdsSDqQjJHhxwpPlzRrLnjJNlaaIpPpPxXekVQuiZfLllHEesSyYExXexXhLkKlRbBgWPpwCCccxXeEVvwh" +
+            "HlLWVvFoiRriDdlLIIOxXhNnHpPDdDdwqQtFfuUTmMWTtHbSshyFqQgLlYjRVveOWoFKkfOBXYyGgxEeCcRiCcIadvyOXxdklSsLKkdDEekNnAfFgsAYscCUmMsvVSOosxkKVvRnSsNgGiQTtSfFrpPRfSNn" +
+            "zMmZHsvkyYcCZOhCcJFxXqCcjnJHhbAnruUpPaAPprCcRksSOoaHhShHslLYtTjkKgGJyxkawEegGYyvVWvpeCFfbBaQqAVOoWwiBFfbQqbCqnvSsMmUloOYyCKiYfwrRNEDxQqXdeJjngGWmUTJKZzZGggH" +
+            "hHeEfaANnKxXqQxSgcwWCdDzZGIiGglLdIrdzaASsMmZxNnRTtJLCWwrpzastuhXxXxgDgGoOdGpPcCqvkKYyPpnJjYpPyNnMoOmzZNwacCxjHHGgWmMwAaIihcChUlLumMScCIMQqmJgGReENScCsQYyDxX" +
+            "iAaIwWOeTtTaYTihHNnIcISIfYzrPoOpxIigGkzzEeSsbrLbBlBbDdWlFcCACcaEAaeVvfXlgGLpwWdabBAVvrRnxNnBbdDXNeRrSTdQqDvVtDUHhFfIiuWgBbxkKqQhotlPFfJGIijJmuUOolbUUISjxsUu" +
+            "SEetnmMFLFfnOorRyLlICciepnNPErFZzZEePpzBnxmUurfmvVMMXxGgmOqHiIhsSZzQHVvQVuHEXJjSVlYOoIkKzOQqoVvZHEeoOSszZLlhEvaQqgGuUYnNmMMmpQqPhlLXEWwvNGgDdnMaAzZvbSOGVuTo" +
+            "NnOzYyLyYitNnTLlkktTNsJjfFHUllLLlwWQlLlLtTqcAJjXqQxqDoOefMZzVWKBRhHgGGgLAalpPxGlCpHMfMmFmqQkqQhtXlLgbWwBGytTYKkPDdpEMsSKpPpLlYQeEZDdJjNTtgyAXWZuUjJYyRrzGNHh" +
+            "HITYytipPMBdFRrqQgvWfEeCQnPpMPpKPFfpOPpXRrFfxyZcrQqRgVjkKJpXxPvOoAapPgGXxhMGPpWqPpoOJlLEegGKGKKkkIidDWwgVvQrRqpPnDiMnNmXxUuNneKkEeIiEdDGgrhHyEeYKJUQUYEShiLl" +
+            "HlLhvRAyYiICudDSTtYaOAaoAOjJYmeEMaARrfroOGPpiPpiIWTMXxqhHBbQmfjWwTtJgGvVJjsFfIibtTdTheCcxLlZccnnbEeKIiqQkfDdNXVmMgbBHfFZvVdDzhGNnYycBbCvLYyyeEXMmxRPsxXSSszy" +
+            "YVvkKMmSsCkKQqfkKoOeEEeuUiIFetcpPCErRyTtYDdHJjJjAqZaABbqEeQYyzsSKhyEeKZMmdqUuEePpQvWEeZzzZsjUuJTtSwifFyVIiXxpPLPDyYHbBkKyGvBbRytAacmMaYnmMCwiIswzZdLlDkKdDLT" +
+            "tljOQqDXsNnCFaiGgBcumMUgGIyYALlIBBFfQqfsXZbrzorHhgGROVzYCufFUFkKdHhDNQxEeFsRwaJjUuASsETtocCJjOPpbECceqOoMoOmaAMmiZsSeEibBwdzqQZDWFiIfIEkxXmVsSWwsJwWHhTgGXxt" +
+            "wZzWjSvWwfKklLnNKjgrRQqipPIgGGTtJRtfdCcSmMHhaAlSswWLoSiILsGgOCwEfMNmMBbnXHhNxrwfFWRvjPHhiTtclLEeMzCGgoeVqbBKkQzZAzyYsYtsSTRreZzQqEpPypPSzZWGLlgxpPPpIPGtTgtW" +
+            "wzAjJpPaoaATtUNjJKknCIksSFlTtLrRGtVvfXxcCnNxMmXsjfQqnNGgFdHhbeeOokKItmRRrrYyPpaPpupqsNxWtTyRrYhBbOVWwyYusnrRNRrNgGnAsSYqUPpoOuZoOzuinCcNvUkfFFUueElwsSBbyYrp" +
+            "aAoOfvVWwklfXfzZCwPZznNksSSsgkaPpABCNnqcOCckKoUpiHhiIUuZIlcCyBJRiIrdcCjhHfMbLlmeIiyZZzznPpNiiIKAakWmMTbuUBBdDbmeENnUlLlGwWBbfvVoOrAaRrwWRdvvVjJIiVaATtfFryYX" +
+            "UdDRrtTukhNTtyDMmVHhHWcCyYUuYGgtLlYkzGWwmMSBUuPxoOmMXnkVviHpEKFfkKJjcsSCcCqkZUwWTkraAMmMTTcCtTRzZYtTNgMmGnKIiSskVvqQyZzsFfiIdjMqvypPYkaAuMTtSnNsYybnNnxXwGgT" +
+            "tTfAaQqYyNnNSJvVjmfFzLlfMCbBzFBNVaAhywDcCfekKiIsyYSEFDEeGYkKUumaAgGMkbIiBlLgXxYZYyNzpwxXnNEewZzJhHAaPOopjrRwmWwKtsSSdDPcCVvZXxzpASsaoOppwHhzXxGgZWmMPPPpiKkZ" +
+            "ZgGzHSsCvDdiGOoWeEGgCcwUBbulZWOSgGMmdznNNCLlsNtlLjXxJJEfFVFlLfZzcxXiIxCMFCaIEeuUfvhtoOeZNlLCxXcRrymwexXtTGgAqQfFTtjJTYMaZzAavVAoeEMmEESKEbBeFfkHMTtEepGQqWPe" +
+            "EpgnNHJuUeEuSsaArpPJAatTMmnJjNnNOoIixXBbHJjhssNnSLlqQoSbBisSIQqJioNjJCRrcnDvVdtzZEeTIkKiPpiIpbqnCYynRrNVQokKRHhZzGGggaruUFftTaPAatTVvFJjKkfCrRcbAasSBYMmpkKz" +
+            "kGgTnNtGNvVngVsarRAThHuUbBtkKvVwacCAPpHoOxoOTKkrRsvqEnNneEtlNnqGgAHfvbBrRVFDTfFMeEXxrRTTtvpTqSsQWBeEaaNAanuUnWwVvNdHCPzKZoOuUKDaTtFPhdWSaAFNnfwQqZzsyUtawWAq" +
+            "RrzZxXMmVzZSsOoSsXxjJizgPpnzZRfXZzZuUzFfweEWkjBboEdbVxXvMcCmKkTMplLPmbBGgMHquUdDZzQAahSsHMdVCcvCgnNmMFWAVbBRmutkgGBuUbBbKszBbZSEenNTjVyYyWiIPpRTtqJWbLkeqnNg" +
+            "GMmwWARfFrROGgoraEeRrYyiZukKQMmqIIiiUkUfFlPhHqAoOaBbjfFCcJpPsuUSULluQzmMAsHSBKynNkEehHmEmTtGgLSshEetsSAacCLAadDWyYaQYyjJquUSGgXDdQqeExpDbLlGuUPyCcwmzZktKPpZ" +
+            "bBfIGrdDrRVvWZzPrRKkXkKuUAlLAaWBbQqvJjbCyYccCMmDdCctTUuJnNtTzZjOoBAQlqIiQLyYzZqYlxXUuzJjDdJUuJUunNfFeQqHkKhDtMmicCDdIBbFfyLqQlYyurRSxnNxXHiIXVGgSlIigGrREeae" +
+            "EXxFYIiyGgSfCCcSdDsYtEeTrRueEvBBbxXbwcWwCFgGoOVYtjxXmMoywWmZzJGdDcrRbHFfhBwtTWcKkCEecCUuCbRZzpuBbpSsxDXVHyRXsgGvVOnxXJjVpMUVGtYyoOAKkmiIaDBXxXdDEKgGkdLULlaQ" +
+            "EJjNJuhHUDdcKkRrRNnFEpJqRrQsoKwwWWGWkXrlLCcpeWwEFJnNjGClLaClLcaAuUNtCcCwWcTzZaYwMmyAHhIvVGMmCcggGsXxMsSGRrZzgtSDQqdenOoNuJEeUvVkSsKSsZdDzEEeRfqQptcjIiroORhH" +
+            "mTrRnNtQwQqQqhItTiWobBBbOwbBFfECchkKkKDdVrUuQqjJReEdmMDvuUKkPpQqdcCDBbBlxXFfuUIifEjJsDmaANXxMAasSOomjJnJLBblVZfFzvjSsEeMqOoJjxrNnRVterRaElLeYyLlEeQqEeljlLJQ" +
+            "OCLPcKknBbLQqaAVvjJOoNratJjbEeFPpwWfFZkKzfcCzZBKWwkfHhFFfNrdqQqQJjrRndDjJcoOCNDaHhzZnTxLlgFCtTnNcCMmDdKkDdcgSLlsCkKIiDMqQyCtaYyVAaPpxXiRrQqLrRlLZdZzwWhoTtOs" +
+            "SEYyehkKHDdHZzwsSWUYLlytrRtTZCLldDHhkZznCySsfCcdDFkKkKYcCfFMmaAcbxXMuUreEzUuZNcCCcfKagGAbmsSipPIiIPaAbBZhiTttLlTcyYgGKIPpiXxkCjeHDdhmMELzSirkuUYyJjdliILDXxW" +
+            "wOonQqNKiIuURxXokKNnWwSzZwjJWBBXgGOYySCcsoxgGsSvdDfFBbeEkGmMgoOyRrYKgcLlrRicCNwWAsRrvFfVMxXEeOoKktTpScnlLNGgPEcCBbcZzCBWwPpbWweuIXxiUIIGnNAaUaAuXfFxLAOoacNn" +
+            "eqQEVvaAHgGCNCBWwmJjnNgGQqvVkNwMmIXtTxdmMDimOvVwcSTdtHhTRrGgKkpWwcQXxXxoVvRrSsHloOpPLxoByRrWgMmpPZznJjcxafFmHhPPpMrRbBmwCcIigRlLrMmhDduUHlLYyWMmBbLuUlhHcCcC" +
+            "uUBbwnWwYyRkvAmMBbNjEjcCGFfFflLvAOoqQVvVvQqHdpatTdDDmcOonCcZzxXmMdDOWgLaAEecuUCQhjWwJcCkpMchHbBCaXfFmMenmkKdDMsEeryOQqGFfuUCctQqeESiIsPpZNnzWdaoOxvHhAafFfzZ" +
+            "hHnNdDhHFiIPfFKkbBpoueEUVvFCcDQqhkKCDdSdAaDFlUpPkKIsrSqxXpPcBbCRrGgNwqQYyxXkNzZnEecQqgGdDDANnyYjJBXQqxkKpRrPzZeTcCtDzZdiIBxXbHhDaAtSsTulxXpXxrErRLYRrIKkmUvV" +
+            "uMObBBbByYHhxCjRrJcXJfksSrIioOlLrZzgGwqdrRDEEeptNnyZfSwWmMZzekKEoOQqLJZYvkKuUiIxSsXVjJuBaAbzZzZPpFgGNneEOoMiIBUuAFGgQqfoLlOrRPpevVPpEHfFaAvhShHXxbpPGgKIihww" +
+            "wqpUuZFflLzPYBbxXbHOoFfYCcLcCvVbBEesSlXxJjnyYFqQTSsKHhHhBzZlkKCiVvsSpHhPVQqlkuUKtpFtTfmqbBnLlNQeEWODdDdSshRPpEerHriinNHhpuoJeSuUsAoOMmtTHiIhIiJfFjpPHhXxRQqJ" +
+            "UjlLJVuVbSbDdNnjJOAaPpsSohHUubaAJrUkPWZzkKGghgdIiDiIQqgjQqJOoGozZWYZzZzzkivVuQfFWgiIGYfmFyYeDixXtKkTQuJjEeUvVOkKowWiIEeBAbBaZSlLuKkUsnNSseqgjJJjhHxomqQtmMTr" +
+            "RiIjiAabBIPMmWwkMDnNdkoOZzpbBFoOfeweEZXxzVvdgjJrIVSsDwWZzeDdeEvVERBbrzrRZTtTtmMlMtJjjoSsyBbnlPpLNzEOWVvwwmMWobBcOoQLlFfRrsSJvVfGgFjoOqPpSsgSsGIiyYfFkJEesSsX" +
+            "cXxzPbBDdcCMmKvMmcCCcFtTfyGDGlOAaoCQqcCcPpnyYyeUuYyNcCPpIIDdiEBiIbkKvVFfJBIlLibBVYyeIpfFoKkvVxmMfFVvJpPMmuUPiIYypZzClsSLYyaQtTtTtGDdOfKaAkFfkEGjjJJjJNXcCvVx" +
+            "QPtgaAylLYBbtUubBRwWJjrzZaAOjJomXMmpPxJNgGnjfloqmGGErRNZzoOnvgGlLLlYYFfygGyHXxqDdqNnkKQQzqQhRrwWpPSsHUuJqJzZCcWmMsSwFUuEnLiIHhaAMoPpwWUuTOoXIiGHhgeFWwfTtSsE" +
+            "DlLOoJCcNnPpEnQqNijJIeoOVtTXxvtTMVvmQSsFsSjiIJyvBbhHRrjrRTIitYpPOoRTuUtrRrFfeEZxaOoOwWkKMmhHkKYyqTtQotTpaUuWwHhAPBvVJjbmMgGdDfFWNxbBcCXxXwySsxnpPMoOeEKkXVMm" +
+            "CuURAaZfKkLfTqQteEpPzruURZHhFmMDMgGmfrReEEeFtTaeRrEJjAyAdDaYMmxXRAaMmrKwWkoOGgdgVdDvhokKOHGwWbrRVvdAazxmMZzXZjJDfFISsiqwuGQqEdDhGWIiskKKkBqJaDupPUFfVgKuRdlI" +
+            "iqDdQEFfeNniIHnSskKrRNabBMmdDAulLroORqhJVvdDLljophUAmMcqQCHxaIiqQWZzxHCdDCcrReEcMwWXeExGKkgNRrxCqQcXEfyMmMmCTuUneENtFfpPzZxXOUupVvhqQHPgMmFfcCtlJjUjJuZzscoO" +
+            "JjCCkvVqQnNgNnpPsSNnAayYWwMmaARrGEeKcNnzZNdDnIhgoOGSszjJwajJOBboWwfjNLlVvmYZzyjdDJOoMOoyYRrnbBUpQdCceEstTSOuULlEMWwGgmDMcCVfFfFhkKHcCEYyAaeTxXtiEeXxGHjJXxlz" +
+            "mMrIAaiXxiIEqQmtTMedDqJUhNVvnHDduxXXNndWwDzZjMdDSsxFfWIiwoAeZzWyYqkItTUuZzzZyjJWwYiMGrQqRFIiUPvtQlLBbqTZQqzbBBAETteydDYsSIgrROoGQNnqMmroOoOBQxHhsvVSaAXqQqQh" +
+            "LlHWwuzOoXAaxZmcCMWwVvrVvdDRBbeEfgBFfbGGgFmqQdDqlLQuUYHvVjJhAayeEepPEsAIiuUuUeIWwiCaEeAcUuErSZzsZzwfLlFvhHfkKZnpfSsjKRkKbHHdeEDJjhCcMTzwWZvVtmhNTtnZzEdpsStZ" +
+            "ziITVOoWOHCchcCpPViIXxyjJrRZzjDyYdLlkKsSAaZBclLZzXxUeEpPmMsYmkFcCkKTKkGAElvVLeuPUVRrVIiTDdtgGVjZzdDVvlehEeGgcvVJmMoOonFbqYcCywtTWmSsMMqQOJTuCkKRSsYugHjJhhHa" +
+            "AdDYbBUuyMUudsKkQqZlLzSlJQqjLNDdMmGgFfoOTRsSklrRLVGxXWUuvTtVMlsTtSLMmIArRmMtGyYzyYZIFUuFfdDlKSsaANnkLdDcjJtfFTCtTTBkIiKbgvVGRdiIAaUuDIIizZiklGgLynNXxWwJjYdg" +
+            "OondSsZXxjJKkzOnNEefFhJjHoDbBGgjuKkZCczdhYyLlZNsSnzSsmMHDUdHhFPpPpQaAqXjJmMxifOoFyYqQuUDdmNnMtTNBmMYyNhHnILnCHdGgbFfgyYAfgkKmHtTJkXLlOoxKjsZzEVveEeBblCLsSgG" +
+            "luUVvHhcxXMtvatDdBbBBXxbuUORrPpwWVvnNQqoiIlPVvphHUmMkKFtTfgwWxXpPNRrTuRrqEeQOoRrnbBCcvmMVSswblLAXoONgGgpPIiJDhHlsnNSUUuuLRrjJJjKkKvVRrJjkuUDbpcCUQSvVtTsjZJj" +
+            "gOonmNnTAsUuSaKkJLlXTtxAhsSzZcCzaaAQLlwWWNncCEeRrwquZzznNDjJFfMHhmEDuUdeAflLmMNJjfFQRrKLlfFSsdiIDPpnJcCSsTEeteERrzZfFnKGSshACSsJjcaHKguUHQqhlLGeEkPRrcCpjpPJ" +
+            "gVvibBIkkHhKzZJnoONWwvVxWYQqOoUwWukKyyvVIeEisSxXuUYyWFfbRrrROoBGOjJogKkwBUudpWcCwPUrjJpPFIipDdLvGFfpVcCbBpPKkmZUuitJjTQQcsSCqqVvyfvHhOoVdDyFfFfPprRkKyYbMvVm" +
+            "BSRBbrBbLlpPPeEQRrKkNwkvVKVvWFVvfMhkIiKkCcKKksMmnNfFrxkKXjjJjJTqQtIiJEelLVRKMHAzJjGaANnCcqfFEeQgMMMiIxXjJmIeELaAlpgGIiKnNkQxrRLrfFRrRQglLtThGgsSULlMjJSsEGpt" +
+            "TjgGlLyPpoOIsBbSWSsaRbaAjvzZVpkNtTMhHmJjnRrKBbPIieEZzJBLGrfFaAJRrjAaXmMxrRRlLXzZPpxgvVDdlkKmuTfpPFAatTuxXNvVnIiwWfIinsSNFuUxXfYDWhPpHBhwiIWdDtAaSEpPesbSsDtW" +
+            "wxsSXeEIiCzZaACcaANsXrRiIUSsuDdxOoqQvQhHqQqVdDaASnNaAstTfFPpaAruUvBZdDmMQqEeztTBbfFgGrRKMuDdpKkPUEVXqQcCfnNFoOWkUuKwxfuUdDjJdDwdkKIEeDdTtTnmMNpHhPlLlLQqLlnN" +
+            "QvSsuUVDGgAvLZzoOlVJZzjlLcCGkhHKMmgGfFgLlgQqGaAHhAiIauQsSWwICciLTteMmEOoEeyYlNnGJjguUiIrRDUudZzJdDtTgGhsShUuiqcCQIDzZUhHTtzZbJeEZtTzkHhPzZmMJjXTWMmwtxwCawWA" +
+            "EepEeoAXxWwYyKkrkKdDRIztTZSjpPJPLcCUcCEeiIuIsSmpPMrNdDWOyCuUVeECgkKDdGGglLcXIiJjxgGHhDcCJvVWwjCNngGjJoOfFYIiTtQqWWzZwwDdyOqDqQdsSumMSnNoOJfFjQgGqliILicAakKE" +
+            "cCyGHhkXLlxgtbBTVvGYyXnNSsggGpEePiIYyGxyZrRvLlVSsStzZLOveshHSEHSsBFfbVjEeyYOkEeNTIitfFnSsuUhHjhzkKHJUueEgGvfFvEeVzZXRNfxxXZSstjVvJidiaAzisSUusSnFfeGgGgTTtHh" +
+            "xCcgGgGYyZzKXxdDYykOkCcLlVvVvYNuUntEejXrcCRUudDTtwWxJNnePpEjJWwQfQqVvKoOcCdDkGggFuUfMPpmHVpPvrRhVvQqJNnjKkiDsSLWwyYbBYuUylZzDddAadDICcskDdKbBdQQqqUuQMmqnNfQ" +
+            "qGOoeEgFamMXFfxpPxXbBrbOoBrRxxMmtyYmMCVuUviUSPAapzZsipPjJQqOwgGPpWWFfEeYFMmqZzQfFfBbyqQwwWylLeGqlLTttTKbBklTQqeEtQqayYAFfiILGgCcKOoklLZquUqXxSsSsWwQjMxXqCZN" +
+            "JjnvWWEeyYwyYeEcCxXwJjVnNzqQcYyXLzZlIoOwWiAbBlLtfFgGnNAYIinrCcTnNRrDdNQqWwNnhWwHwvVNnqqLlXxQhlLnNrvVuBuUbUfFfHhFVvlLCcRwwWqQWPYypUubuVvHhUBFpVvPMmbGgBfgIiRF" +
+            "friECvVcrReIoOZzGrRVVvvXxFfITcCtiYYIiyOBbbBlLtTRreEouUkiIKyYdDvCcmgGYyuUMPpwWsLlSaAVvNZFfygDoFfOdmnNMVvNjJrPqQPwWpwWAoOvbBcChSLlsEeGgvVAcGgbBDdXxAaCHhaDdkKT" +
+            "oODdtzZiKkIrNnHuUEqQeVvVvhRfXxyquUQFfYLlFpsXoxDdXlLtlLGzZOoXoOrRxdDXCczxXZxZuJjUIistZzTYySeEUHlLhuAaxXXaAHjiIJBpPbhKkgTtGAaXxhTLltUAaXxIizZzgGZIebBiIEieEYyX" +
+            "WFfzZkKZGgGUeEfFRyiImMYrCbBSscmXbucLltpPiAaXxtfFTnNIgwWGTOoyYyHhVvYODSHhskZzKCcCcJjbBdzrRZpxXIwWAazZiGgOoNsSnBxCceTtqxXTtQsWtTwbBQqHhmoOOoSJjQAaqsVbBnNJpPYz" +
+            "ZgGwRrWQEgFUufnkyJsSXxyYyiRvmMVbVYyvBsSvVrvjzZFfkXxsSWOogGVvwDGgJjdMBbufHhFotZzTuUCcCcCbHhvVlLaABbKYykBsSNSwXxvVWzZVYyxyYZzXiIvXxsnrRWSsSsNnHhUFfgnNXhHJxXjx" +
+            "GuhHeMmOoEYyOoMmfFhbBMnNmUfFuhEeFfOolDQqdkKLHIvViUxXaAzEeKkmhHdizZfRDdtTwWIMmlXxLSSssWwnNFzZfavVhHKkAOaArjxXErRegGJrRRlnyYNLoqQZfUufoOFFnNtNoOqQQqoiIOnuUNsS" +
+            "FbBfFfkcCtEeTmnNMkKKWSJjsFkKPzPpJKZzhGgHDAazZdWwuUkpAaPfFeloOLEvXxVIBbifBbmSQqsbBuUZffFgsSGFCBbmaMmAMcIQSsqTwQqWMmcCVvGgpAaVvPVvxjMmTDdJjtJLlXIiOotTgOohHoOG" +
+            "XQqhHxtVvbRrBXxKYRrPcpPRoOEMmerpPpdDRrSZzCiXJFPpfjFfRrLaAvVlKVvkyCwWHfFhqQtTRYyrcCNzpPZnVvxYyXcDdnNfFqQgGQqSVvslZzzUuZLYEKkqQaMaAmErRianNAILnBboDdpPObBlLNqo" +
+            "OADdooOOXxaeOoCcEcCYRrvJjEeVbBcCmQFfqCcYFfLHhlPGgpyKnNnNRHiIhahwJjWpPHhcyYCdtTtTDGQqhHfgGFEIyaAYqQsSdEeSsfFKkMmAafFWxXLKKkkbBpPGgvGWwgGjJgkKSsJHhHhPpdIiDMmd" +
+            "RrDLHhxXMmlutTUZWwzTtJjMIxkKXCWwSpPRrqQsdDlxXNnJjmWGgwMXxdDJfUvQquUgGVJjYzIiZyKkpUUQqLlXNXxVvEjJwWeuUcjJLUIiulmRrMxXEeEeWwrRaAnNvVeHzZbBhUNnuEeiVvVvIFfnNCSs" +
+            "BLlbQGgWwqFiIDdCcRrGzZCEeXxWwYysScPAaJjIFfhyYHtimMLdDIzgGMPpxPpNnXmZjJXvWwuUiYyIhHrRzIislLfBXxbIuUxXiFrRcwWClarRQqzaAsYytakoOKATSaAOMVrRvVHhusSUUMmDduMnUeEn" +
+            "NudDmDdSslLtDMmnNmMhHdTeqQEOeEoWUuwcCMeXxgBIibixgmMGXIGKkUeEutTEdDcCNcUqQWxXnlLNCcyfFYNXxXAwWZqQatTTtibBeqyYsmMSQggGGpPfFlRqQrasSHhmMgGTtAQNnqVEeHhlLvVxXvLK" +
+            "CaAcTtThHtTtkaWwAPrMQqmROnNXxbBopkhjJGgMmNMmnIhHXxiHZzJjqQIiKKzTrPpRtmMNzaAIiZnKkgGLlDdwXxWfFZSzHhZyYaAsznNZGAvSsVLlIlFfLZztrRpnNPzZsEsSewWSqQbDBbdBYsSyFALf" +
+            "FlpoOnNCcwXxersuUsSRrBbSREDksSaHhZzFjJfsSPcCeEXMmMDvVdLlWwaAkKOVvNnMYymxXoJjYydCVypPYvcWvVwDRPOVvoiIxtTWKkwXNTtTbBtXRGgrxEBbTtGyYXxgeXxxOoYPogGOXxbxXBeOsSoO" +
+            "VYNnPpyDdUubBvWwDgGdOhHbBaqQcCAfaAbBLHhQzZqYylFQeEzZMmsIiCyYcSqDSmMsdPiEevVIHRrhAoOVnNvEwWeLlykoOfFKzZIiPpFlLyYfUuJjwtpPJjTWwkOFIizZfXhHpPvVkKiIcCNnxzuUmMZG" +
+            "RnNCPpdDqjJQsSQhHuXxUqZzsSxOwWoEepfFPWdDqeErRCwWeEcurBlTtBbZfFsScKkJjpTtFfUuzIHhiBbkiIKMmcCZwWrlfFonbBNStxXTcCDdnjJNnVvNsKkhHhHRrpPvZzLlnNkylZzgGLDdcfFdDSqQ" +
+            "srCcRsSadDwWjjJdHSscChDJjsSMwWDdnNolLhHACcQqjJaOlDdLLlXlLyYxSsSNnsFsOoSsSauUAqSsmtBbTMQsUZieBbEPprRMxXXBbcCxvHhVmbBFfSpukxXKUuRMmrWoOwdDLBjYyPpiIgOKkoGSnNPp" +
+            "uUJjfuUoDNndOoOLlEeOoSlLsdRPprjtTEeMmsSRiraAilLmMKCcYyGmMgIikKBOPpnyYNohHUuCyYAGgaHSshZfFzQqjJcRiIrDdiGgzfKkUuOoFZobBKiIkcCdVeEsSPpnNBbpPrAiEeIagFfyXpPxLJjC" +
+            "bBcEMmefFEvVeoOAaINnfFiXxdDbBXWSovgGqvVLfFZzQlCcLqZTtzdDQADtTdatKiImMHhkTwcCWTtIdDuUiVgGoOFfGgvDdMmqpPMmhHwcCWPFzlLuuUqbBAISsisHhSSsFLlfUyJjvVBsSmqQMbDXxdsS" +
+            "YumlLMeZbqQqrRlLnBbqbBQrUuRjEuUevVmMJLlEerFrRKDsSmLlMNFJjpSsIsSCcuUKkVvXCcxQaAtkKJjTlMmLlPpUufFLYaDdAyjmsSMBbJYyqaAmMAZXxzYyuLFflhHkKDdDasSYyFfZztTmsSMMcCmA" +
+            "FfPFfKkdAaDnNIiqQMvVzZhzZHugGURrxXgGBfTwWNnRDdCcroOhnogGLlVvyYOABbasSGJdDqQrRTtqsSiOoZzIBIykRrKQqEecZzjBbJCqQWwpkKPAPpaVvrdDRYmMrpPYyRzEfFPpncByYbCCcNtTeZVv" +
+            "pnUuLMNnmlNxXPZmiInUuNvVfuUgGgayYPpAzKkwWZbZzDdegGJxXtTkjjJJKFfYyznNFffBbLlFCcpKkPsSbBFflkKsSHcCdTtKHzSsZpPfQqFDdgGhYyqQLlpPMmiIkNnOosSLtTlDFfiIUFfJnNbBjvVu" +
+            "oOjyYJhGFfgoiIOsSKkkKOoRkKlwWdDLYxdDWwXmMLNBIiMmmMjJXMmxOowWPOoUupyYLlmLlEVveDVdDvzdDeEvVZAanNxuUXCcdcCDdKDHhdkqwWbBaAjrRJBbRWwrxcCvwWVBbGgYyHhaANaiIAnXdDxZ" +
+            "PpYykBbhHKQqAsTtSiqqQQIqQCctTlpPLaACcwWkTtKaeEAaeDdBbElfFhBbHmMsSsPmMKkhHzZIionNObBEJWZcCzoOPQSsMmyYqpFcCfkRrKCccCDKkPTfFbHhtTBtWwwvVWrRpPWmMwrBbIiXBvVbIiNn" +
+            "sSenNvVEDpPdfFAPMmqQXxHhyYfhgGHFpoZzfYyFfyMyYKiIXhHlLmMTtxhHrRrvVqQdDRhHLlzZqJjgGmMQlgGWwQqLvVsSorjJUuQlLqbBgTtGRDijJIMmQqWsQqxMhHmXGgSwWsjJSwXxyYYyAyYLlZwW" +
+            "KkyVvYSsTtyYqxIiREerDdbUuuUBeEDdGZzgAayYKkLnNuUlvIiHQuUqhKIiqQkpAaQqDgGdDdPBbVHNcXCcZeEMBbmzXxMmxzxXyWwYQXxQqSsqTtpxXRrPZaAFNnoMmTtpPONvKWwtTkuUmMkKnNVsSqQv" +
+            "VJjuUHoOdDhQciICqWZFEefzwhHSsqKkQRAMmvVUuabBmRrMbtTuUpPWwvVTtbBTtuiIUaAuiILlhZzKkWwBbrRApPwWaJdDjTtpPXxdKNnkDBbnjJsGfFAagSaAVvaARCvjJVcuMmuUiIUSsTtOoJvVjvKk" +
+            "RrlLYyMmtTUuDdSRYycCrFfsnjDJjHhdLlGgJdDefFkKIieEoJjOENVPYGgypSiICclLRrTtsQqSsdEeDxgmyUuYMHhYyjJbBUjYKkyOEFfrRbBRrkpEeVvPKjGZzByYdDbOcYrSPpIFfiIdDIiqJjQiIijJ" +
+            "vcCUuBhHbbjTtJqoOQBVYydDUuMtMyYmCcTmbCcUusSyYTtrRBglLJoqQOYaAyWwjaAYMmZzLlsSCBfFcAaCDdiIbYJTeEtTkKtBbdDPpOojXdDxQqBbeEHhdDNOsCclLSimMOodDtTjJFfIzvbBVZjjJDUV" +
+            "vudCzZcJXxtvzZVDdJjTvyYVPZsSzkKpyYkpPKrREepPaAvgGUuwWVsIUnqQNlLhmMHuhHlYyLhBbAaHDtcFftTmwWMCTOzZodYFkKyaArRXBAabVvvVxwWEeXKkWwxEeuUrwWdDEfFeipPTtIIPeEpwWKke" +
+            "ECcmoOMguUmMlLuUwlLuxXHhnNUaAGnNGJjKZzQqTmMOwWQlLqotXxkVvkZzUuuUHAKtXxTCcwOoPDdSpPspRpPYySsHhlDdLyhHkKYwAuUPpaSrRFfcaACLlBbsOoNnWZAaAarRSsuRrTOotFfUzdDRroOx" +
+            "XZSsXeoOEbMmBkHhKxnNXWwhHilLebBEUBbIiCwzZWcBbdDGguhvVmMRrQqOooOXxGguUaAYiIuUyeEShHuUaZzAcCsHIAazZiAwWMmaIWpPwWGJjgPEexoOXRkKrJjphHOoEemMWwMmzZoOeEwlLGgOsSwi" +
+            "IWIGgCGgciZzSsKsSkPFfpjlLGTtgsBbSXxaAkKaAzZlKfFrRnNkrRWwPItTJSsjyYrRiZkVvKuUzmMUuHhehHweElLYyWEZzIUuiIiefFLdQqeELlueETtswWSkKUMmDFfoOHHhwUuXyYOoxAaWhHdDDdVb" +
+            "BvhHCcQKkqBfFbHhsSwWriIRhoOIiowWURruObiIBKkaXxAheCcEHceECFfgKkGKcCpPIiLlzhmMHZnBPpbNPpGJjgxXlLrRXfFOBbYyCqkyYKpPkvVmMKoSiIsPpOcCcpPJIipPoOcCoOjCPqQkqQEeKbBE" +
+            "YyeRjbjJZzBJjHhXTtMmcCnNxNnJDdFYyQDdzZqKkByYngGGgNbVMmXxTtEEStEeTszZlLSDdDzZsIiSdWwfFAYyaXxwWIRrVvlLAaMmrBbRiAPpxXapLlPOOoVDdzZzZGgvVvoKkEexXsHhQqrSsiIVvIiJ" +
+            "BbjJkKjsFiIfRNnrCcSBTtfljHyYmMSYyshxXpPJKkLQqFzZGgdDbnNOkKotTCcRrNnUqQuReXxqVvxbBlLXPpnNGgOoXxrGgYGgaAyRvVWyYsSwhXxHkKlLvVEzZeaiIAWwBbCKkclLClLclLmYyMKkVvQp" +
+            "PGfkKFgzYyHhYcCjFxXfDrRoOdJfFPFfnNpPKxjJXkxwWVvsSDdCcXOpPjJopCogGOUubBvNnVZYaQsSqaAmMgGHhHDdhAGgykKEhtWwTIiHeiIFRrRrnNYqKkQyjJBlLnTtaipPsmqQiIbDdnQIiqNSsBAa" +
+            "MXrRxLlyaAzsSZeEIioOYGfwWFeESsePpeETtNnKkWwaAYyENnZHhzZFfoOzoOaAcCwWCRrGgHhToOEeuJjKkUCaAcPptLpPlcTPptguUTtOdDvVoPdDpAfFaeEmMhLdDlHFGgigGIfSsOowjJggGGNDdWwm" +
+            "MCcnNZzTtZznWVvVvDsSAMPpmaDddKkKrVvIoOiJjVvRsDdSIJjnNiHqQhoGkKuUguUjJWOojJucCeExXgwWGUpPTtwfFfNnFfFbcCbBESsfFefwWFQAahHsSLlnNfFbBVvCcGgmTtMXxqhqQtMmTzZKkKuU" +
+            "cCrRkZiICGgRrDdFgzZGsJNnjjJSWIisjJtTSyYwvVgGLgGlNnQzZqDdYFfxXIPQqpiyyYywWqQaAmvVMYfaKJHhjBQVvqbSqQsiIoOAakAtNxXmMpPSsnacCAYyTagGgGfFRTcCtrHhAHhcCjOoJKkBbcLl" +
+            "zuUuYyPHhFfpUpbBlLjJPNPQqYyHhcCLOohHlaAtTDdOoaAIPpblLvVDdjPwWpJwWtTBbFfBGgtvVTuhHJjUMmHhiUuzZLlrRpWwBZzbaAWwkwCwWcOoWKGkKVwWvQqgRrdrRDSMmAaWMmwqtTQRzZrdmMBb" +
+            "DhHHAxXYHrRhQzZrRqyafFPEenNXxplLkpPSsYYypPCcKJjNnkySNnsWzZwiWwIKuUKKDdaAkAaXxKkQSGgsfFqQgjJGaACeEckKiOYXxyjkKUuk";
+
+        public static void Main()
+        {
+            Part1();
+            Part2();
+        }
+
+        public static void Part1()
+        {
+            Console.WriteLine("Starting Part 1...");
+
+            var fullPolymer = Input.ToCharArray().ToList();
+
+            var collapsedPolymer = ReactPolymer(fullPolymer);
+
+            Console.WriteLine($"Length: {collapsedPolymer.Count}");
+        }
+
+        public static void Part2()
+        {
+            Console.WriteLine("Starting Part 2...");
+            var distinctUnitTypes = Input.ToUpper().ToCharArray().ToList().Distinct();
+
+            var polymerOptions = new Dictionary<string, int>(); // Key: Removed Unit Type, Value: Collapsed Length
+            foreach (var unitType in distinctUnitTypes)
+            {
+                var unit = unitType.ToString();
+                var improvedPolymer = Input.Replace(unit.ToUpper(), string.Empty).Replace(unit.ToLower(), string.Empty).ToCharArray().ToList();
+                var collapsedPolymer = ReactPolymer(improvedPolymer);
+                polymerOptions.Add(unit, collapsedPolymer.Count);
+                Console.WriteLine($"Removing {unit} shorted polymer to {collapsedPolymer.Count} units.");
+            }
+
+            var optimalPolymer = polymerOptions.MinBy(o => o.Value).FirstOrDefault();
+            Console.WriteLine($"Shortest: {optimalPolymer.Value}");
+        }
+
+        public static IList<char> ReactPolymer(List<char> polymer)
+        {
+            int index = 0;
+
+            while (index + 1 < polymer.Count)
+            {
+                // Lowercase and Uppercase comparison will return a non-zero result, this is the only time we want to remove.
+                var firstTarget = polymer[index];
+                var secondTarget = polymer[index + 1];
+                if (char.ToLower(firstTarget) == char.ToLower(secondTarget) && polymer[index].CompareTo(polymer[index + 1]) != 0)
+                {
+                    polymer.RemoveRange(index, 2);
+                    if (index > 0)
+                        index--; // Move back one to check if a new pair has resulted from the removal.
+                }
+                else
+                {
+                    index++; // Nothing here, next!
+                }
+            }
+
+            return polymer;
+        }
+    }
+}
