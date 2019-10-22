@@ -16,6 +16,7 @@ namespace Day6
         public static void Main(string[] args)
         {
             Part1();
+            Part2();
         }
 
         public static void Part1()
@@ -49,6 +50,7 @@ namespace Day6
                     AllLocations.SingleOrDefault(l => l == shortestDistance.Key).ClosestLocations.Add(newLocation);
                 }
 
+                // Move to the next location
                 if (currentLocation.Y == yBoundary)
                 {
                     currentLocation.X++;
@@ -64,6 +66,49 @@ namespace Day6
             var largestNonInfinite = nonInfiniteLocations.MaxBy(l => l.ClosestLocations.Count).First();
 
             Console.WriteLine($"The largest non-infinite area is {largestNonInfinite.ClosestLocations.Count}");
+        }
+
+        public static void Part2()
+        {
+            var AllLocations = new List<Location>();
+            foreach (var i in Input)
+            {
+                var split = i.Split(',');
+                AllLocations.Add(new Location(int.Parse(split[0]), int.Parse(split[1])));
+            }
+
+            int xBoundary = AllLocations.Max(l => l.X);
+            int yBoundary = AllLocations.Max(l => l.Y);
+
+            var locationsInSafeRegion = new List<Location>();
+            var currentLocation = new Location(0, 0);
+            while (currentLocation.X <= xBoundary && currentLocation.Y <= yBoundary)
+            {
+                var distances = new Dictionary<Location, int>();
+                foreach (var location in AllLocations)
+                {
+                    distances.Add(location, CalculateManhattanDistance(currentLocation, location));
+                }
+
+                var totalDistance = distances.Sum(d => d.Value);
+                if (totalDistance < 10000)
+                {
+                    locationsInSafeRegion.Add(new Location(currentLocation.X, currentLocation.Y));
+                }
+
+                // Move to the next location
+                if (currentLocation.Y == yBoundary)
+                {
+                    currentLocation.X++;
+                    currentLocation.Y = 0;
+                }
+                else
+                {
+                    currentLocation.Y++;
+                }
+            }
+
+            Console.WriteLine($"The size of the safe region is {locationsInSafeRegion.Count}");
         }
 
         public static int CalculateManhattanDistance(Location l1, Location l2)
