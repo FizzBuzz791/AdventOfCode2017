@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
+using MoreLinq;
 
 namespace Day7
 {
@@ -112,11 +114,78 @@ namespace Day7
 
         public static void Main()
         {
-            var stepGraph = new DirectedGraph();
-            stepGraph.Build(Input);
-            stepGraph.ApplyTransientReduction(stepGraph.Roots.Select(r => r.Name).ToList());
+            var graph = new DirectedGraph();
+            graph.Build(Input);
+            graph.ApplyTransientReduction(graph.Roots.Select(r => r.Name).ToList());
 
-            Console.WriteLine($"Step Order: {stepGraph.GetStepOrder()}");
+            Part1(graph);
+            Part2(graph);
+        }
+
+        private static void Part1(DirectedGraph graph)
+        {
+            // Correct answer: BCADPVTJFZNRWXHEKSQLUYGMIO
+            Console.WriteLine($"Step Order: {graph.GetStepOrder()}");
+        }
+
+        private static void Part2(DirectedGraph graph)
+        {
+            var workGroup = new WorkGroup(5);
+
+            var completedSteps = new List<Node>();
+            var availableSteps = new List<Node>(graph.Roots);
+            availableSteps.Sort();
+
+            // Initialise
+            foreach (Worker worker in workGroup.Workers)
+            {
+                if (availableSteps.Any())
+                {
+                    worker.AssignStep(availableSteps.First());
+                    availableSteps.RemoveAt(0);
+                }
+            }
+
+            // Tick
+            var totalTime = 0;
+            while (completedSteps.Count < graph.Nodes.Count)
+            {
+                var workResult = workGroup.DoWork();
+                if (workResult.Any())
+                {
+                    completedSteps.AddRange(workResult);
+
+                    // Get newly available steps
+                    foreach (var stepsReadyToComplete in completedSteps.Select(completedStep =>
+                        graph.GetStepsReadyToComplete(completedStep.Name,
+                            string.Join(string.Empty, completedSteps.Select(c => c.Name)))))
+                    {
+                        availableSteps.AddRange(stepsReadyToComplete.Select(s => new Node(s)));
+                    }
+
+                    availableSteps = availableSteps.DistinctBy(s => s.Name).ToList();
+                    availableSteps.Sort();
+
+                    // Need to account for "in progress" steps.
+                    foreach (int index in workGroup.BusyWorkers
+                        .Select(worker => availableSteps.FindIndex(s => s.Name == worker.WorkingOn.Name))
+                        .Where(index => index >= 0))
+                    {
+                        availableSteps.RemoveAt(index);
+                    }
+                }
+
+                foreach (Worker worker in workGroup.AvailableWorkers.Where(worker => availableSteps.Any()))
+                {
+                    worker.AssignStep(availableSteps.First());
+                    availableSteps.RemoveAt(0);
+                }
+
+                totalTime++;
+            }
+
+            // Correct answer: 973
+            Console.WriteLine($"Total time: {totalTime}s");
         }
     }
 
@@ -293,13 +362,21 @@ namespace Day7
         }
     }
 
-    public class Node
+    [DebuggerDisplay("{" + nameof(Name) + "}")]
+    public class Node : IComparable<Node>
     {
         public char Name { get; }
+        public int Time => 60 + Name % 32;
 
         public Node(char name)
         {
             Name = name;
+        }
+
+        public int CompareTo(Node otherNode)
+        {
+            // Alphabetical sort
+            return Name.CompareTo(otherNode.Name);
         }
     }
 
@@ -312,6 +389,56 @@ namespace Day7
         {
             Source = source;
             Target = target;
+        }
+    }
+
+    public class Worker
+    {
+        public Node WorkingOn { get; set; }
+        public int TimeRemaining { get; set; }
+        public bool IsFree => WorkingOn == null;
+
+        public void AssignStep(Node step)
+        {
+            WorkingOn = step;
+            TimeRemaining = step.Time;
+        }
+
+        public Node DoWork()
+        {
+            Node completedStep = null;
+
+            TimeRemaining--;
+
+            if (TimeRemaining == 0)
+            {
+                completedStep = WorkingOn;
+                Console.WriteLine($"Completed Node {WorkingOn.Name}");
+
+                WorkingOn = null;
+            }
+
+            return completedStep;
+        }
+    }
+
+    public class WorkGroup
+    {
+        public List<Worker> Workers { get; } = new List<Worker>();
+        public List<Worker> AvailableWorkers => Workers.Where(w => w.IsFree).ToList();
+        public List<Worker> BusyWorkers => Workers.Where(w => !w.IsFree).ToList();
+
+        public WorkGroup(int amountOfWorkers)
+        {
+            for (var i = 0; i < amountOfWorkers; i++)
+            {
+                Workers.Add(new Worker());
+            }
+        }
+
+        public List<Node> DoWork()
+        {
+            return BusyWorkers.Select(worker => worker.DoWork()).Where(workResult => workResult != null).ToList();
         }
     }
 }
