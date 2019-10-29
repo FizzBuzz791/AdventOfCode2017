@@ -276,15 +276,21 @@ namespace Day8
 
         public static void Main()
         {
-            Part1();
-        }
-
-        public static void Part1()
-        {
             var tree = new Tree();
             tree.Build(Input);
 
+            Part1(tree);
+            Part2(tree);
+        }
+
+        public static void Part1(Tree tree)
+        {
             Console.WriteLine($"Metadata Total: {tree.GetMetadataTotal(tree.RootNode)}");
+        }
+
+        public static void Part2(Tree tree)
+        {
+            Console.WriteLine($"Node Value: {tree.GetNodeValue(tree.RootNode)}");
         }
     }
 
@@ -331,6 +337,28 @@ namespace Day8
             }
 
             return metadataTotal;
+        }
+
+        public int GetNodeValue(Node node)
+        {
+            var nodeValue = 0;
+
+            if (node.ChildNodes.Count == 0)
+            {
+                nodeValue = node.Metadata.Sum(m => m);
+            }
+            else
+            {
+                foreach (var index in node.Metadata)
+                {
+                    if (index - 1 < node.ChildNodes.Count)
+                    {
+                        nodeValue += GetNodeValue(node.ChildNodes[index - 1]);
+                    }
+                }
+            }
+
+            return nodeValue;
         }
     }
 
