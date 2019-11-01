@@ -383,7 +383,7 @@ namespace Day10
             }
 
             (int time, int size) = iterations.OrderBy(i => i.Value).First();
-            Console.WriteLine($"Smallest Iteration: {time}. Area: {size}.");
+            Console.WriteLine($"Smallest Iteration: {time}. Area: {size}."); // `time` is answer to Part 2
 
             DrawPositionsAtTime(skyLights, time); // ZNNRZJXP
         }
