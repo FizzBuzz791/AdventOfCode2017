@@ -15,7 +15,7 @@ namespace Day11Tests
             var grid = new FuelGrid(new Size(300, 300), gridSerialNumber);
 
             // Act
-            (Point coordinate, int powerLevel) = grid.GetHighestPowerSquare();
+            (Point coordinate, int powerLevel) = grid.GetHighestPowerSquare(3);
 
             // Assert
             Assert.That(powerLevel, Is.EqualTo(expectedPowerLevel));

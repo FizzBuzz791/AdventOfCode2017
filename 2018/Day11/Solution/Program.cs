@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
-using MoreLinq;
 
 namespace Day11
 {
@@ -10,8 +9,20 @@ namespace Day11
         public static void Main()
         {
             var grid = new FuelGrid(new Size(300, 300), 2694);
-            (Point coordinate, int powerLevel) = grid.GetHighestPowerSquare();
-            Console.WriteLine($"Top-left coordinate for highest power square ({powerLevel}) is {coordinate.X},{coordinate.Y}");
+            Part1(grid);
+            Part2(grid);
+        }
+
+        public static void Part1(FuelGrid grid)
+        {
+            (Point coordinate, int squareSize) = grid.GetHighestPowerSquare(3);
+            Console.WriteLine($"Top-left coordinate for highest power square ({squareSize}x{squareSize}) is {coordinate.X},{coordinate.Y}");
+        }
+
+        public static void Part2(FuelGrid grid)
+        {
+            (Point coordinate, int squareSize) = grid.GetHighestPowerSquare(null);
+            Console.WriteLine($"Top-left coordinate for highest power square ({squareSize}x{squareSize}) is {coordinate.X},{coordinate.Y}");
         }
     }
 
@@ -36,47 +47,52 @@ namespace Day11
             }
         }
 
-        public int? GetTotalPowerLevelForSquare(FuelCell cell)
+        public int? GetTotalPowerLevelForSquare(FuelCell cell, int squareSize)
         {
             int? totalPower = null;
-            if (cell.Coordinate.X + 2 < Size.Width && cell.Coordinate.Y + 2 < Size.Height)
+            if (cell.Coordinate.X + squareSize - 1 < Size.Width && cell.Coordinate.Y + squareSize - 1 < Size.Height)
             {
-                int topLeftPower = cell.PowerLevel;
-                int topMiddlePower = Grid[cell.Coordinate.X + 1, cell.Coordinate.Y].PowerLevel;
-                int topRightPower = Grid[cell.Coordinate.X + 2, cell.Coordinate.Y].PowerLevel;
-
-                int middleLeftPower = Grid[cell.Coordinate.X, cell.Coordinate.Y + 1].PowerLevel;
-                int middleMiddlePower = Grid[cell.Coordinate.X + 1, cell.Coordinate.Y + 1].PowerLevel;
-                int middleRightPower = Grid[cell.Coordinate.X + 2, cell.Coordinate.Y + 1].PowerLevel;
-
-                int bottomLeftPower = Grid[cell.Coordinate.X, cell.Coordinate.Y + 2].PowerLevel;
-                int bottomMiddlePower = Grid[cell.Coordinate.X + 1, cell.Coordinate.Y + 2].PowerLevel;
-                int bottomRightPower = Grid[cell.Coordinate.X + 2, cell.Coordinate.Y + 2].PowerLevel;
-
-                totalPower = topLeftPower + topMiddlePower + topRightPower +
-                    middleLeftPower + middleMiddlePower + middleRightPower +
-                    bottomLeftPower + bottomMiddlePower + bottomRightPower;
+                totalPower = 0;
+                for (int i = 0; i < squareSize; i++)
+                {
+                    for (int j = 0; j < squareSize; j++)
+                    {
+                        totalPower += Grid[cell.Coordinate.X + i, cell.Coordinate.Y + j].PowerLevel;
+                    }
+                }
             }
             return totalPower;
         }
 
-        public KeyValuePair<Point, int> GetHighestPowerSquare()
+        public KeyValuePair<Point, int> GetHighestPowerSquare(int? squareSize)
         {
-            var powerSquares = new Dictionary<Point, int>();
-            for (var i = 0; i < Size.Width; i++)
+            var highestPower = 0;
+            KeyValuePair<Point, int> target = new KeyValuePair<Point, int>();
+            var currentSize = squareSize.HasValue ? squareSize.Value : 1;
+
+            while (currentSize <= Size.Width)
             {
-                for (var j = 0; j < Size.Height; j++)
+                Console.WriteLine($"Calculating for {currentSize}x{currentSize}");
+                for (var i = 0; i + currentSize < Size.Width; i++)
                 {
-                    FuelCell fuelCell = Grid[i, j];
-                    var totalPowerLevel = GetTotalPowerLevelForSquare(fuelCell);
-                    if (totalPowerLevel != null)
-                        powerSquares.Add(fuelCell.Coordinate, (int)totalPowerLevel);
+                    for (var j = 0; j + currentSize < Size.Height; j++)
+                    {
+                        FuelCell fuelCell = Grid[i, j];
+                        var totalPowerLevel = GetTotalPowerLevelForSquare(fuelCell, currentSize);
+                        if (totalPowerLevel != null && totalPowerLevel > highestPower)
+                        {
+                            target = new KeyValuePair<Point, int>(fuelCell.Coordinate, currentSize);
+                            highestPower = (int)totalPowerLevel;
+                        }
+                    }
                 }
+
+                // Break the loop if squareSize has a value.
+                currentSize += squareSize.HasValue ? Size.Width : 1;
             }
 
-            (Point coordinate, int powerLevel) = powerSquares.MaxBy(p => p.Value).First();
             // Grid is 0-indexed but the question expects 1-indexed, so add 1 here where it's inconsequential.
-            return new KeyValuePair<Point, int>(new Point(coordinate.X + 1, coordinate.Y + 1), powerLevel);
+            return new KeyValuePair<Point, int>(new Point(target.Key.X + 1, target.Key.Y + 1), target.Value);
         }
     }
 
@@ -85,6 +101,8 @@ namespace Day11
         public Point Coordinate { get; }
         public int RackId => Coordinate.X + CoordinateOffset + RackOffset;
 
+        private int? CachedPowerLevel;
+
         private const int CoordinateOffset = 1;
         private const int RackOffset = 10;
 
@@ -92,12 +110,24 @@ namespace Day11
         {
             get
             {
-                int powerLevel = (RackId * (Coordinate.Y + CoordinateOffset) + GridSerialNumber) * RackId;
+                if (CachedPowerLevel.HasValue)
+                {
+                    // Not sure if this will help, the math is pretty basic, but let's try.
+                    return CachedPowerLevel.Value;
+                }
+                else
+                {
+                    int powerLevel = (RackId * (Coordinate.Y + CoordinateOffset) + GridSerialNumber) * RackId;
 
-                // Discard everything except the 100's digit (will be 0 if less than 100)
-                powerLevel = powerLevel / (int)Math.Pow(10, 3 - 1) % 10;
+                    // Discard everything except the 100's digit (will be 0 if less than 100)
+                    powerLevel = powerLevel / (int)Math.Pow(10, 3 - 1) % 10;
 
-                return powerLevel - 5;
+                    powerLevel -= 5;
+
+                    CachedPowerLevel = powerLevel;
+
+                    return powerLevel;
+                }
             }
         }
 
