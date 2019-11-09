@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
+using Humanizer;
 
 namespace Day12
 {
@@ -46,30 +48,39 @@ namespace Day12
 
         public static void Main()
         {
-            var potKeySum = Part1(InitialState, RuleInput);
-
-            Console.WriteLine($"Pot Key Sum: {potKeySum}");
-        }
-
-        public static int Part1(string initialState, string[] ruleInput)
-        {
             var pots = new Dictionary<int, Pot>();
             var count = 0;
-            foreach (var pot in initialState.ToCharArray().Select(p => new Pot(p)))
+            foreach (var pot in InitialState.ToCharArray().Select(p => new Pot(p)))
             {
                 pots.Add(count, pot);
                 count++;
             }
 
-            var rules = ruleInput.Select(r => new Rule(r)).ToList();
+            var rules = RuleInput.Select(r => new Rule(r)).ToList();
+            // Micro-optimisation
+            rules = rules.Where(r => r.Result == '#').ToList();
 
-            for (int i = 0; i < 20; i++)
+            var timer = new Stopwatch();
+            timer.Start();
+            var part1Pots = CalculateStateAtIteration(pots, rules);
+            var part1Sum = SumPotsWithPlants(part1Pots);
+            timer.Stop();
+            Console.WriteLine($"(1) Calculated Pot Key Sum: {part1Sum} for {20} iterations in {TimeSpan.FromMilliseconds(timer.ElapsedMilliseconds).Humanize(4)}");
+
+            timer.Restart();
+            var part2Pots = CalculateStateAtIteration(pots, rules, 50000000000L);
+            var part2Sum = SumPotsWithPlants(part2Pots);
+            timer.Stop();
+            Console.WriteLine($"(2) Calculated Pot Key Sum: {part2Sum} for {50000000000} iterations in {TimeSpan.FromMilliseconds(timer.ElapsedMilliseconds).Humanize(4)}");
+        }
+
+        public static Dictionary<int, Pot> CalculateStateAtIteration(Dictionary<int, Pot> pots, List<Rule> rules, long iterations = 20)
+        {
+            var newPots = new Dictionary<int, Pot>();
+            for (int i = 0; i < iterations; i++)
             {
-                var newPots = new Dictionary<int, Pot>();
                 foreach (var pot in pots)
                 {
-                    var newPotValue = pot.Value.State;
-
                     Pot potMinusTwo = GetPot(pots, newPots, pot.Key - 2);
                     Pot potMinusOne = GetPot(pots, newPots, pot.Key - 1);
                     Pot potPlusOne = GetPot(pots, newPots, pot.Key + 1);
@@ -77,16 +88,37 @@ namespace Day12
 
                     // Determine new value
                     Rule match = rules.FirstOrDefault(r => r.IsMatch(potMinusTwo, potMinusOne, pot.Value, potPlusOne, potPlusTwo));
-                    newPots.Add(pot.Key, new Pot(match != null ? match.Result : '.'));
+                    Pot result = match != null ? new Pot(match.Result) : Pot.Empty;
+                    newPots.Add(pot.Key, match != null ? new Pot(match.Result) : Pot.Empty);
                 }
 
-                pots = newPots;
+                // Optimise the pots list so it doesn't grow out of control and slow down the algorithm.
+                int minKey = newPots.Keys.Min();
+                while (newPots[minKey].State == '.' && newPots[minKey + 1].State == '.' && newPots[minKey + 2].State == '.' && newPots[minKey + 3].State == '.' && newPots[minKey + 4].State == '.')
+                {
+                    newPots.Remove(minKey);
+                    minKey = newPots.Keys.Min();
+                }
+
+                int maxKey = newPots.Keys.Max();
+                while (newPots[maxKey].State == '.' && newPots[maxKey - 1].State == '.' && newPots[maxKey - 2].State == '.' && newPots[maxKey - 3].State == '.' && newPots[maxKey - 4].State == '.')
+                {
+                    newPots.Remove(maxKey);
+                    maxKey = newPots.Keys.Max();
+                }
+                pots = newPots.ToDictionary(p => p.Key, p => p.Value);
+                newPots.Clear();
+
+                if (i % 1000000 == 0)
+                {
+                    Console.WriteLine($"Completed {i} iterations");
+                }
             }
 
-            return SumPotsWithPlants(pots);
+            return pots;
         }
 
-        private static Pot GetPot(Dictionary<int, Pot> pots, Dictionary<int, Pot> newPots, int key)
+        public static Pot GetPot(Dictionary<int, Pot> pots, Dictionary<int, Pot> newPots, int key)
         {
             Pot pot;
 
@@ -111,15 +143,16 @@ namespace Day12
             return pot;
         }
 
-        private static int SumPotsWithPlants(Dictionary<int, Pot> pots)
+        public static long SumPotsWithPlants(Dictionary<int, Pot> pots)
         {
-            var potKeySum = 0;
-            foreach (var pot in pots)
+            var potKeySum = 0L;
+            foreach (var pot in pots.Where(p => p.Value.State == '#'))
             {
-                if (pot.Value.State == '#')
+                if (potKeySum + pot.Key >= Int64.MaxValue)
                 {
-                    potKeySum += pot.Key;
+                    Console.Error.WriteLine("Integer 64 Overflow");
                 }
+                potKeySum += pot.Key;
             }
             return potKeySum;
         }
