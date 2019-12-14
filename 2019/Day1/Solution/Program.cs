@@ -15,6 +15,7 @@ namespace Day1
             var input = puzzle.GetInputAsync().Result;
 
             Part1(input);
+            Part2(input);
         }
 
         public static string GetCookie()
@@ -37,16 +38,40 @@ namespace Day1
             {
                 if (Int32.TryParse(module, out int moduleWeight))
                 {
-                    requiredFuel += CalculateFuelForModule(moduleWeight);
+                    requiredFuel += CalculateFuel(moduleWeight);
                 }
             }
 
             Console.WriteLine($"Part 1: {requiredFuel}");
         }
 
-        public static int CalculateFuelForModule(int module)
+        public static void Part2(string puzzleInput)
         {
-            return (int)Math.Floor(module / 3.0) - 2;
+            var modules = puzzleInput.Split("\n");
+            var requiredFuel = 0L;
+            foreach (var module in modules)
+            {
+                if (Int32.TryParse(module, out int moduleWeight))
+                {
+                    requiredFuel += CalculateFuel(moduleWeight, true);
+                }
+            }
+
+            Console.WriteLine($"Part 2: {requiredFuel}");
+        }
+
+        public static int CalculateFuel(int module, bool part2 = false)
+        {
+            var totalFuel = 0;
+
+            var requiredFuel = (int)Math.Floor(module / 3.0) - 2;
+            while (requiredFuel >= 0)
+            {
+                totalFuel += requiredFuel;
+                requiredFuel = (int)Math.Floor(requiredFuel / 3.0) - 2;
+            }
+
+            return totalFuel;
         }
     }
 }
