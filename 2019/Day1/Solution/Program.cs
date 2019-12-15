@@ -1,7 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Linq;
-using AoCHelper;
+using NAoCHelper;
 using Microsoft.Extensions.Configuration;
 
 namespace Day1
@@ -65,11 +65,12 @@ namespace Day1
             var totalFuel = 0;
 
             var requiredFuel = (int)Math.Floor(module / 3.0) - 2;
-            while (requiredFuel >= 0)
+
+            do
             {
                 totalFuel += requiredFuel;
                 requiredFuel = (int)Math.Floor(requiredFuel / 3.0) - 2;
-            }
+            } while (part2 && requiredFuel >= 0);
 
             return totalFuel;
         }
