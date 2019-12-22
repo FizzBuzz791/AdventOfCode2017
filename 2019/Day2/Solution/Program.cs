@@ -36,60 +36,10 @@ namespace Day2
             opcodes[1] = 12;
             opcodes[2] = 2;
 
-            var result = ProcessOpCodes(opcodes);
-            Console.WriteLine($"Part 1: {result[0]}");
-        }
+            var computer = new IntCodeMachine(opcodes);
 
-        public static int[] ProcessOpCodes(int[] opcodes)
-        {
-            int instructionPosition = 0;
-            int operation = opcodes[instructionPosition];
-            while (operation != 99)
-            {
-                switch (operation)
-                {
-                    case 1:
-                        opcodes = Add(opcodes, instructionPosition);
-                        break;
-                    case 2:
-                        opcodes = Multiply(opcodes, instructionPosition);
-                        break;
-                }
-
-                instructionPosition += 4;
-                operation = opcodes[instructionPosition];
-            }
-            return opcodes;
-        }
-
-        public static int[] Add(int[] opcodes, int instructionPosition)
-        {
-            int firstTermIndex = opcodes[instructionPosition + 1];
-            int secondTermIndex = opcodes[instructionPosition + 2];
-            int resultIndex = opcodes[instructionPosition + 3];
-
-            int firstTerm = opcodes[firstTermIndex];
-            int secondTerm = opcodes[secondTermIndex];
-
-            int result = firstTerm + secondTerm;
-            opcodes[resultIndex] = result;
-
-            return opcodes;
-        }
-
-        public static int[] Multiply(int[] opcodes, int instructionPosition)
-        {
-            int firstTermIndex = opcodes[instructionPosition + 1];
-            int secondTermIndex = opcodes[instructionPosition + 2];
-            int resultIndex = opcodes[instructionPosition + 3];
-
-            int firstTerm = opcodes[firstTermIndex];
-            int secondTerm = opcodes[secondTermIndex];
-
-            int result = firstTerm * secondTerm;
-            opcodes[resultIndex] = result;
-
-            return opcodes;
+            computer.Execute();
+            Console.WriteLine($"Part 1: {computer.Memory[0]}");
         }
     }
 }
