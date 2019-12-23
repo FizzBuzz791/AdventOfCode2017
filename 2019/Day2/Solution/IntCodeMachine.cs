@@ -1,3 +1,5 @@
+using System.Linq;
+
 namespace Day2
 {
     public class IntCodeMachine
@@ -11,7 +13,7 @@ namespace Day2
 
         public IntCodeMachine(int[] initialState)
         {
-            Memory = initialState;
+            Memory = initialState.ToArray(); // Use .ToArray so we get a copy instead of a reference.
         }
 
         public void Execute()
