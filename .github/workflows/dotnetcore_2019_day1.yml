@@ -9,7 +9,7 @@ on:
     paths: "2019/Day1/**"
 
 jobs:
-  Build_&_Test_2019_Day1:
+  Build_and_Test_2019_Day1:
 
     runs-on: windows-latest
 
