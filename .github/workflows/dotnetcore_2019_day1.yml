@@ -3,11 +3,13 @@ name: .NET Core - 2019 - Day 1
 on:
   push:
     branches: [ master ]
+    paths: "2019/Day1/**"
   pull_request:
     branches: [ master ]
+    paths: "2019/Day1/**"
 
 jobs:
-  build:
+  Build_&_Test_2019_Day1:
 
     runs-on: windows-latest
 
