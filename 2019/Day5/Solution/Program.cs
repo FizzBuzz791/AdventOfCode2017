@@ -17,6 +17,7 @@ namespace Day5
             var memory = input.Split(',').Select(Int32.Parse).ToArray();
 
             Part1(memory);
+            Part2(memory);
         }
 
         public static string GetCookie()
@@ -33,10 +34,18 @@ namespace Day5
 
         public static void Part1(int[] memory)
         {
-            var computer = new IntCodeMachine(memory);
+            var computer = new IntCodeMachine(memory, 1);
             computer.Execute();
 
             Console.WriteLine("Part 1 Complete");
+        }
+
+        public static void Part2(int[] memory)
+        {
+            var computer = new IntCodeMachine(memory, 5);
+            computer.Execute();
+
+            Console.WriteLine("Part 2 Complete");
         }
     }
 }

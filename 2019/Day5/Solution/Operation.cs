@@ -25,19 +25,4 @@ namespace Day5
             ThirdParameterMode = operationParts.Length >= 5 ? Enum.Parse<Mode>(partA.ToString()) : Mode.Position;
         }
     }
-
-    public enum OpCode
-    {
-        Add = 1,
-        Multiply = 2,
-        Input = 3,
-        Output = 4,
-        Halt = 99
-    }
-
-    public enum Mode
-    {
-        Position = 0,
-        Immediate = 1
-    }
 }
