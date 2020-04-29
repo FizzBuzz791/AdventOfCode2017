@@ -6,8 +6,8 @@ namespace Day5Tests
 {
     public class OperationTests
     {
-        [TestCase(1002, 2, Mode.Position, Mode.Immediate, Mode.Position)]
-        public void CanSuccessfullyConstructOperationFromInteger(int input, int expectedOpCode, Mode expectedMode1, Mode expectedMode2, Mode expectedMode3)
+        [TestCase(1002, OpCode.Multiply, Mode.Position, Mode.Immediate, Mode.Position)]
+        public void CanSuccessfullyConstructOperationFromInteger(int input, OpCode expectedOpCode, Mode expectedMode1, Mode expectedMode2, Mode expectedMode3)
         {
             // Arrange
 

@@ -14,6 +14,9 @@ namespace Day5
             var puzzle = new Puzzle(user, 2019, 5);
             var input = puzzle.GetInputAsync().Result;
 
+            var memory = input.Split(',').Select(Int32.Parse).ToArray();
+
+            Part1(memory);
         }
 
         public static string GetCookie()
@@ -21,11 +24,19 @@ namespace Day5
             var builder = new ConfigurationBuilder()
                             .SetBasePath(Directory.GetCurrentDirectory())
                             .AddJsonFile("appsettings.json", false, true)
-                            .AddUserSecrets("9f311380-1bb8-4ef6-8431-101bfeed90df");
+                            .AddUserSecrets("8730e162-85ce-40fe-bbfb-31292325b310");
             var config = builder.Build();
 
             var secretValues = config.GetSection("Secrets").GetChildren();
             return secretValues.FirstOrDefault(s => s.Key == "Cookie")?.Value ?? string.Empty;
+        }
+
+        public static void Part1(int[] memory)
+        {
+            var computer = new IntCodeMachine(memory);
+            computer.Execute();
+
+            Console.WriteLine("Part 1 Complete");
         }
     }
 }

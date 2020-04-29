@@ -4,7 +4,7 @@ namespace Day5
 {
     public class Operation
     {
-        public int OpCode { get; }
+        public OpCode OpCode { get; }
         public Mode FirstParameterMode { get; }
         public Mode SecondParameterMode { get; }
         public Mode ThirdParameterMode { get; }
@@ -18,12 +18,21 @@ namespace Day5
             var partB = operationParts.Length - 4 >= 0 ? operationParts[operationParts.Length - 4] : '0';
             var partA = operationParts.Length - 5 >= 0 ? operationParts[operationParts.Length - 5] : '0';
 
-            OpCode = (Int32.Parse(partD.ToString()) * 10) + Int32.Parse(partE.ToString());
+            OpCode = (OpCode)((Int32.Parse(partD.ToString()) * 10) + Int32.Parse(partE.ToString()));
 
             FirstParameterMode = Enum.Parse<Mode>(partC.ToString());
             SecondParameterMode = Enum.Parse<Mode>(partB.ToString());
             ThirdParameterMode = operationParts.Length >= 5 ? Enum.Parse<Mode>(partA.ToString()) : Mode.Position;
         }
+    }
+
+    public enum OpCode
+    {
+        Add = 1,
+        Multiply = 2,
+        Input = 3,
+        Output = 4,
+        Halt = 99
     }
 
     public enum Mode

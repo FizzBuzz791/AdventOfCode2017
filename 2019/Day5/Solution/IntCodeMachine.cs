@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 
 namespace Day5
@@ -7,10 +8,6 @@ namespace Day5
         public int[] Memory { get; }
         public int InstructionPointer { get; private set; } = 0;
 
-        private const int AddOpCode = 1;
-        private const int MultiplyOpCode = 2;
-        private const int HaltOpCode = 99;
-
         public IntCodeMachine(int[] initialState)
         {
             Memory = initialState.ToArray(); // Use .ToArray so we get a copy instead of a reference.
@@ -19,20 +16,27 @@ namespace Day5
         public void Execute()
         {
             var operation = new Operation(Memory[InstructionPointer]);
-            while (operation.OpCode != HaltOpCode)
+            while (operation.OpCode != OpCode.Halt)
             {
                 switch (operation.OpCode)
                 {
-                    case AddOpCode:
+                    case OpCode.Add:
                         Add(operation, InstructionPointer);
                         break;
-                    case MultiplyOpCode:
+                    case OpCode.Multiply:
                         Multiply(operation, InstructionPointer);
+                        break;
+                    case OpCode.Input:
+                        Input(operation, InstructionPointer);
+                        break;
+                    case OpCode.Output:
+                        Output(operation, InstructionPointer);
                         break;
                 }
 
                 operation = new Operation(Memory[InstructionPointer]);
             }
+            Console.WriteLine("Halt");
         }
 
         private void Add(Operation operation, int instructionAddress)
@@ -52,7 +56,7 @@ namespace Day5
             // Doesn't make sense for the result to be Mode.Immediate, assume Mode.Position
             Memory[Memory[instructionAddress + 3]] = firstParam + secondParam;
 
-            IncrementInstructionPointer();
+            IncrementInstructionPointer(4);
         }
 
         private void Multiply(Operation operation, int instructionAddress)
@@ -72,10 +76,34 @@ namespace Day5
             // Doesn't make sense for the result to be Mode.Immediate, assume Mode.Position
             Memory[Memory[instructionAddress + 3]] = firstParam * secondParam;
 
-            IncrementInstructionPointer();
+            IncrementInstructionPointer(4);
         }
 
-        private void IncrementInstructionPointer(int increment = 4)
+        private void Input(Operation operation, int instructionAddress)
+        {
+            // Input operation's first param is an address, no point in checking the mode.
+            int inputAddress = Memory[instructionAddress + 1];
+
+            Memory[inputAddress] = 1; // This'll work for Day 5...
+
+            IncrementInstructionPointer(2);
+        }
+
+        private void Output(Operation operation, int instructionAddress)
+        {
+            // Output operation's first param is an address, no point in checking the mode.
+            int output;
+            if (operation.FirstParameterMode == Mode.Immediate)
+                output = Memory[instructionAddress + 1];
+            else
+                output = Memory[Memory[instructionAddress + 1]];
+
+            Console.WriteLine(output);
+
+            IncrementInstructionPointer(2);
+        }
+
+        private void IncrementInstructionPointer(int increment)
         {
             InstructionPointer += increment;
         }
