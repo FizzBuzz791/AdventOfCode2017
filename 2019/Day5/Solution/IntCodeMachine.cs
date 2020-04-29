@@ -1,6 +1,6 @@
 using System.Linq;
 
-namespace Day2
+namespace Day5
 {
     public class IntCodeMachine
     {
@@ -18,49 +18,59 @@ namespace Day2
 
         public void Execute()
         {
-            int operation = Memory[InstructionPointer];
-            while (Memory[InstructionPointer] != HaltOpCode)
+            var operation = new Operation(Memory[InstructionPointer]);
+            while (operation.OpCode != HaltOpCode)
             {
-                switch (operation)
+                switch (operation.OpCode)
                 {
                     case AddOpCode:
-                        Add(InstructionPointer);
+                        Add(operation, InstructionPointer);
                         break;
                     case MultiplyOpCode:
-                        Multiply(InstructionPointer);
+                        Multiply(operation, InstructionPointer);
                         break;
                 }
 
-                operation = Memory[InstructionPointer];
+                operation = new Operation(Memory[InstructionPointer]);
             }
         }
 
-        private void Add(int instructionAddress)
+        private void Add(Operation operation, int instructionAddress)
         {
-            int firstParamAddress = Memory[instructionAddress + 1];
-            int secondParamAddress = Memory[instructionAddress + 2];
-            int resultAddress = Memory[instructionAddress + 3];
+            int firstParam;
+            if (operation.FirstParameterMode == Mode.Immediate)
+                firstParam = Memory[instructionAddress + 1]; // Use the value directly.
+            else
+                firstParam = Memory[Memory[instructionAddress + 1]]; // Find the value at the given address.
 
-            int firstParam = Memory[firstParamAddress];
-            int secondParam = Memory[secondParamAddress];
+            int secondParam;
+            if (operation.SecondParameterMode == Mode.Immediate)
+                secondParam = Memory[instructionAddress + 2]; // Use the value directly
+            else
+                secondParam = Memory[Memory[instructionAddress + 2]]; // Find the value at the given address.
 
-            int result = firstParam + secondParam;
-            Memory[resultAddress] = result;
+            // Doesn't make sense for the result to be Mode.Immediate, assume Mode.Position
+            Memory[Memory[instructionAddress + 3]] = firstParam + secondParam;
 
             IncrementInstructionPointer();
         }
 
-        private void Multiply(int instructionAddress)
+        private void Multiply(Operation operation, int instructionAddress)
         {
-            int firstParamAddress = Memory[instructionAddress + 1];
-            int secondTermAddress = Memory[instructionAddress + 2];
-            int resultAddress = Memory[instructionAddress + 3];
+            int firstParam;
+            if (operation.FirstParameterMode == Mode.Immediate)
+                firstParam = Memory[instructionAddress + 1]; // Use the value directly.
+            else
+                firstParam = Memory[Memory[instructionAddress + 1]]; // Find the value at the given address.
 
-            int firstParam = Memory[firstParamAddress];
-            int secondParam = Memory[secondTermAddress];
+            int secondParam;
+            if (operation.SecondParameterMode == Mode.Immediate)
+                secondParam = Memory[instructionAddress + 2]; // Use the value directly
+            else
+                secondParam = Memory[Memory[instructionAddress + 2]]; // Find the value at the given address.
 
-            int result = firstParam * secondParam;
-            Memory[resultAddress] = result;
+            // Doesn't make sense for the result to be Mode.Immediate, assume Mode.Position
+            Memory[Memory[instructionAddress + 3]] = firstParam * secondParam;
 
             IncrementInstructionPointer();
         }
