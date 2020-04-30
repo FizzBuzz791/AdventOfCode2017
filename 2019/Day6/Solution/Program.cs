@@ -19,6 +19,76 @@ namespace Day6
             orbitMap.Build(orbits);
 
             Console.WriteLine($"Total orbits: {orbitMap.OrbitChecksum}");
+
+            var jumpCount = Part2(orbitMap);
+            Console.WriteLine($"It took {jumpCount} orbital jumps to reach SAN");
+        }
+
+        public static int Part2(OrbitMap orbitMap)
+        {
+            // 1. Find what you're orbiting
+            var yourOrbit = FindOrbitingObject(orbitMap.CenterOfMass, "YOU");
+            Console.WriteLine($"YOU are orbiting {yourOrbit.Name}");
+
+            // 2. Find what Santa's orbiting
+            var santasOrbit = FindOrbitingObject(orbitMap.CenterOfMass, "SAN");
+            Console.WriteLine($"SAN is orbiting {santasOrbit.Name}");
+
+            // 3. Figure out how to get from whatever YOU are orbiting to whatever SAN is orbiting
+            var path1 = yourOrbit;
+            var visitedByYou = new Dictionary<string, int>() { { path1.Name, 0 } };
+            var yourJumpCount = 0;
+            var path2 = santasOrbit;
+            var visitedBySanta = new Dictionary<string, int>() { { path2.Name, 0 } };
+            var santasJumpCount = 0;
+            string commonObjectName = string.Empty;
+
+            while (string.IsNullOrWhiteSpace(commonObjectName))
+            {
+                if (path1 != null && string.IsNullOrWhiteSpace(commonObjectName))
+                {
+                    path1 = FindOrbitingObject(orbitMap.CenterOfMass, path1.Name);
+                    if (path1 != null)
+                    {
+                        yourJumpCount++;
+                        visitedByYou.Add(path1.Name, yourJumpCount);
+
+                        // Exit condition
+                        commonObjectName = visitedBySanta.ContainsKey(path1.Name) ? path1.Name : string.Empty;
+                    }
+                }
+
+                if (path2 != null && string.IsNullOrWhiteSpace(commonObjectName))
+                {
+                    path2 = FindOrbitingObject(orbitMap.CenterOfMass, path2.Name);
+                    if (path2 != null)
+                    {
+                        santasJumpCount++;
+                        visitedBySanta.Add(path2.Name, santasJumpCount);
+
+                        // Exit condition
+                        commonObjectName = visitedByYou.ContainsKey(path2.Name) ? path2.Name : string.Empty;
+                    }
+                }
+            }
+
+            return visitedByYou[commonObjectName] + visitedBySanta[commonObjectName];
+        }
+
+        private static OrbitingObject FindOrbitingObject(OrbitingObject orbitingObject, string nameToFind)
+        {
+            if (orbitingObject.OrbitingObjects.Any(o => o.Name == nameToFind))
+            {
+                return orbitingObject;
+            }
+            else if (orbitingObject.OrbitingObjects.Count > 0)
+            {
+                return orbitingObject.OrbitingObjects.Select(oo => FindOrbitingObject(oo, nameToFind)).SingleOrDefault(oo => oo != null);
+            }
+            else
+            {
+                return null;
+            }
         }
     }
 
