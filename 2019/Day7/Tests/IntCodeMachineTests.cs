@@ -34,7 +34,7 @@ namespace Day7Tests
         public void IOTests(int[] initialState, int input, int[] expectedResult, string[] expectedOutput)
         {
             // Arrange
-            var computer = new IntCodeMachine(initialState, input);
+            var computer = new IntCodeMachine(initialState, new int[] { input });
 
             // Act
             computer.Execute();
@@ -50,7 +50,7 @@ namespace Day7Tests
         public void JumpTests(int[] initialState, int input, int[] expectedResult, string[] expectedOutput)
         {
             // Arrange
-            var computer = new IntCodeMachine(initialState, input);
+            var computer = new IntCodeMachine(initialState, new int[] { input });
 
             // Act
             computer.Execute();

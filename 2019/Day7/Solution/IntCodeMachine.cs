@@ -8,7 +8,7 @@ namespace Day7
     {
         public int[] Memory { get; }
         public int InstructionPointer { get; private set; } = 0;
-        public int InputValue { get; }
+        public Queue<int> InputValues { get; }
         public List<string> Outputs { get; } = new List<string>();
 
         public IntCodeMachine(int[] initialState)
@@ -16,13 +16,13 @@ namespace Day7
             Memory = initialState.ToArray(); // Use .ToArray so we get a copy instead of a reference.
         }
 
-        public IntCodeMachine(int[] initialState, int input)
+        public IntCodeMachine(int[] initialState, int[] inputs)
         {
             Memory = initialState.ToArray(); // Use .ToArray so we get a copy instead of a reference.
-            InputValue = input;
+            InputValues = new Queue<int>(inputs);
         }
 
-        public void Execute()
+        public void Execute(bool printOutput = true)
         {
             var operation = new Operation(Memory[InstructionPointer]);
             while (operation.OpCode != OpCode.Halt)
@@ -59,9 +59,12 @@ namespace Day7
             }
             Outputs.Add("Halt");
 
-            foreach (var output in Outputs)
+            if (printOutput)
             {
-                Console.WriteLine(output);
+                foreach (var output in Outputs)
+                {
+                    Console.WriteLine(output);
+                }
             }
         }
 
@@ -92,7 +95,7 @@ namespace Day7
             // Input operation's first param is an address, no point in checking the mode.
             int inputAddress = Memory[instructionAddress + 1];
 
-            Memory[inputAddress] = InputValue;
+            Memory[inputAddress] = InputValues.Dequeue();
 
             IncrementInstructionPointer(2);
         }
