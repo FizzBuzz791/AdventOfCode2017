@@ -10,22 +10,26 @@ namespace Day7
         public int InstructionPointer { get; private set; } = 0;
         public Queue<int> InputValues { get; }
         public List<string> Outputs { get; } = new List<string>();
+        public MachineState State { get; private set; }
 
         public IntCodeMachine(int[] initialState)
         {
             Memory = initialState.ToArray(); // Use .ToArray so we get a copy instead of a reference.
+            State = MachineState.Paused;
         }
 
         public IntCodeMachine(int[] initialState, int[] inputs)
         {
             Memory = initialState.ToArray(); // Use .ToArray so we get a copy instead of a reference.
             InputValues = new Queue<int>(inputs);
+            State = MachineState.Paused;
         }
 
         public void Execute(bool printOutput = true)
         {
+            State = MachineState.Running;
             var operation = new Operation(Memory[InstructionPointer]);
-            while (operation.OpCode != OpCode.Halt)
+            while (State == MachineState.Running)
             {
                 switch (operation.OpCode)
                 {
@@ -53,11 +57,14 @@ namespace Day7
                     case OpCode.Equals:
                         Equals(operation, InstructionPointer);
                         break;
+                    case OpCode.Halt:
+                        State = MachineState.Paused;
+                        Outputs.Add("Halt");
+                        break;
                 }
 
                 operation = new Operation(Memory[InstructionPointer]);
             }
-            Outputs.Add("Halt");
 
             if (printOutput)
             {
@@ -95,9 +102,16 @@ namespace Day7
             // Input operation's first param is an address, no point in checking the mode.
             int inputAddress = Memory[instructionAddress + 1];
 
-            Memory[inputAddress] = InputValues.Dequeue();
+            if (InputValues.Count > 0)
+            {
+                Memory[inputAddress] = InputValues.Dequeue();
 
-            IncrementInstructionPointer(2);
+                IncrementInstructionPointer(2);
+            }
+            else
+            {
+                State = MachineState.Paused;
+            }
         }
 
         private void Output(Operation operation, int instructionAddress)

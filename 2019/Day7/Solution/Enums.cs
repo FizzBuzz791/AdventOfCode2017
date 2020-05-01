@@ -18,4 +18,10 @@ namespace Day7
         Position = 0,
         Immediate = 1
     }
+
+    public enum MachineState
+    {
+        Running,
+        Paused
+    }
 }
