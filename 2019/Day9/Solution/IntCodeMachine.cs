@@ -6,7 +6,7 @@ namespace Day9
 {
     public class IntCodeMachine
     {
-        public int[] Memory { get; }
+        public int[] Memory { get; } = new int[1000000];
         public int InstructionPointer { get; private set; } = 0;
         public Queue<int> InputValues { get; }
         public List<string> Outputs { get; } = new List<string>();
@@ -15,13 +15,15 @@ namespace Day9
 
         public IntCodeMachine(int[] initialState)
         {
-            Memory = initialState.ToArray(); // Use .ToArray so we get a copy instead of a reference.
+            initialState.CopyTo(Memory, 0);
+
             State = MachineState.Paused;
         }
 
         public IntCodeMachine(int[] initialState, int[] inputs)
         {
-            Memory = initialState.ToArray(); // Use .ToArray so we get a copy instead of a reference.
+            initialState.CopyTo(Memory, 0);
+
             InputValues = new Queue<int>(inputs);
             State = MachineState.Paused;
         }

@@ -23,7 +23,7 @@ namespace Day9Tests
             computer.Execute(false);
 
             // Assert
-            computer.Memory.ShouldBe(expectedResult);
+            computer.Memory.ShouldBe(new IntCodeMachine(expectedResult).Memory);
         }
 
         [TestCase(new int[] { 3, 0, 4, 0, 99 }, 43, new int[] { 43, 0, 4, 0, 99 }, new string[] { "43", "Halt" })] // Outputs the input.
@@ -40,7 +40,7 @@ namespace Day9Tests
             computer.Execute(false);
 
             // Assert
-            computer.Memory.ShouldBe(expectedResult);
+            computer.Memory.ShouldBe(new IntCodeMachine(expectedResult).Memory);
             computer.Outputs.ShouldBe(expectedOutput.ToList());
         }
 
@@ -56,7 +56,7 @@ namespace Day9Tests
             computer.Execute(false);
 
             // Assert
-            computer.Memory.ShouldBe(expectedResult);
+            computer.Memory.ShouldBe(new IntCodeMachine(expectedResult).Memory);
             computer.Outputs.ShouldBe(expectedOutput.ToList());
         }
 
