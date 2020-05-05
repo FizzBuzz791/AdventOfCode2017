@@ -20,7 +20,7 @@ namespace Day9Tests
             var computer = new IntCodeMachine(initialState);
 
             // Act
-            computer.Execute();
+            computer.Execute(false);
 
             // Assert
             computer.Memory.ShouldBe(expectedResult);
@@ -37,7 +37,7 @@ namespace Day9Tests
             var computer = new IntCodeMachine(initialState, new int[] { input });
 
             // Act
-            computer.Execute();
+            computer.Execute(false);
 
             // Assert
             computer.Memory.ShouldBe(expectedResult);
@@ -53,11 +53,24 @@ namespace Day9Tests
             var computer = new IntCodeMachine(initialState, new int[] { input });
 
             // Act
-            computer.Execute();
+            computer.Execute(false);
 
             // Assert
             computer.Memory.ShouldBe(expectedResult);
             computer.Outputs.ShouldBe(expectedOutput.ToList());
+        }
+
+        [TestCase(new int[] { 109, 19, 99 }, 19)]
+        public void RelativeBaseTests(int[] initialState, int expectedRelativeBase)
+        {
+            // Arrange
+            var computer = new IntCodeMachine(initialState, new int[] { });
+
+            // Act
+            computer.Execute(false);
+
+            // Assert
+            computer.RelativeBase.ShouldBe(expectedRelativeBase);
         }
     }
 }

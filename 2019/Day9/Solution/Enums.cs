@@ -10,13 +10,15 @@ namespace Day9
         JumpIfFalse = 6,
         LessThan = 7,
         Equals = 8,
+        AdjustRelativeBase = 9,
         Halt = 99
     }
 
     public enum Mode
     {
         Position = 0,
-        Immediate = 1
+        Immediate = 1,
+        Relative = 2
     }
 
     public enum MachineState

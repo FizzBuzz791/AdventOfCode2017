@@ -11,6 +11,7 @@ namespace Day9
         public Queue<int> InputValues { get; }
         public List<string> Outputs { get; } = new List<string>();
         public MachineState State { get; private set; }
+        public int RelativeBase { get; set; } = 0;
 
         public IntCodeMachine(int[] initialState)
         {
@@ -57,9 +58,16 @@ namespace Day9
                     case OpCode.Equals:
                         Equals(operation, InstructionPointer);
                         break;
+                    case OpCode.AdjustRelativeBase:
+                        AdjustRelativeBase(operation, InstructionPointer);
+                        break;
                     case OpCode.Halt:
                         State = MachineState.Paused;
                         Outputs.Add("Halt");
+                        break;
+                    default:
+                        State = MachineState.Paused;
+                        Outputs.Add($"Encountered unknown operation: {operation.OpCode}");
                         break;
                 }
 
@@ -167,9 +175,28 @@ namespace Day9
             IncrementInstructionPointer(4);
         }
 
+        private void AdjustRelativeBase(Operation operation, int instructionAddress)
+        {
+            int firstParam = GetParameter(operation.FirstParameterMode, instructionAddress + 1);
+
+            RelativeBase += firstParam;
+
+            IncrementInstructionPointer(2);
+        }
+
         private int GetParameter(Mode parameterMode, int instructionAddress)
         {
-            return parameterMode == Mode.Immediate ? Memory[instructionAddress] : Memory[Memory[instructionAddress]];
+            switch (parameterMode)
+            {
+                case Mode.Immediate:
+                    return Memory[instructionAddress];
+                case Mode.Position:
+                    return Memory[Memory[instructionAddress]];
+                case Mode.Relative:
+                    return Memory[Memory[instructionAddress] + RelativeBase];
+                default:
+                    throw new ArgumentException(nameof(parameterMode), $"Unknown parameter mode: {parameterMode}");
+            }
         }
 
         private void IncrementInstructionPointer(int increment)
