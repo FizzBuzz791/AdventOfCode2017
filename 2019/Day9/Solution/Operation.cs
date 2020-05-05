@@ -1,4 +1,5 @@
 using System;
+using System.Numerics;
 
 namespace Day9
 {
@@ -9,7 +10,7 @@ namespace Day9
         public Mode SecondParameterMode { get; }
         public Mode ThirdParameterMode { get; }
 
-        public Operation(int operation)
+        public Operation(BigInteger operation)
         {
             var operationParts = operation.ToString().ToCharArray();
             var partE = operationParts.Length - 1 >= 0 ? operationParts[operationParts.Length - 1] : '0';
