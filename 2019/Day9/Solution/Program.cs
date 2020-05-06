@@ -14,11 +14,18 @@ namespace Day9
             var memory = input.Split(',').Select(BigInteger.Parse).ToArray();
 
             Part1(memory);
+            Part2(memory);
         }
 
         public static void Part1(BigInteger[] memory)
         {
             var computer = new IntCodeMachine(memory, new int[] { 1 });
+            computer.Execute(true);
+        }
+
+        public static void Part2(BigInteger[] memory)
+        {
+            var computer = new IntCodeMachine(memory, new int[] { 2 });
             computer.Execute(true);
         }
     }
