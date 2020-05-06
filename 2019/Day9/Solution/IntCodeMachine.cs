@@ -90,8 +90,7 @@ namespace Day9
             BigInteger firstParam = GetParameter(operation.FirstParameterMode, instructionAddress + 1);
             BigInteger secondParam = GetParameter(operation.SecondParameterMode, instructionAddress + 2);
 
-            // Doesn't make sense for the result to be Mode.Immediate, assume Mode.Position
-            Memory[(int)Memory[instructionAddress + 3]] = firstParam + secondParam;
+            SetParameter(operation.ThirdParameterMode, instructionAddress + 3, firstParam + secondParam);
 
             IncrementInstructionPointer(4);
         }
@@ -101,20 +100,16 @@ namespace Day9
             BigInteger firstParam = GetParameter(operation.FirstParameterMode, instructionAddress + 1);
             BigInteger secondParam = GetParameter(operation.SecondParameterMode, instructionAddress + 2);
 
-            // Doesn't make sense for the result to be Mode.Immediate, assume Mode.Position
-            Memory[(int)Memory[instructionAddress + 3]] = firstParam * secondParam;
+            SetParameter(operation.ThirdParameterMode, instructionAddress + 3, firstParam * secondParam);
 
             IncrementInstructionPointer(4);
         }
 
         private void Input(Operation operation, int instructionAddress)
         {
-            // Input operation's first param is an address, no point in checking the mode.
-            int inputAddress = (int)Memory[instructionAddress + 1];
-
             if (InputValues.Count > 0)
             {
-                Memory[inputAddress] = InputValues.Dequeue();
+                SetParameter(operation.FirstParameterMode, instructionAddress + 1, InputValues.Dequeue());
 
                 IncrementInstructionPointer(2);
             }
@@ -160,8 +155,7 @@ namespace Day9
             BigInteger firstParam = GetParameter(operation.FirstParameterMode, instructionAddress + 1);
             BigInteger secondParam = GetParameter(operation.SecondParameterMode, instructionAddress + 2);
 
-            // Doesn't make sense for the result to be Mode.Immediate, assume Mode.Position
-            Memory[(int)Memory[instructionAddress + 3]] = firstParam < secondParam ? 1 : 0;
+            SetParameter(operation.ThirdParameterMode, instructionAddress + 3, firstParam < secondParam ? 1 : 0);
 
             IncrementInstructionPointer(4);
         }
@@ -171,8 +165,7 @@ namespace Day9
             BigInteger firstParam = GetParameter(operation.FirstParameterMode, instructionAddress + 1);
             BigInteger secondParam = GetParameter(operation.SecondParameterMode, instructionAddress + 2);
 
-            // Doesn't make sense for the result to be Mode.Immediate, assume Mode.Position
-            Memory[(int)Memory[instructionAddress + 3]] = firstParam == secondParam ? 1 : 0;
+            SetParameter(operation.ThirdParameterMode, instructionAddress + 3, firstParam == secondParam ? 1 : 0);
 
             IncrementInstructionPointer(4);
         }
@@ -188,17 +181,33 @@ namespace Day9
 
         private BigInteger GetParameter(Mode parameterMode, int instructionAddress)
         {
+            int parameterAddress = Int32.MinValue;
             switch (parameterMode)
             {
-                case Mode.Immediate:
-                    return Memory[instructionAddress];
                 case Mode.Position:
-                    return Memory[(int)Memory[instructionAddress]];
+                    parameterAddress = (int)Memory[instructionAddress];
+                    break;
+                case Mode.Immediate:
+                    parameterAddress = instructionAddress;
+                    break;
                 case Mode.Relative:
-                    return Memory[(int)Memory[instructionAddress] + RelativeBase];
+                    parameterAddress = (int)Memory[instructionAddress] + RelativeBase;
+                    break;
                 default:
                     throw new ArgumentException(nameof(parameterMode), $"Unknown parameter mode: {parameterMode}");
             }
+
+            return Memory[parameterAddress];
+        }
+
+        private void SetParameter(Mode parameterMode, int instructionAddress, BigInteger value)
+        {
+            int parameterAddress = (int)Memory[instructionAddress];
+
+            if (parameterMode == Mode.Relative)
+                parameterAddress += RelativeBase;
+
+            Memory[parameterAddress] = value;
         }
 
         private void IncrementInstructionPointer(int increment)

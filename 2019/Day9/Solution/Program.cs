@@ -1,4 +1,5 @@
-﻿using System;
+﻿using System.Linq;
+using System.Numerics;
 using NAoCHelper;
 
 namespace Day9
@@ -10,8 +11,15 @@ namespace Day9
             var user = new User(Helpers.GetCookie("fe89d886-33f1-4478-8a4e-bc48a031be8c"));
             var puzzle = new Puzzle(user, 2019, 9);
             var input = puzzle.GetInputAsync().Result;
+            var memory = input.Split(',').Select(BigInteger.Parse).ToArray();
 
-            Console.WriteLine(input);
+            Part1(memory);
+        }
+
+        public static void Part1(BigInteger[] memory)
+        {
+            var computer = new IntCodeMachine(memory, new int[] { 1 });
+            computer.Execute(true);
         }
     }
 }

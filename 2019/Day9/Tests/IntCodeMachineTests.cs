@@ -127,5 +127,30 @@ namespace Day9Tests
             // Output 1125899906842624
             yield return new object[] { new BigInteger[] { 104, 1125899906842624, 99 }, new string[] { "1125899906842624", "Halt" } };
         }
+
+        [TestCaseSource(nameof(AdditionalCases))]
+        public void AdditionalTests(BigInteger[] initialState, string[] expectedOutput)
+        {
+            // Arrange
+            var computer = new IntCodeMachine(initialState, new int[] { 12345 });
+
+            // Act
+            computer.Execute(false);
+
+            // Assert
+            computer.Outputs.ShouldBe(expectedOutput.ToList());
+        }
+
+        private static IEnumerable<object[]> AdditionalCases()
+        {
+            yield return new object[] { new BigInteger[] { 109, -1, 4, 1, 99 }, new string[] { "-1", "Halt" } };
+            yield return new object[] { new BigInteger[] { 109, -1, 104, 1, 99 }, new string[] { "1", "Halt" } };
+            yield return new object[] { new BigInteger[] { 109, -1, 204, 1, 99 }, new string[] { "109", "Halt" } };
+            yield return new object[] { new BigInteger[] { 109, 1, 9, 2, 204, -6, 99 }, new string[] { "204", "Halt" } };
+            yield return new object[] { new BigInteger[] { 109, 1, 109, 9, 204, -6, 99 }, new string[] { "204", "Halt" } };
+            yield return new object[] { new BigInteger[] { 109, 1, 209, -1, 204, -106, 99 }, new string[] { "204", "Halt" } };
+            yield return new object[] { new BigInteger[] { 109, 1, 3, 3, 204, 2, 99 }, new string[] { "12345", "Halt" } };
+            yield return new object[] { new BigInteger[] { 109, 1, 203, 2, 204, 2, 99 }, new string[] { "12345", "Halt" } };
+        }
     }
 }
