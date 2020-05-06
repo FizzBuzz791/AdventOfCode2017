@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <UserSecretsId>c617493e-f753-4626-bb52-9661e64c9878</UserSecretsId>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="NAoCHelper" Version="1.2.0" />
+  </ItemGroup>
+</Project>
