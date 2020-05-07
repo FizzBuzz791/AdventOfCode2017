@@ -17,6 +17,7 @@ namespace Day11
         {
             initialState.CopyTo(Memory, 0);
 
+            InputValues = new Queue<int>();
             State = MachineState.Paused;
         }
 
