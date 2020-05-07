@@ -17,26 +17,35 @@ namespace Day11
             Brain = new IntCodeMachine(memory);
         }
 
-        public void Run()
+        public void Run(Color firstPanelColor = Color.Black)
         {
+            bool firstPanel = true;
             do
             {
                 if (PaintedPanels.ContainsKey(CurrentLocation))
                     Brain.InputValues.Enqueue((int)PaintedPanels[CurrentLocation]);
                 else
-                    Brain.InputValues.Enqueue((int)Color.Black);
+                    Brain.InputValues.Enqueue(firstPanel ? (int)firstPanelColor : (int)Color.Black);
+
+                firstPanel = false;
 
                 Brain.Execute(false);
 
-                var panelColor = Enum.Parse<Color>(Brain.Outputs.ToArray()[Brain.Outputs.Count - 2]);
+                var offset = 2;
+                if (Brain.Outputs.Contains("Halt"))
+                    offset = 3;
+                var panelColor = Enum.Parse<Color>(Brain.Outputs.ToArray()[Brain.Outputs.Count - offset]);
                 if (PaintedPanels.ContainsKey(CurrentLocation))
                     PaintedPanels[CurrentLocation] = panelColor;
                 else
                     PaintedPanels.Add(CurrentLocation, panelColor);
+                offset--;
 
-                if (Enum.TryParse<Turn>(Brain.Outputs.ToArray()[Brain.Outputs.Count - 1], out var turnDirection))
-                    Move(turnDirection);
+                var turnDirection = Enum.Parse<Turn>(Brain.Outputs.ToArray()[Brain.Outputs.Count - offset]);
+                Move(turnDirection);
             } while (Brain.State == MachineState.Paused && !Brain.Outputs.Contains("Halt"));
+
+            Console.WriteLine("debugging");
         }
 
         private void Move(Turn direction)

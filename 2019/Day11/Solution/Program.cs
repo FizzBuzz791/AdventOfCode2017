@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Drawing;
 using System.Linq;
 using System.Numerics;
+using System.Text;
 using NAoCHelper;
 
 namespace Day11
@@ -17,6 +19,8 @@ namespace Day11
             var paintedPanelCount = Part1(memory);
 
             Console.WriteLine($"The Robot painted {paintedPanelCount} panels at least once.");
+
+            Part2(memory);
         }
 
         public static int Part1(BigInteger[] memory)
@@ -24,6 +28,33 @@ namespace Day11
             var robot = new Robot(memory);
             robot.Run();
             return robot.PaintedPanels.Count;
+        }
+
+        public static void Part2(BigInteger[] memory)
+        {
+            var robot = new Robot(memory);
+            robot.Run(Color.White);
+
+            int minX = robot.PaintedPanels.Keys.Min(p => p.X);
+            int minY = robot.PaintedPanels.Keys.Min(p => p.Y);
+            int maxX = robot.PaintedPanels.Keys.Max(p => p.X);
+            int maxY = robot.PaintedPanels.Keys.Max(p => p.Y);
+
+            var output = new StringBuilder();
+            var currentPoint = Point.Empty;
+            for (int y = minY; y <= maxY; y++)
+            {
+                for (int x = minX; x <= maxX; x++)
+                {
+                    currentPoint = new Point(x, y);
+                    if (robot.PaintedPanels.ContainsKey(currentPoint))
+                        output.Append(robot.PaintedPanels[currentPoint] == Color.White ? '#' : ' ');
+                    else
+                        output.Append(' '); // Black
+                }
+                Console.WriteLine(output.ToString());
+                output.Clear();
+            }
         }
     }
 }
