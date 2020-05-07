@@ -12,9 +12,10 @@ namespace Day10Tests
         public void FindsBestLocation(string map, Point expectedLocation, int expectedAsteroids)
         {
             // Arrange
+            var asteroids = Program.FindAsteroids(map);
 
             // Act
-            var bestLocation = Program.Part1(map);
+            var bestLocation = Program.Part1(asteroids);
 
             // Assert
             bestLocation.Item1.ShouldBe(expectedLocation);
