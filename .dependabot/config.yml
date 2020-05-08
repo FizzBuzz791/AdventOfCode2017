@@ -70,3 +70,10 @@ update_configs:
   - package_manager: "dotnet:nuget"
     directory: "/2019/Day10/Tests/"
     update_schedule: "live"
+  # 2019 - Day 11
+  - package_manager: "dotnet:nuget"
+    directory: "/2019/Day11/Solution/"
+    update_schedule: "live"
+  - package_manager: "dotnet:nuget"
+    directory: "/2019/Day11/Tests/"
+    update_schedule: "live"
