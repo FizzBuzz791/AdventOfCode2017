@@ -1,7 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using Extensions;
+using Combinatorics.Collections;
 using NAoCHelper;
 
 namespace Day7
@@ -25,7 +24,7 @@ namespace Day7
         public static int Part1(int[] memory)
         {
             // Do for all combinations of Phase
-            var permutations = Enumerable.Range(0, 5).GetPermutations(5);
+            var permutations = new Permutations<int>(Enumerable.Range(0, 5).ToList());
             var maxOutput = Int32.MinValue;
             foreach (var permutation in permutations)
             {
@@ -47,7 +46,7 @@ namespace Day7
 
         public static int Part2(int[] memory)
         {
-            var permutations = Enumerable.Range(5, 5).GetPermutations(5);
+            var permutations = new Permutations<int>(Enumerable.Range(5, 5).ToList());
             var maxOutput = Int32.MinValue;
             foreach (var permutation in permutations)
             {

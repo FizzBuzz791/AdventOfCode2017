@@ -6,9 +6,7 @@
     <UserSecretsId>98fda5c2-62f1-4660-abe5-48b5d862e52f</UserSecretsId>
   </PropertyGroup>
   <ItemGroup>
+    <PackageReference Include="Combinatorics" Version="1.1.0.19" />
     <PackageReference Include="NAoCHelper" Version="1.2.0" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\..\..\Extensions\Solution\Extensions.csproj" />
   </ItemGroup>
 </Project>
