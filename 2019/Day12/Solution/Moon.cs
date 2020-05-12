@@ -21,6 +21,12 @@ namespace Day12
             Position = new Point3D(x, y, z);
         }
 
+        public Moon(Moon moon)
+        {
+            Position = new Point3D(moon.Position.X, moon.Position.Y, moon.Position.Z);
+            Velocity = new Point3D(moon.Velocity.X, moon.Velocity.Y, moon.Velocity.Z);
+        }
+
         public void ApplyVelocity()
         {
             Position.X += Velocity.X;
