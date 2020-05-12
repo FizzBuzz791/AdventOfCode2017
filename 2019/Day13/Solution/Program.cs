@@ -14,7 +14,15 @@ namespace Day13
             var input = puzzle.GetInputAsync().Result;
             var memory = input.Split(',').Select(BigInteger.Parse).ToArray();
 
-            Console.WriteLine(memory);
+            Part1(memory);
+        }
+
+        public static void Part1(BigInteger[] memory)
+        {
+            var ac = new ArcadeCabinet(memory);
+            ac.GenerateGrid();
+
+            Console.WriteLine($"Block Tiles: {ac.BlockTileCount}");
         }
     }
 }
