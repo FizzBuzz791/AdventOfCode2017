@@ -3,7 +3,8 @@
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <TargetFramework>netcoreapp3.1</TargetFramework>
-    <UserSecretsId>98fda5c2-62f1-4660-abe5-48b5d862e52f</UserSecretsId>
+    <UserSecretsId>c1614296-0e85-46b7-aed7-a1c3d3891e37</UserSecretsId>
+    <Nullable>enable</Nullable>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Combinatorics" Version="1.1.0.19" />

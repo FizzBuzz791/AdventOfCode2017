@@ -7,3 +7,4 @@
 packages/
 /.idea/*
 **/.vs/*
+**/lcov.info
