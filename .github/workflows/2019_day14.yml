@@ -1,0 +1,29 @@
+name: 2019 - Day 14
+
+on:
+  push:
+    branches: [ master ]
+    paths: "2019/Day14/**"
+  pull_request:
+    branches: [ master ]
+    paths: "2019/Day14/**"
+
+jobs:
+  Build_and_Test_2019_Day14:
+
+    runs-on: windows-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Setup .NET Core
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: 3.1.101
+    - name: Install dependencies for Solution
+      run: dotnet restore 2019/Day14/Solution/Day14.csproj
+    - name: Build
+      run: dotnet build --configuration Release --no-restore 2019/Day14/Solution/Day14.csproj
+    - name: Install dependencies for Tests
+      run: dotnet restore 2019/Day14/Tests/Day14Tests.csproj
+    - name: Test
+      run: dotnet test --no-restore --verbosity normal 2019/Day14/Tests/Day14Tests.csproj
