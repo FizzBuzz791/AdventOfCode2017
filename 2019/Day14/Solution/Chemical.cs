@@ -6,9 +6,9 @@ namespace Day14
     public class Chemical : IEquatable<Chemical>
     {
         public string Name { get; set; }
-        public int Amount { get; set; }
+        public double Amount { get; set; }
 
-        public Chemical(string name, int amount)
+        public Chemical(string name, double amount)
         {
             Name = name;
             Amount = amount;
@@ -19,7 +19,7 @@ namespace Day14
             var parts = chemical.Trim().Split(" ");
 
             Name = parts[1];
-            Amount = Int32.Parse(parts[0]);
+            Amount = Double.Parse(parts[0]);
         }
 
         public Chemical(Chemical chemical)
@@ -49,7 +49,7 @@ namespace Day14
             return Name == other.Name && Amount == other.Amount;
         }
 
-        public override int GetHashCode() => Name.GetHashCode() + Amount * 0x00100000;
+        public override int GetHashCode() => (int)Math.Round(Name.GetHashCode() + (Amount * 0x00100000), 0);
 
         public static bool operator ==(Chemical lhs, Chemical rhs) => lhs is null ? rhs is null : lhs.Equals(rhs);
 

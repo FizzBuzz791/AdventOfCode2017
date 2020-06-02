@@ -9,13 +9,13 @@ namespace Day14Tests
     public class Part1Tests
     {
         [TestCaseSource(nameof(FindsRequiredOreCases))]
-        public void FindsRequiredOre(string input, int expectedOre)
+        public void FindsRequiredOre(string input, double expectedOre)
         {
             // Arrange
             var reactions = input.Split("\n").Select(r => new Reaction(r)).ToList();
 
             // Act
-            var requiredOre = Program.FindRequiredOre(reactions);
+            var requiredOre = Program.FindRequiredOre(reactions, 1);
 
             // Assert
             requiredOre.ShouldBe(expectedOre);
