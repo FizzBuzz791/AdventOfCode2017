@@ -1,5 +1,12 @@
 version: 1
 update_configs:
+  # 2019 - IntCode Machine
+  - package_manager: "dotnet:nuget"
+    directory: "/2019/IntCodeMachine/Solution/"
+    update_schedule: "live"
+  - package_manager: "dotnet:nuget"
+    directory: "/2019/IntCodeMachine/Tests/"
+    update_schedule: "live"
   # 2019 - Day 1
   - package_manager: "dotnet:nuget"
     directory: "/2019/Day1/Solution/"
