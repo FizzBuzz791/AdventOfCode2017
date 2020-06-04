@@ -94,7 +94,7 @@ namespace Day15
         }
 
         // Dijkstra's Algo
-        public int FindPath(Point source, Point destination)
+        public List<Node> FindPath(Point source)
         {
             var nodes = new List<Node>();
             for (int row = 0; row < Grid.GetLength(0); row++)
@@ -129,7 +129,7 @@ namespace Day15
                 priorityQueue.Remove(currentNode);
             } while (priorityQueue.Any());
 
-            return nodes.SingleOrDefault(n => n.Location == destination).Distance;
+            return nodes;
         }
 
         private bool AreNeighbours(Point p1, Point p2) => (p1.X == p2.X || p1.Y == p2.Y) && (Math.Abs(p1.X - p2.X) == 1 || Math.Abs(p1.Y - p2.Y) == 1);
