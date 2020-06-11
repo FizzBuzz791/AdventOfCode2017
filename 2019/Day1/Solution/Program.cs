@@ -2,7 +2,6 @@
 using System.IO;
 using System.Linq;
 using NAoCHelper;
-using Microsoft.Extensions.Configuration;
 
 namespace Day1
 {
@@ -10,24 +9,12 @@ namespace Day1
     {
         public static void Main()
         {
-            var user = new User(GetCookie());
+            var user = new User(Helpers.GetCookie("9f311380-1bb8-4ef6-8431-101bfeed90df"));
             var puzzle = new Puzzle(user, 2019, 1);
             var input = puzzle.GetInputAsync().Result;
 
             Part1(input);
             Part2(input);
-        }
-
-        public static string GetCookie()
-        {
-            var builder = new ConfigurationBuilder()
-                            .SetBasePath(Directory.GetCurrentDirectory())
-                            .AddJsonFile("appsettings.json", false, true)
-                            .AddUserSecrets("9f311380-1bb8-4ef6-8431-101bfeed90df");
-            var config = builder.Build();
-
-            var secretValues = config.GetSection("Secrets").GetChildren();
-            return secretValues.FirstOrDefault(s => s.Key == "Cookie")?.Value ?? string.Empty;
         }
 
         public static void Part1(string puzzleInput)
