@@ -10,7 +10,7 @@ namespace Day5
     {
         public static void Main(string[] args)
         {
-            var user = new User(GetCookie("8730e162-85ce-40fe-bbfb-31292325b310"));
+            var user = new User(Helpers.GetCookie("8730e162-85ce-40fe-bbfb-31292325b310"));
             var puzzle = new Puzzle(user, 2019, 5);
             var input = puzzle.GetInputAsync().Result;
 
