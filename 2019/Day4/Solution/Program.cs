@@ -1,7 +1,6 @@
 ﻿using System;
 using System.IO;
 using System.Linq;
-using Microsoft.Extensions.Configuration;
 using NAoCHelper;
 
 namespace Day4
@@ -10,7 +9,7 @@ namespace Day4
     {
         public static void Main()
         {
-            var user = new User(GetCookie());
+            var user = new User(Helpers.GetCookie("1964f53f-6f5d-4b42-b635-fadef0a0d1f3"));
             var puzzle = new Puzzle(user, 2019, 4);
             var input = puzzle.GetInputAsync().Result;
 
@@ -71,20 +70,6 @@ namespace Day4
             }
 
             return hasDouble && onlyIncreases;
-        }
-
-        public static string GetCookie()
-        {
-            var builder =
-                new ConfigurationBuilder()
-                    .SetBasePath(Directory.GetCurrentDirectory())
-                    .AddJsonFile("appsettings.json", false, true)
-                    .AddUserSecrets("1964f53f-6f5d-4b42-b635-fadef0a0d1f3");
-            var config = builder.Build();
-
-            var secretValues = config.GetSection("Secrets").GetChildren();
-            return secretValues.FirstOrDefault(s => s.Key == "Cookie")?.Value
-                ?? string.Empty;
         }
     }
 }
