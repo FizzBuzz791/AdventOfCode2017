@@ -15,7 +15,7 @@ namespace Day3
 
         public static void Main()
         {
-            var user = new User(GetCookie());
+            var user = new User(Helpers.GetCookie("846e2ffd-4fb8-4da4-9405-d0f80b0ed87e"));
             var puzzle = new Puzzle(user, 2019, 3);
             var input = puzzle.GetInputAsync().Result;
 
@@ -26,20 +26,6 @@ namespace Day3
 
             var minSteps = Part2(crossovers);
             Console.WriteLine($"Part 2: {minSteps}");
-        }
-
-        public static string GetCookie()
-        {
-            var builder =
-                new ConfigurationBuilder()
-                    .SetBasePath(Directory.GetCurrentDirectory())
-                    .AddJsonFile("appsettings.json", false, true)
-                    .AddUserSecrets("846e2ffd-4fb8-4da4-9405-d0f80b0ed87e");
-            var config = builder.Build();
-
-            var secretValues = config.GetSection("Secrets").GetChildren();
-            return secretValues.FirstOrDefault(s => s.Key == "Cookie")?.Value
-                ?? string.Empty;
         }
 
         public static List<Step> FindCrossovers(string input)

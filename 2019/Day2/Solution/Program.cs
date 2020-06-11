@@ -10,25 +10,13 @@ namespace Day2
     {
         public static void Main(string[] args)
         {
-            var user = new User(GetCookie());
+            var user = new User(Helpers.GetCookie("9f311380-1bb8-4ef6-8431-101bfeed90df"));
             var puzzle = new Puzzle(user, 2019, 2);
             var input = puzzle.GetInputAsync().Result;
             var opcodes = input.Split(',').Select(Int32.Parse).ToArray();
 
             Part1(opcodes);
             Part2(opcodes);
-        }
-
-        public static string GetCookie()
-        {
-            var builder = new ConfigurationBuilder()
-                            .SetBasePath(Directory.GetCurrentDirectory())
-                            .AddJsonFile("appsettings.json", false, true)
-                            .AddUserSecrets("9f311380-1bb8-4ef6-8431-101bfeed90df");
-            var config = builder.Build();
-
-            var secretValues = config.GetSection("Secrets").GetChildren();
-            return secretValues.FirstOrDefault(s => s.Key == "Cookie")?.Value ?? string.Empty;
         }
 
         public static void Part1(int[] opcodes)
