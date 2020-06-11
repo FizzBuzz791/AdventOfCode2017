@@ -11,48 +11,66 @@ namespace Day16
         {
             var user = new User(Helpers.GetCookie("5755d29d-585d-46d4-ba5e-5eed30d1bcca"));
             var puzzle = new Puzzle(user, 2019, 16);
-            var input = puzzle.GetInputAsync().Result;
+            var input = puzzle.GetInputAsync().Result.Trim('\n');
 
-            var output = Part1(input, 100);
-            Console.WriteLine($"{string.Join(string.Empty, output.Take(8))}");
+            Part1(input);
+            Part2(input);
         }
 
-        public static List<int> Part1(string input, int phases)
+        public static void Part1(string input)
         {
-            var list = input.Trim('\n').Select(c => int.Parse(c.ToString())).ToList();
+            var output = FlawedFrequencyTransmission(input, 100);
+            Console.WriteLine($"Part 1: {string.Concat(output.Take(8))}");
+        }
+
+        public static void Part2(string input)
+        {
+            var message = DecodeSignal(input);
+            Console.WriteLine($"Part 2: {message}");
+        }
+
+        public static string DecodeSignal(string input)
+        {
+            var signal = string.Concat(Enumerable.Repeat(input, 10000));
+            var offset = int.Parse(string.Concat(input.Take(7)));
+
+            var list = signal.Select(c => int.Parse(c.ToString())).ToList();
+            for (int phase = 0; phase < 100; phase++)
+            {
+                for (int index = list.Count - 1; index >= offset; index--)
+                {
+                    list[index] = Math.Abs(index == list.Count - 1 ? list[index] : list[index] + list[index + 1]) % 10;
+                }
+            }
+
+            return string.Concat(list.Skip(offset).Take(8));
+        }
+
+        public static List<int> FlawedFrequencyTransmission(string input, int phases)
+        {
+            var list = input.Select(c => int.Parse(c.ToString())).ToList();
             var basePattern = new int[] { 0, 1, 0, -1 };
 
             for (int p = 0; p < phases; p++)
             {
                 var newList = new List<int>();
+                var pattern = new List<int>();
                 for (int i = 0; i < list.Count; i++)
                 {
-                    var pattern = new List<int>();
-                    var index = 0;
+                    pattern.Clear();
 
                     // Generate pattern
-                    while (pattern.Count <= list.Count)
+                    foreach (var x in basePattern)
                     {
-                        for (int j = 0; j < i + 1; j++)
-                        {
-                            pattern.Add(basePattern[index]);
-                        }
-
-                        // Increment or reset index
-                        index = index + 1 == basePattern.Length ? 0 : index + 1;
+                        pattern.AddRange(Enumerable.Repeat(x, i + 1));
                     }
+
+                    pattern = Enumerable.Repeat(pattern, (int)Math.Ceiling((double)list.Count / pattern.Count) + 1).SelectMany(x => x).ToList();
 
                     // "left shift"
                     pattern.RemoveAt(0);
 
-                    var newValue = 0;
-                    for (int e = 0; e < list.Count; e++)
-                    {
-                        newValue += list[e] * pattern[e];
-                    }
-
-                    // Keep the ones digit
-                    newList.Add(Math.Abs(newValue % 10));
+                    newList.Add(Math.Abs(list.Select((element, index) => element * pattern[index]).Sum() % 10));
                 }
 
                 list = newList;

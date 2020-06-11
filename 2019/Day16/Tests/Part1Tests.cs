@@ -6,7 +6,7 @@ using Shouldly;
 
 namespace Day16Tests
 {
-    public class Tests
+    public class Part1Tests
     {
         [TestCaseSource(nameof(Part1Cases))]
         public void GeneratesOutputCorrectly(string input, int phases, List<int> expectedOutput)
@@ -14,7 +14,7 @@ namespace Day16Tests
             // Arrange
 
             // Act
-            var result = Program.Part1(input, phases);
+            var result = Program.FlawedFrequencyTransmission(input, phases);
 
             // Assert
             result.Take(8).ShouldBe(expectedOutput);
