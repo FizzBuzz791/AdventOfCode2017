@@ -10,7 +10,7 @@ namespace Day5
     {
         public static void Main(string[] args)
         {
-            var user = new User(GetCookie());
+            var user = new User(GetCookie("8730e162-85ce-40fe-bbfb-31292325b310"));
             var puzzle = new Puzzle(user, 2019, 5);
             var input = puzzle.GetInputAsync().Result;
 
@@ -18,18 +18,6 @@ namespace Day5
 
             Part1(memory);
             Part2(memory);
-        }
-
-        public static string GetCookie()
-        {
-            var builder = new ConfigurationBuilder()
-                            .SetBasePath(Directory.GetCurrentDirectory())
-                            .AddJsonFile("appsettings.json", false, true)
-                            .AddUserSecrets("8730e162-85ce-40fe-bbfb-31292325b310");
-            var config = builder.Build();
-
-            var secretValues = config.GetSection("Secrets").GetChildren();
-            return secretValues.FirstOrDefault(s => s.Key == "Cookie")?.Value ?? string.Empty;
         }
 
         public static void Part1(int[] memory)
