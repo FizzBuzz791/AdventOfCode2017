@@ -1,0 +1,223 @@
+version: 2
+updates:
+# 2019 - IntCode Machine
+- package-ecosystem: nuget
+  directory: "/2019/IntCodeMachine/Solution"
+  schedule:
+    interval: daily
+    time: '21:00'
+  open-pull-requests-limit: 99
+- package-ecosystem: nuget
+  directory: "/2019/IntCodeMachine/Tests"
+  schedule:
+    interval: daily
+    time: '21:00'
+  open-pull-requests-limit: 99
+# 2019 - Day 16
+- package-ecosystem: nuget
+  directory: "/2019/Day16/Solution"
+  schedule:
+    interval: daily
+    time: '21:00'
+  open-pull-requests-limit: 99
+- package-ecosystem: nuget
+  directory: "/2019/Day16/Tests"
+  schedule:
+    interval: daily
+    time: '21:00'
+  open-pull-requests-limit: 99
+# 2019 - Day 15
+- package-ecosystem: nuget
+  directory: "/2019/Day15/Solution"
+  schedule:
+    interval: daily
+    time: '21:00'
+  open-pull-requests-limit: 99
+- package-ecosystem: nuget
+  directory: "/2019/Day15/Tests"
+  schedule:
+    interval: daily
+    time: '21:00'
+  open-pull-requests-limit: 99
+# 2019 - Day 14
+- package-ecosystem: nuget
+  directory: "/2019/Day14/Tests"
+  schedule:
+    interval: daily
+    time: '21:00'
+  open-pull-requests-limit: 99
+- package-ecosystem: nuget
+  directory: "/2019/Day14/Solution"
+  schedule:
+    interval: daily
+    time: '21:00'
+  open-pull-requests-limit: 99
+# 2019 - Day 13
+- package-ecosystem: nuget
+  directory: "/2019/Day13/Solution"
+  schedule:
+    interval: daily
+    time: '21:00'
+  open-pull-requests-limit: 99
+- package-ecosystem: nuget
+  directory: "/2019/Day13/Tests"
+  schedule:
+    interval: daily
+    time: '21:00'
+  open-pull-requests-limit: 99
+# 2019 - Day 12
+- package-ecosystem: nuget
+  directory: "/2019/Day12/Solution"
+  schedule:
+    interval: daily
+    time: '21:00'
+  open-pull-requests-limit: 99
+- package-ecosystem: nuget
+  directory: "/2019/Day12/Tests"
+  schedule:
+    interval: daily
+    time: '21:00'
+  open-pull-requests-limit: 99
+# 2019 - Day 11
+- package-ecosystem: nuget
+  directory: "/2019/Day11/Solution"
+  schedule:
+    interval: daily
+    time: '21:00'
+  open-pull-requests-limit: 99
+- package-ecosystem: nuget
+  directory: "/2019/Day11/Tests"
+  schedule:
+    interval: daily
+    time: '21:00'
+  open-pull-requests-limit: 99
+# 2019 - Day 10
+- package-ecosystem: nuget
+  directory: "/2019/Day10/Solution"
+  schedule:
+    interval: daily
+    time: '21:00'
+  open-pull-requests-limit: 99
+- package-ecosystem: nuget
+  directory: "/2019/Day10/Tests"
+  schedule:
+    interval: daily
+    time: '21:00'
+  open-pull-requests-limit: 99
+# 2019 - Day 9
+- package-ecosystem: nuget
+  directory: "/2019/Day9/Solution"
+  schedule:
+    interval: daily
+    time: '21:00'
+  open-pull-requests-limit: 99
+- package-ecosystem: nuget
+  directory: "/2019/Day9/Tests"
+  schedule:
+    interval: daily
+    time: '21:00'
+  open-pull-requests-limit: 99
+# 2019 - Day 8
+- package-ecosystem: nuget
+  directory: "/2019/Day8/Solution"
+  schedule:
+    interval: daily
+    time: '21:00'
+  open-pull-requests-limit: 99
+- package-ecosystem: nuget
+  directory: "/2019/Day8/Tests"
+  schedule:
+    interval: daily
+    time: '21:00'
+  open-pull-requests-limit: 99
+# 2019 - Day 7
+- package-ecosystem: nuget
+  directory: "/2019/Day7/Solution"
+  schedule:
+    interval: daily
+    time: '21:00'
+  open-pull-requests-limit: 99
+- package-ecosystem: nuget
+  directory: "/2019/Day7/Tests"
+  schedule:
+    interval: daily
+    time: '21:00'
+  open-pull-requests-limit: 99
+# 2019 - Day 6
+- package-ecosystem: nuget
+  directory: "/2019/Day6/Solution"
+  schedule:
+    interval: daily
+    time: '21:00'
+  open-pull-requests-limit: 99
+- package-ecosystem: nuget
+  directory: "/2019/Day6/Tests"
+  schedule:
+    interval: daily
+    time: '21:00'
+  open-pull-requests-limit: 99
+# 2019 - Day 5
+- package-ecosystem: nuget
+  directory: "/2019/Day5/Solution"
+  schedule:
+    interval: daily
+    time: '21:00'
+  open-pull-requests-limit: 99
+- package-ecosystem: nuget
+  directory: "/2019/Day5/Tests"
+  schedule:
+    interval: daily
+    time: '21:00'
+  open-pull-requests-limit: 99
+# 2019 - Day 4
+- package-ecosystem: nuget
+  directory: "/2019/Day4/Solution"
+  schedule:
+    interval: daily
+    time: '21:00'
+  open-pull-requests-limit: 99
+- package-ecosystem: nuget
+  directory: "/2019/Day4/Tests"
+  schedule:
+    interval: daily
+    time: '21:00'
+  open-pull-requests-limit: 99
+# 2019 - Day 3
+- package-ecosystem: nuget
+  directory: "/2019/Day3/Solution"
+  schedule:
+    interval: daily
+    time: '21:00'
+  open-pull-requests-limit: 99
+- package-ecosystem: nuget
+  directory: "/2019/Day3/Tests"
+  schedule:
+    interval: daily
+    time: '21:00'
+  open-pull-requests-limit: 99
+# 2019 - Day 2
+- package-ecosystem: nuget
+  directory: "/2019/Day2/Solution"
+  schedule:
+    interval: daily
+    time: '21:00'
+  open-pull-requests-limit: 99
+- package-ecosystem: nuget
+  directory: "/2019/Day2/Tests"
+  schedule:
+    interval: daily
+    time: '21:00'
+  open-pull-requests-limit: 99
+# 2019 - Day 1
+- package-ecosystem: nuget
+  directory: "/2019/Day1/Solution"
+  schedule:
+    interval: daily
+    time: '21:00'
+  open-pull-requests-limit: 99
+- package-ecosystem: nuget
+  directory: "/2019/Day1/Tests"
+  schedule:
+    interval: daily
+    time: '21:00'
+  open-pull-requests-limit: 99
