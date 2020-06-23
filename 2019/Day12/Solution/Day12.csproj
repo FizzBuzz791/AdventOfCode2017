@@ -8,6 +8,6 @@
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Combinatorics" Version="1.1.0.19" />
-    <PackageReference Include="NAoCHelper" Version="1.2.4" />
+    <PackageReference Include="NAoCHelper" Version="1.2.5" />
   </ItemGroup>
 </Project>
