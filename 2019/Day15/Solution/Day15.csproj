@@ -8,7 +8,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="naochelper" Version="1.2.5" />
+    <PackageReference Include="naochelper" Version="1.2.8" />
   </ItemGroup>
 
   <ItemGroup>
