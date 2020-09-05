@@ -18,13 +18,6 @@ updates:
     schedule:
       interval: daily
       time: "21:00"
-    open-pull-requests-limit: 99
-  - package-ecosystem: nuget
-    directory: "/2019/IntCodeMachine/Tests"
-    schedule:
-      interval: daily
-      time: "21:00"
-    open-pull-requests-limit: 99
   # 2019 - Day 16
   - package-ecosystem: nuget
     directory: "/2019/Day16/Solution"
@@ -190,45 +183,6 @@ updates:
     open-pull-requests-limit: 99
   - package-ecosystem: nuget
     directory: "/2019/Day4/Tests"
-    schedule:
-      interval: daily
-      time: "21:00"
-    open-pull-requests-limit: 99
-  # 2019 - Day 3
-  - package-ecosystem: nuget
-    directory: "/2019/Day3/Solution"
-    schedule:
-      interval: daily
-      time: "21:00"
-    open-pull-requests-limit: 99
-  - package-ecosystem: nuget
-    directory: "/2019/Day3/Tests"
-    schedule:
-      interval: daily
-      time: "21:00"
-    open-pull-requests-limit: 99
-  # 2019 - Day 2
-  - package-ecosystem: nuget
-    directory: "/2019/Day2/Solution"
-    schedule:
-      interval: daily
-      time: "21:00"
-    open-pull-requests-limit: 99
-  - package-ecosystem: nuget
-    directory: "/2019/Day2/Tests"
-    schedule:
-      interval: daily
-      time: "21:00"
-    open-pull-requests-limit: 99
-  # 2019 - Day 1
-  - package-ecosystem: nuget
-    directory: "/2019/Day1/Solution"
-    schedule:
-      interval: daily
-      time: "21:00"
-    open-pull-requests-limit: 99
-  - package-ecosystem: nuget
-    directory: "/2019/Day1/Tests"
     schedule:
       interval: daily
       time: "21:00"
