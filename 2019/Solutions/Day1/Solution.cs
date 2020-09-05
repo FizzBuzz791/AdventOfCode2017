@@ -3,19 +3,15 @@ using NAoCHelper;
 
 namespace Solutions.Day1
 {
-    public class Solution
+    public class Solution : BaseSolution<string[]>, ISolvable
     {
-        private readonly IPuzzle _puzzle;
-        
-        public Solution(IPuzzle puzzle)
+        public Solution(IPuzzle puzzle) : base(puzzle, x => x.Split("\n"))
         {
-            _puzzle = puzzle;
         }
         
         public string SolvePart1()
         {
-            string input = _puzzle.GetInputAsync().Result;
-            var modules = input.Split("\n");
+            var modules = Input;
             var requiredFuel = 0L;
             foreach (string module in modules)
             {
@@ -28,8 +24,7 @@ namespace Solutions.Day1
 
         public string SolvePart2()
         {
-            string input = _puzzle.GetInputAsync().Result;
-            var modules = input.Split("\n");
+            var modules = Input;
             var requiredFuel = 0L;
             foreach (string module in modules)
             {

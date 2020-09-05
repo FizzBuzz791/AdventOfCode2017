@@ -5,14 +5,27 @@ namespace Solutions
 {
     public static class Program
     {
-        public static void Main()
+        public static void Main(string[] args)
         {
             var user = new User(Helpers.GetCookie("1d35577e-659d-4010-861a-8d561da451fe"));
-            var day1Puzzle = new Puzzle(user, 2019, 1);
-            
-            var day1 = new Day1.Solution(day1Puzzle);
-            Console.WriteLine(day1.SolvePart1());
-            Console.WriteLine(day1.SolvePart2());
+
+            int day = int.Parse(args[0]);
+            var puzzle = new Puzzle(user, 2019, day);
+            ISolvable? solution = day switch
+            {
+                1 => new Day1.Solution(puzzle),
+                _ => null
+            };
+
+            if (solution != null)
+            {
+                Console.WriteLine(solution.SolvePart1());
+                Console.WriteLine(solution.SolvePart2());
+            }
+            else
+            {
+                Console.WriteLine($"No solution available for Day {day}.");
+            }
         }
     }
 }
