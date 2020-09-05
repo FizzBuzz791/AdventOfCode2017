@@ -4,7 +4,7 @@ using NUnit.Framework;
 using Shouldly;
 using Solutions.Day1;
 
-namespace Tests.Day1
+namespace Tests.Day1Tests
 {
     public class Day1Tests
     {

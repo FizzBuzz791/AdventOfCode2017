@@ -15,6 +15,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\IntCodeMachine\IntCodeMachine.csproj" />
     <ProjectReference Include="..\Solutions\Solutions.csproj" />
   </ItemGroup>
 

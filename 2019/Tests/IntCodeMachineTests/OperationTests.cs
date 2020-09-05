@@ -1,10 +1,10 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Numerics;
-using Common;
+using IntCodeMachine;
 using NUnit.Framework;
 using Shouldly;
 
-namespace CommonTests
+namespace Tests.IntCodeMachineTests
 {
     public class OperationTests
     {

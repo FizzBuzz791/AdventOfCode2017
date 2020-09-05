@@ -14,6 +14,7 @@ namespace Solutions
             ISolvable? solution = day switch
             {
                 1 => new Day1.Solution(puzzle),
+                2 => new Day2.Solution(puzzle),
                 _ => null
             };
 

@@ -2,16 +2,16 @@ using System;
 using System.Collections.Generic;
 using System.Numerics;
 
-namespace Common
+namespace IntCodeMachine
 {
     public class IntCodeMachine
     {
         public BigInteger[] Memory { get; } = new BigInteger[1000000];
-        public int InstructionPointer { get; private set; } = 0;
-        public Queue<int> InputValues { get; }
+        private int InstructionPointer { get; set; }
+        private Queue<int> InputValues { get; }
         public List<string> Outputs { get; } = new List<string>();
-        public MachineState State { get; private set; } = MachineState.Paused;
-        public int RelativeBase { get; set; } = 0;
+        private MachineState State { get; set; } = MachineState.Paused;
+        public int RelativeBase { get; private set; }
 
         public IntCodeMachine(BigInteger[] initialState)
         {
@@ -20,7 +20,7 @@ namespace Common
             InputValues = new Queue<int>();
         }
 
-        public IntCodeMachine(BigInteger[] initialState, int[] inputs)
+        public IntCodeMachine(BigInteger[] initialState, IEnumerable<int> inputs)
         {
             initialState.CopyTo(Memory, 0);
 
@@ -82,8 +82,8 @@ namespace Common
 
         private void Add(Operation operation, int instructionAddress)
         {
-            BigInteger firstParam = GetParameter(operation.FirstParameterMode, instructionAddress + 1);
-            BigInteger secondParam = GetParameter(operation.SecondParameterMode, instructionAddress + 2);
+            var firstParam = GetParameter(operation.FirstParameterMode, instructionAddress + 1);
+            var secondParam = GetParameter(operation.SecondParameterMode, instructionAddress + 2);
 
             SetParameter(operation.ThirdParameterMode, instructionAddress + 3, firstParam + secondParam);
 
@@ -92,8 +92,8 @@ namespace Common
 
         private void Multiply(Operation operation, int instructionAddress)
         {
-            BigInteger firstParam = GetParameter(operation.FirstParameterMode, instructionAddress + 1);
-            BigInteger secondParam = GetParameter(operation.SecondParameterMode, instructionAddress + 2);
+            var firstParam = GetParameter(operation.FirstParameterMode, instructionAddress + 1);
+            var secondParam = GetParameter(operation.SecondParameterMode, instructionAddress + 2);
 
             SetParameter(operation.ThirdParameterMode, instructionAddress + 3, firstParam * secondParam);
 
@@ -116,7 +116,7 @@ namespace Common
 
         private void Output(Operation operation, int instructionAddress)
         {
-            BigInteger output = GetParameter(operation.FirstParameterMode, instructionAddress + 1);
+            var output = GetParameter(operation.FirstParameterMode, instructionAddress + 1);
 
             Outputs.Add(output.ToString());
 
@@ -125,8 +125,8 @@ namespace Common
 
         private void JumpIfTrue(Operation operation, int instructionAddress)
         {
-            BigInteger firstParam = GetParameter(operation.FirstParameterMode, instructionAddress + 1);
-            BigInteger secondParam = GetParameter(operation.SecondParameterMode, instructionAddress + 2);
+            var firstParam = GetParameter(operation.FirstParameterMode, instructionAddress + 1);
+            var secondParam = GetParameter(operation.SecondParameterMode, instructionAddress + 2);
 
             if (firstParam != 0)
                 SetInstructionPointer((int)secondParam);
@@ -136,8 +136,8 @@ namespace Common
 
         private void JumpIfFalse(Operation operation, int instructionAddress)
         {
-            BigInteger firstParam = GetParameter(operation.FirstParameterMode, instructionAddress + 1);
-            BigInteger secondParam = GetParameter(operation.SecondParameterMode, instructionAddress + 2);
+            var firstParam = GetParameter(operation.FirstParameterMode, instructionAddress + 1);
+            var secondParam = GetParameter(operation.SecondParameterMode, instructionAddress + 2);
 
             if (firstParam == 0)
                 SetInstructionPointer((int)secondParam);
@@ -147,8 +147,8 @@ namespace Common
 
         private void LessThan(Operation operation, int instructionAddress)
         {
-            BigInteger firstParam = GetParameter(operation.FirstParameterMode, instructionAddress + 1);
-            BigInteger secondParam = GetParameter(operation.SecondParameterMode, instructionAddress + 2);
+            var firstParam = GetParameter(operation.FirstParameterMode, instructionAddress + 1);
+            var secondParam = GetParameter(operation.SecondParameterMode, instructionAddress + 2);
 
             SetParameter(operation.ThirdParameterMode, instructionAddress + 3, firstParam < secondParam ? 1 : 0);
 
@@ -157,8 +157,8 @@ namespace Common
 
         private void Equals(Operation operation, int instructionAddress)
         {
-            BigInteger firstParam = GetParameter(operation.FirstParameterMode, instructionAddress + 1);
-            BigInteger secondParam = GetParameter(operation.SecondParameterMode, instructionAddress + 2);
+            var firstParam = GetParameter(operation.FirstParameterMode, instructionAddress + 1);
+            var secondParam = GetParameter(operation.SecondParameterMode, instructionAddress + 2);
 
             SetParameter(operation.ThirdParameterMode, instructionAddress + 3, firstParam == secondParam ? 1 : 0);
 
@@ -167,7 +167,7 @@ namespace Common
 
         private void AdjustRelativeBase(Operation operation, int instructionAddress)
         {
-            BigInteger firstParam = GetParameter(operation.FirstParameterMode, instructionAddress + 1);
+            var firstParam = GetParameter(operation.FirstParameterMode, instructionAddress + 1);
 
             RelativeBase += (int)firstParam;
 
@@ -176,7 +176,7 @@ namespace Common
 
         private BigInteger GetParameter(Mode parameterMode, int instructionAddress)
         {
-            var parameterAddress = parameterMode switch
+            int parameterAddress = parameterMode switch
             {
                 Mode.Position => (int)Memory[instructionAddress],
                 Mode.Immediate => instructionAddress,
@@ -188,7 +188,7 @@ namespace Common
 
         private void SetParameter(Mode parameterMode, int instructionAddress, BigInteger value)
         {
-            int parameterAddress = (int)Memory[instructionAddress];
+            var parameterAddress = (int)Memory[instructionAddress];
 
             if (parameterMode == Mode.Relative)
                 parameterAddress += RelativeBase;

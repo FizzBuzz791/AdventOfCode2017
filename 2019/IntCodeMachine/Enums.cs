@@ -1,4 +1,4 @@
-namespace Common
+namespace IntCodeMachine
 {
     public enum OpCode
     {
