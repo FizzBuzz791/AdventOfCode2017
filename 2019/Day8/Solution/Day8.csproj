@@ -6,6 +6,6 @@
     <UserSecretsId>f4e71f6f-ce28-49d3-8515-f4e51a2ddfd7</UserSecretsId>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="NAoCHelper" Version="1.2.5" />
+    <PackageReference Include="NAoCHelper" Version="1.2.12" />
   </ItemGroup>
 </Project>
