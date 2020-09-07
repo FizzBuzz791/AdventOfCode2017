@@ -135,16 +135,3 @@ updates:
       interval: daily
       time: "21:00"
     open-pull-requests-limit: 99
-  # 2019 - Day 7
-  - package-ecosystem: nuget
-    directory: "/2019/Day7/Solution"
-    schedule:
-      interval: daily
-      time: "21:00"
-    open-pull-requests-limit: 99
-  - package-ecosystem: nuget
-    directory: "/2019/Day7/Tests"
-    schedule:
-      interval: daily
-      time: "21:00"
-    open-pull-requests-limit: 99

@@ -8,7 +8,7 @@ namespace IntCodeMachine
     {
         public BigInteger[] Memory { get; } = new BigInteger[1000000];
         private int InstructionPointer { get; set; }
-        private Queue<int> InputValues { get; }
+        public Queue<int> InputValues { get; }
         public List<string> Outputs { get; } = new List<string>();
         private MachineState State { get; set; } = MachineState.Paused;
         public int RelativeBase { get; private set; }
