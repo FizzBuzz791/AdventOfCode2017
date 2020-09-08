@@ -7,9 +7,6 @@ namespace Solutions
     {
         protected readonly T Input;
 
-        protected BaseSolution(IPuzzle puzzle, Func<string, T> inputSelector)
-        {
-            Input = inputSelector(puzzle.GetInputAsync().Result);
-        }
+        protected BaseSolution(IPuzzle puzzle, Func<string, T> inputSelector) => Input = inputSelector(puzzle.GetInputAsync().Result);
     }
 }
