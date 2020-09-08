@@ -25,6 +25,7 @@ namespace Solutions
                 10 => new Day10.Solution(puzzle),
                 11 => new Day11.Solution(puzzle),
                 12 => new Day12.Solution(puzzle),
+                13 => new Day13.Solution(puzzle),
                 _ => null
             };
 
