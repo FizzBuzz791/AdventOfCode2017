@@ -10,7 +10,7 @@ namespace IntCodeMachine
         private int InstructionPointer { get; set; }
         public Queue<int> InputValues { get; }
         public List<string> Outputs { get; } = new List<string>();
-        private MachineState State { get; set; } = MachineState.Paused;
+        public MachineState State { get; private set; } = MachineState.Paused;
         public int RelativeBase { get; private set; }
 
         public IntCodeMachine(BigInteger[] initialState)
