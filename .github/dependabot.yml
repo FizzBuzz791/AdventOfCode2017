@@ -18,16 +18,3 @@ updates:
     schedule:
       interval: daily
       time: "21:00"
-  # 2019 - Day 16
-  - package-ecosystem: nuget
-    directory: "/2019/Day16/Solution"
-    schedule:
-      interval: daily
-      time: "21:00"
-    open-pull-requests-limit: 99
-  - package-ecosystem: nuget
-    directory: "/2019/Day16/Tests"
-    schedule:
-      interval: daily
-      time: "21:00"
-    open-pull-requests-limit: 99
