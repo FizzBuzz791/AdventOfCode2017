@@ -5,6 +5,7 @@
 *.ncrunchsolution*
 *.ncrunchproject*
 packages/
-/.idea/*
 **/.vs/*
 **/lcov.info
+*/.idea/*
+*.DotSettings.user
