@@ -3,7 +3,7 @@
   <ItemGroup>
     <PackageReference Include="Combinatorics" Version="1.1.0.19" />
     <PackageReference Include="MoreLinq" Version="3.3.2" />
-    <PackageReference Include="NAoCHelper" Version="1.2.12" />
+    <PackageReference Include="NAoCHelper" Version="1.2.13" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="appsettings.json">
