@@ -10,7 +10,7 @@
       "request": "launch",
       "preLaunchTask": "build",
       "program": "${workspaceFolder}/Solutions/bin/Debug/net5.0/Solutions.dll",
-      "args": ["3"],
+      "args": ["4"],
       "cwd": "${workspaceFolder}/Solutions",
       "console": "internalConsole",
       "stopAtEntry": false
