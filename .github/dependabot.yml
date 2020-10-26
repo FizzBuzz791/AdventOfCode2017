@@ -1,5 +1,17 @@
 version: 2
 updates:
+  # 2018 - Solutions
+  - package-ecosystem: nuget
+    directory: "/2018/Solutions"
+    schedule:
+      interval: daily
+      time: "21:00"
+  # 2018 - Tests
+  - package-ecosystem: nuget
+    directory: "2018/Tests"
+    schedule:
+      interval: daily
+      time: "21:00"
   # 2019 - Solutions
   - package-ecosystem: nuget
     directory: "/2019/Solutions"

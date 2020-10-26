@@ -1,0 +1,26 @@
+name: 2018
+
+on:
+  push:
+    branches: [master]
+    paths: "2018/**"
+  pull_request:
+    branches: [master]
+    paths: "2018/**"
+
+jobs:
+  Build_and_Test_2019:
+    runs-on: windows-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Setup .NET Core
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: 3.1.301
+      - name: Install dependencies for Solution
+        run: dotnet restore 2018/AoC2018.sln
+      - name: Build
+        run: dotnet build --configuration Release --no-restore 2018/AoC2018.sln
+      - name: Test
+        run: dotnet test --no-restore --verbosity normal 2018/AoC2018.sln
