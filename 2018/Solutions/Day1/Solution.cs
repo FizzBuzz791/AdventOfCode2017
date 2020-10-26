@@ -17,9 +17,9 @@ namespace Solutions.Day1
 
         public string SolvePart2()
         {
-            int final = 0;
-            int count = 0;
-            bool duplicateFound = false;
+            var final = 0;
+            var count = 0;
+            var duplicateFound = false;
             HashSet<int> frequencies = new HashSet<int>
             {
                 final

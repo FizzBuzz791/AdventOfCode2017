@@ -1,12 +1,11 @@
 using System.Collections.Generic;
-using System.Drawing;
 using NAoCHelper;
 using NSubstitute;
 using NUnit.Framework;
 using Shouldly;
 using Solutions.Day1;
 
-namespace Day1Tests
+namespace Tests.Day1Tests
 {
     public class Tests
     {
