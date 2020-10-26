@@ -9,7 +9,7 @@ on:
     paths: "2018/**"
 
 jobs:
-  Build_and_Test_2019:
+  Build_and_Test_2018:
     runs-on: windows-latest
 
     steps:
@@ -17,7 +17,7 @@ jobs:
       - name: Setup .NET Core
         uses: actions/setup-dotnet@v1
         with:
-          dotnet-version: 3.1.301
+          dotnet-version: 5.0.0-rc.2.20475.5
       - name: Install dependencies for Solution
         run: dotnet restore 2018/AoC2018.sln
       - name: Build
