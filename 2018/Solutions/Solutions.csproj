@@ -8,6 +8,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="MoreLinq" Version="3.3.2" />
     <PackageReference Include="naochelper" Version="1.2.13" />
   </ItemGroup>
 
