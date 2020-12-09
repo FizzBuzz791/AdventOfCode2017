@@ -1,0 +1,7 @@
+﻿<wpf:ResourceDictionary xml:space="preserve" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:s="clr-namespace:System;assembly=mscorlib" xmlns:ss="urn:shemas-jetbrains-com:settings-storage-xaml" xmlns:wpf="http://schemas.microsoft.com/winfx/2006/xaml/presentation">
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=7b6818e3_002D2225_002D463e_002D9475_002De9e752a81421/@EntryIndexedValue">&lt;SessionState ContinuousTestingIsOn="True" ContinuousTestingMode="3" IsActive="True" Name="Tests" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
+  &lt;TestAncestor&gt;&#xD;
+    &lt;TestId&gt;NUnit3x::8EA9CFF0-C7F2-46A9-B151-09014AEB316E::.NETCoreApp,Version=v5.0::Tests.Day6Tests.Day6Tests.FindsLargestFiniteArea&lt;/TestId&gt;&#xD;
+    &lt;TestId&gt;NUnit3x::8EA9CFF0-C7F2-46A9-B151-09014AEB316E::.NETCoreApp,Version=v5.0::Tests.Day6Tests.Day6Tests.FindsRegionClosestToAllCoordinates&lt;/TestId&gt;&#xD;
+  &lt;/TestAncestor&gt;&#xD;
+&lt;/SessionState&gt;</s:String></wpf:ResourceDictionary>

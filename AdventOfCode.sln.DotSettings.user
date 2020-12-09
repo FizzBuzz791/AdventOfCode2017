@@ -1,0 +1,15 @@
+﻿<wpf:ResourceDictionary xml:space="preserve" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:s="clr-namespace:System;assembly=mscorlib" xmlns:ss="urn:shemas-jetbrains-com:settings-storage-xaml" xmlns:wpf="http://schemas.microsoft.com/winfx/2006/xaml/presentation">
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=0159ae04_002Dcd4b_002D4fec_002Db630_002D08bc1007405c/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" IsActive="True" Name="Part1ReturnsExpectedResult" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
+  &lt;TestAncestor&gt;&#xD;
+    &lt;TestId&gt;NUnit3x::A07D6341-70C3-40A8-92E1-3E94411AF656::net5.0::Tests.Year2020.Day1.SolutionTests.Part1ReturnsExpectedResult&lt;/TestId&gt;&#xD;
+    &lt;TestId&gt;NUnit3x::A07D6341-70C3-40A8-92E1-3E94411AF656::net5.0::Tests.Year2020.Day1.SolutionTests.Part2ReturnsExpectedResult&lt;/TestId&gt;&#xD;
+    &lt;TestId&gt;NUnit3x::A07D6341-70C3-40A8-92E1-3E94411AF656::net5.0::Tests.Year2020.Day2.SolutionTests&lt;/TestId&gt;&#xD;
+    &lt;TestId&gt;NUnit3x::A07D6341-70C3-40A8-92E1-3E94411AF656::net5.0::Tests.Year2020.Day4.SolutionTests.Part1ReturnsExpectedResult&lt;/TestId&gt;&#xD;
+    &lt;TestId&gt;NUnit3x::A07D6341-70C3-40A8-92E1-3E94411AF656::net5.0::Tests.Year2020.Day4.DocumentTests.FindsPassportWithBasicValidation&lt;/TestId&gt;&#xD;
+    &lt;TestId&gt;NUnit3x::A07D6341-70C3-40A8-92E1-3E94411AF656::net5.0::Tests.Year2020.Day4.DocumentTests.FindsPassportWithAdvancedValidation&lt;/TestId&gt;&#xD;
+    &lt;TestId&gt;NUnit3x::A07D6341-70C3-40A8-92E1-3E94411AF656::net5.0::Tests.Year2020.Day5.SolutionTests.Part1ReturnsExpectedResult&lt;/TestId&gt;&#xD;
+    &lt;TestId&gt;NUnit3x::A07D6341-70C3-40A8-92E1-3E94411AF656::net5.0::Tests.Year2020.Day6.GroupTests.UniqueAnswersReturnsExpectedResult&lt;/TestId&gt;&#xD;
+    &lt;TestId&gt;NUnit3x::A07D6341-70C3-40A8-92E1-3E94411AF656::net5.0::Tests.Year2020.Day6.GroupTests.AllAnswersReturnsExpectedResult&lt;/TestId&gt;&#xD;
+  &lt;/TestAncestor&gt;&#xD;
+&lt;/SessionState&gt;</s:String>
+	<s:Boolean x:Key="/Default/UserDictionary/Words/=borked/@EntryIndexedValue">True</s:Boolean></wpf:ResourceDictionary>

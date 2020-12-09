@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ContentModelStore">
+    <e p="C:\Repos\AdventOfCode\2018" t="IncludeFlat">
+      <e p="AoC2018.sln" t="IncludeFlat" />
+      <e p="packages" t="ExcludeRecursive" />
+      <e p="Solutions" t="IncludeRecursive">
+        <e p="appsettings.json" t="Include" />
+        <e p="BaseSolution.cs" t="Include" />
+        <e p="bin" t="ExcludeRecursive" />
+        <e p="Day1" t="Include">
+          <e p="Solution.cs" t="Include" />
+        </e>
+        <e p="Day2" t="Include">
+          <e p="Solution.cs" t="Include" />
+        </e>
+        <e p="Day3" t="Include">
+          <e p="Claim.cs" t="Include" />
+          <e p="Solution.cs" t="Include" />
+        </e>
+        <e p="Day4" t="Include">
+          <e p="ActivityRecord.cs" t="Include" />
+          <e p="Solution.cs" t="Include" />
+        </e>
+        <e p="Day5" t="Include">
+          <e p="Solution.cs" t="Include" />
+        </e>
+        <e p="Day6" t="Include">
+          <e p="Location.cs" t="Include" />
+          <e p="Solution.cs" t="Include" />
+        </e>
+        <e p="ISolvable.cs" t="Include" />
+        <e p="obj" t="ExcludeRecursive">
+          <e p="Debug" t="Include">
+            <e p="net5.0" t="Include">
+              <e p="Solutions.AssemblyInfo.cs" t="Include" />
+            </e>
+          </e>
+        </e>
+        <e p="Program.cs" t="Include" />
+        <e p="Solutions.csproj" t="IncludeRecursive" />
+      </e>
+      <e p="Tests" t="IncludeRecursive">
+        <e p="bin" t="ExcludeRecursive" />
+        <e p="Day1Tests" t="Include">
+          <e p="Day1Tests.cs" t="Include" />
+        </e>
+        <e p="Day2Tests" t="Include">
+          <e p="Day2Tests.cs" t="Include" />
+        </e>
+        <e p="Day3Tests" t="Include">
+          <e p="Day3Tests.cs" t="Include" />
+        </e>
+        <e p="Day4Tests" t="Include">
+          <e p="Day4Tests.cs" t="Include" />
+        </e>
+        <e p="Day5Tests" t="Include">
+          <e p="Day5Tests.cs" t="Include" />
+        </e>
+        <e p="Day6Tests" t="Include">
+          <e p="Day6Tests.cs" t="Include" />
+        </e>
+        <e p="obj" t="ExcludeRecursive">
+          <e p="Debug" t="Include">
+            <e p="net5.0" t="Include">
+              <e p="Tests.AssemblyInfo.cs" t="Include" />
+            </e>
+          </e>
+        </e>
+        <e p="Tests.csproj" t="IncludeRecursive" />
+      </e>
+    </e>
+    <e p="C:\Users\trent\.nuget\packages\microsoft.net.test.sdk\16.7.1\build\netcoreapp2.1" t="Include">
+      <e p="Microsoft.NET.Test.Sdk.Program.cs" t="Include" />
+    </e>
+    <e p="C:\Users\trent\.nuget\packages\microsoft.testplatform.testhost\16.7.1\build\netcoreapp2.1\x64\testhost.dll" t="Include" />
+    <e p="C:\Users\trent\.nuget\packages\microsoft.testplatform.testhost\16.7.1\build\netcoreapp2.1\x64\testhost.exe" t="Include" />
+    <e p="C:\Users\trent\.nuget\packages\nunit3testadapter\3.17.0\build\netcoreapp2.1\nunit.engine.api.dll" t="Include" />
+    <e p="C:\Users\trent\.nuget\packages\nunit3testadapter\3.17.0\build\netcoreapp2.1\nunit.engine.core.dll" t="Include" />
+    <e p="C:\Users\trent\.nuget\packages\nunit3testadapter\3.17.0\build\netcoreapp2.1\nunit.engine.dll" t="Include" />
+    <e p="C:\Users\trent\.nuget\packages\nunit3testadapter\3.17.0\build\netcoreapp2.1\NUnit3.TestAdapter.dll" t="Include" />
+    <e p="C:\Users\trent\.nuget\packages\nunit3testadapter\3.17.0\build\netcoreapp2.1\NUnit3.TestAdapter.pdb" t="Include" />
+    <e p="C:\Users\trent\AppData\Local\JetBrains\Rider2020.2\extResources" t="IncludeRecursive" />
+    <e p="C:\Users\trent\AppData\Local\JetBrains\Rider2020.2\resharper-host\Local\Transient\Rider\v202\SolutionCaches\_AoC2018.-1912821571.00" t="ExcludeRecursive" />
+  </component>
+</project>
