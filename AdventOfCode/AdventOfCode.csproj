@@ -14,4 +14,10 @@
         <PackageReference Include="NAoCHelper" Version="1.2.16" />
     </ItemGroup>
 
+    <ItemGroup>
+        <Content Include="appsettings.json">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+    </ItemGroup>
+
 </Project>

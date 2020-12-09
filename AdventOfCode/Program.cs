@@ -15,6 +15,7 @@ ISolvable? solution = year switch
         1 => new AdventOfCode.Year2017.Day1.Solution(puzzle),
         2 => new AdventOfCode.Year2017.Day2.Solution(puzzle),
         3 => new AdventOfCode.Year2017.Day3.Solution(puzzle),
+        4 => new AdventOfCode.Year2017.Day4.Solution(puzzle),
         _ => null
     },
     2018 => day switch
@@ -57,6 +58,9 @@ ISolvable? solution = year switch
         1 => new AdventOfCode.Year2020.Day1.Solution(puzzle),
         2 => new AdventOfCode.Year2020.Day2.Solution(puzzle),
         3 => new AdventOfCode.Year2020.Day3.Solution(puzzle),
+        4 => new AdventOfCode.Year2020.Day4.Solution(puzzle),
+        5 => new AdventOfCode.Year2020.Day5.Solution(puzzle),
+        6 => new AdventOfCode.Year2020.Day6.Solution(puzzle),
         _ => null
     },
     _ => null

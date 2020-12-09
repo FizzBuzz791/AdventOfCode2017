@@ -40,37 +40,37 @@ namespace AdventOfCode.Year2019.Day6
 			{
 				// 3. Figure out how to get from whatever YOU are orbiting to whatever SAN is orbiting
 				OrbitingObject? path1 = yourOrbit;
-				visitedByYou.Add(path1.Name, 0);
+				visitedByYou.Add(path1.Name ?? "UNK", 0);
 				var yourJumpCount = 0;
 				OrbitingObject? path2 = santasOrbit;
-				visitedBySanta.Add(path2.Name, 0);
+				visitedBySanta.Add(path2.Name ?? "UNK", 0);
 				var santasJumpCount = 0;
 
 				while (string.IsNullOrWhiteSpace(commonObjectName))
 				{
 					if (path1 != null && string.IsNullOrWhiteSpace(commonObjectName))
 					{
-						path1 = FindOrbitingObject(orbitMap.CenterOfMass, path1.Name);
+						path1 = FindOrbitingObject(orbitMap.CenterOfMass, path1.Name ?? "UNK");
 						if (path1 != null)
 						{
 							yourJumpCount++;
-							visitedByYou.Add(path1.Name, yourJumpCount);
+							visitedByYou.Add(path1.Name ?? "UNK", yourJumpCount);
 
 							// Exit condition
-							commonObjectName = visitedBySanta.ContainsKey(path1.Name) ? path1.Name : string.Empty;
+							commonObjectName = path1.Name != null && visitedBySanta.ContainsKey(path1.Name) ? path1.Name : string.Empty;
 						}
 					}
 
 					if (path2 != null && string.IsNullOrWhiteSpace(commonObjectName))
 					{
-						path2 = FindOrbitingObject(orbitMap.CenterOfMass, path2.Name);
+						path2 = FindOrbitingObject(orbitMap.CenterOfMass, path2.Name ?? "UNK");
 						if (path2 != null)
 						{
 							santasJumpCount++;
-							visitedBySanta.Add(path2.Name, santasJumpCount);
+							visitedBySanta.Add(path2.Name ?? "UNK", santasJumpCount);
 
 							// Exit condition
-							commonObjectName = visitedByYou.ContainsKey(path2.Name) ? path2.Name : string.Empty;
+							commonObjectName = path2.Name != null && visitedByYou.ContainsKey(path2.Name) ? path2.Name : string.Empty;
 						}
 					}
 				}
